@@ -19,32 +19,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb242499-2148-404e-bd2e-2e4f87343656" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/boot/disk.asm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot/gdt.asm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot/kernel_entry.asm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot/switch_lm.asm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot/switch_pm.asm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cpu/idt.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cpu/idt.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cpu/int.asm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cpu/isr.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cpu/isr.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/keyboard.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/keyboard.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/ports.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/ports.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/timer.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/drivers/timer.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/stdmem.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/stdmem.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/string.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/string.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/types.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/bash.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/bash.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/functions.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/functions.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/kernel.c" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.pre-commit-config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,21 +80,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/ray/CLionProjects/PacMan",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
-    "structure.view.defaults.are.configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ray/CLionProjects/PacMan&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;structure.view.defaults.are.configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Makefile Application.all">
     <configuration name="all" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-drive file=boot.iso,format=raw,media=disk" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
       <method v="2">
@@ -127,6 +104,11 @@
     <configuration name="debug" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="debug" CONFIG_NAME="debug" version="1">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <list>

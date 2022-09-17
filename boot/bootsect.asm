@@ -4,6 +4,12 @@
 KERNEL_OFFSET equ 0x00007E00
 PAGING_OFFSET equ 0x00001000
 
+    mov ah, 0x01
+    mov ch, 0x3F
+    int 0x10
+
+    jmp $
+
     mov ax, 0x4F02
     mov bx, 0x4100 ; 4000
     int 0x10
@@ -55,18 +61,29 @@ PAGING_OFFSET equ 0x00001000
 disk_error:
 sectors_error:
 disk_loop:
-    mov ah, 0x0E
-
-    mov al, 'D'
-    int 0x10
-
-    mov al, 'E'
-    int 0x10
+    mov dx, DISK_ERROR
+    call print
 
     jmp $
 
-gdt_start: ; don't remove the labels, they're needed to compute sizes and jumps
-    ; the GDT starts with a null 8-byte
+print:
+    cmp byte [bx], 0
+    je return
+
+    mov ah, 0x0e
+    mov al, [bx]
+    int 0x10
+
+    add bx, 1
+
+    jmp print
+
+return:
+    ret
+
+DISK_ERROR: db "Disk error!", 0
+
+gdt_start:
     dd 0x0 ; 4 byte
     dd 0x0 ; 4 byte
 

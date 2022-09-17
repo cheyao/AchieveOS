@@ -13,9 +13,9 @@ debug:OS.iso kernel/kernel.elf
 	i686-elf-gdb -ex "target remote localhost:1234" -ex "symbol-file kernel/kernel.elf"
 
 OS.iso: boot/bootsect.bin kernel/kernel.bin
-	dd if=/dev/zero of=boot.iso bs=512 count=9000
-	dd if=boot/bootsect.bin of=boot.iso conv=notrunc bs=512 seek=0 count=1
-	dd if=kernel/kernel.bin of=boot.iso conv=notrunc bs=512 seek=1 count=9000
+	dd if=/dev/zero of=pacman.iso bs=512 count=9001
+	dd if=boot/bootsect.bin of=pacman.iso conv=notrunc bs=512 seek=0 count=1
+	dd if=kernel/kernel.bin of=pacman.iso conv=notrunc bs=512 seek=1 count=9000
 
 boot/bootsect.bin:
 	nasm -f bin boot/bootsect.asm -o $@

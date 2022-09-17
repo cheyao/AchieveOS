@@ -13,10 +13,16 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Install dependencies
-      run: brew install i686-elf-gcc i686-elf-binutils nasm
-    
-    - name: make
-      run: make
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: brew install i686-elf-gcc i686-elf-binutils nasm
+
+      - name: make
+        run: make
+
+      - name: Store iso
+        uses: actions/upload-artifact@v3
+        with:
+          name: pacman.iso
+          path: pacman.iso

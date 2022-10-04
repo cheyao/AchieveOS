@@ -11,6 +11,7 @@ main:
     int 0x0
     jmp $
 
+align 16
 idtr:
     dw idt_end - idt - 1
     dd idt
@@ -31,7 +32,7 @@ idtr:
     dw (error_isr - $$ + 0x1000) >> 16
 %endmacro
 
-align 8
+align 4096
 idt:
     idt_noerr
     idt_noerr

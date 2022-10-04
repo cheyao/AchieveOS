@@ -3,7 +3,7 @@
 all: clean run
 
 run: OS.iso
-	qemu-system-x86_64 -vnc 127.0.0.1:0 -hdd pacman.iso
+	qemu-system-x86_64 -vnc 127.0.0.1:0 -hdd pacman.iso -no-reboot
 
 OS.iso: bootsect.bin kernel.bin
 	dd if=/dev/zero of=pacman.iso bs=512 count=901

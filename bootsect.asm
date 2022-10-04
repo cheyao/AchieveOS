@@ -1,4 +1,4 @@
-[org 0x7C00]
+org 0x7C00
 KERNEL_OFFSET equ 0x00007E00
 PAGING_OFFSET equ 0x00001000
 SECTORS equ 16
@@ -26,16 +26,16 @@ SECTORS equ 16
     mov bx, KERNEL_OFFSET
     mov dl, [BOOT_DRIVE]
 
-    mov ah, 0x02 
+    mov ah, 0x02
     mov al, SECTORS  
     mov cl, 0x02
     mov ch, 0x00
-    mov dh, 0x00 
+    mov dh, 0x00
 
     int 0x13 
     jc disk_error
 
-    cmp al, SECTORS 
+    cmp al, SECTORS
     jne sectors_error
 
     mov ax, 0x4F02
@@ -84,7 +84,6 @@ gdt_code:
     dw 0x0000
     db 0x00
     db 10011010b
-.code_limit:
     db 11001111b
     db 0x0
 

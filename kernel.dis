@@ -1,0 +1,22 @@
+00001000  0F011D10100000    lidt [dword 0x1010]
+00001007  CD00              int 0x0
+00001009  EBFE              jmp short 0x1009
+0000100B  83C404            add esp,byte +0x4
+0000100E  CF                iret
+0000100F  90                nop
+00001010  17                pop ss
+00001011  0016              add [esi],dl
+00001013  1000              adc [eax],al
+00001015  000E              add [esi],cl
+00001017  1008              adc [eax],cl
+00001019  0000              add [eax],al
+0000101B  8E00              mov es,[eax]
+0000101D  000E              add [esi],cl
+0000101F  1008              adc [eax],cl
+00001021  0000              add [eax],al
+00001023  8E00              mov es,[eax]
+00001025  000E              add [esi],cl
+00001027  1008              adc [eax],cl
+00001029  0000              add [eax],al
+0000102B  8E00              mov es,[eax]
+0000102D  00                db 0x00

@@ -6,10 +6,14 @@ org 0x1000
 bits 32
 
 main:
-    mov eax, idtr
-    lidt [eax]
+    lidt [idtr]
     int 0x0
     jmp $
+
+error_isr:
+    add esp, 4
+no_error_isr:
+    iret
 
 align 16
 idtr:
@@ -32,14 +36,8 @@ idtr:
     dw (error_isr - $$ + 0x1000) >> 16
 %endmacro
 
-align 4096
 idt:
     idt_noerr
     idt_noerr
     idt_noerr
 idt_end:
-
-error_isr:
-    add esp, 4
-no_error_isr:
-    iret

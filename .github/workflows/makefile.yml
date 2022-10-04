@@ -19,7 +19,7 @@ jobs:
         run: brew install nasm qemu
 
       - name: make OS.iso
-        run: make
+        run: make OS.iso
 
       - name: Store iso
         uses: actions/upload-artifact@v3

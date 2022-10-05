@@ -1,6 +1,5 @@
 org 0x7C00
-KERNEL_OFFSET equ 0x00007E00
-PAGING_OFFSET equ 0x00001000
+KERNEL_OFFSET equ 0x00001000
 SECTORS equ 16
 
     mov ah, 0x01
@@ -15,7 +14,7 @@ SECTORS equ 16
     mov eax, [0xF000 + 0x28]
     mov bx, 0x7000
     mov gs, bx
-    mov [gs:0xFFF0], eax
+    mov [gs:0xFFF0], eax ;gonna change this
     xor bx, bx
     mov gs, bx
 
@@ -113,7 +112,7 @@ init_pm:
     mov fs, ax
     mov gs, ax
 
-    mov ebp, 0x90000
+    mov ebp, 0x20000
     mov esp, ebp
 
     call KERNEL_OFFSET

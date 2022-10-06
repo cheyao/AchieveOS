@@ -2,23 +2,12 @@ org 0x7C00
 KERNEL_OFFSET equ 0x00001000
 SECTORS equ 16
 
+    mov [BOOT_DRIVE], dl
+    
     mov ah, 0x01
     mov ch, 0x3F
     int 0x10
 
-    mov di, 0xF000 
-    mov ax, 0x4F01
-    mov cx, 0x0100
-    int 0x10
-
-    mov eax, [0xF000 + 0x28]
-    mov bx, 0x7000
-    mov gs, bx
-    mov [gs:0xFFF0], eax ;gonna change this
-    xor bx, bx
-    mov gs, bx
-
-    mov [BOOT_DRIVE], dl
     mov bp, 0x7BFF
     mov sp, bp
 
@@ -26,7 +15,7 @@ SECTORS equ 16
     mov dl, [BOOT_DRIVE]
 
     mov ah, 0x02
-    mov al, SECTORS  
+    mov al, SECTORS 
     mov cl, 0x02
     mov ch, 0x00
     mov dh, 0x00

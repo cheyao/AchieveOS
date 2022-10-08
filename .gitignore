@@ -57,6 +57,7 @@ dkms.conf
 
 # IntelliJ project files
 .idea
+.idea/workspace.xml
 *.iml
 
 ### macOS template
@@ -89,4 +90,3 @@ Temporary Items
 
 *.iso
 *.bin
-

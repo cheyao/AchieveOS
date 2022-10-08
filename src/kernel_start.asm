@@ -4,8 +4,9 @@ HEIGHT equ 400
 NULL equ 0
 PASS equ 0xFFFF
 
-org 0x1000
 bits 32
+[extern mainC]
+[extern tickC]
 
 ; Macro section
 
@@ -17,79 +18,76 @@ bits 32
     dw (%1 - $$ + 0x1000) >> 16
 %endmacro
 
-%macro outb 2
-    %ifn %1 = PASS
-        mov dx, %1
-    %endif
-    %ifn %2 = PASS
-        mov al, %2
-    %endif
-    out dx, al
-%endmacro
-
 %imacro zero 1
     xor %1, %1
 %endmacro
 
 ; Code section
 
-main:
-    outb 0x20, 0x11
-    outb 0xA0, PASS
-    outb 0x21, 0x20
-    outb 0xA1, 0x28
-    outb 0x21, 0x04
-    outb 0xA1, 0x02
-    outb 0x21, 0x01
-    outb 0xA1, PASS
-    zero al
-    outb 0x21, PASS
-    outb 0xA1, PASS
+    mov eax, [FRAMEBUFFER]
+    mov byte [eax], 6
+
+    mov     eax, 17
+    mov     edx, 32
+    out dx, al
+    mov     edx, 160
+    out dx, al
+    mov     ebx, 33
+    mov     eax, 32
+    mov     edx, ebx
+    out dx, al
+    mov     ecx, 161
+    mov     eax, 40
+    mov     edx, ecx
+    out dx, al
+    mov     eax, 4
+    mov     edx, ebx
+    out dx, al
+    mov     eax, 2
+    mov     edx, ecx
+    out dx, al
+    mov     eax, 1
+    mov     edx, ebx
+    out dx, al
+    mov     edx, ecx
+    out dx, al
+    xor     eax, eax
+    mov     edx, ebx
+    out dx, al
+    mov     edx, ecx
+    out dx, al
 
     lidt [idtr]
     sti
 
-    outb 0x43, 0x36
-    outb 0x40, 174
-    outb 0x40,  77
+    mov     eax, 54
+    mov     edx, 67
+    out dx, al
+    mov     edx, 64
+    mov     eax, -82
+    out dx, al
+    mov     eax, 77
+    out dx, al
 
-main_loop:
+    call mainC
 
-    jmp main_loop
-
+    jmp $
 
 tick:
-    outb 0x20, 0x20
-    mov eax, [ticks]
-    add eax, 1
-    mov [ticks], eax
-    and eax, 1000b
-    cmp eax, 1000b
-    jne end
-    xor byte [FRAMEBUFFER], 6
-    xor byte [FRAMEBUFFER + 1], 6
-    xor byte [FRAMEBUFFER + WIDTH], 6
-    xor byte [FRAMEBUFFER + WIDTH + 1], 6
-end:
+    push eax
+    push edx
+    mov     eax, 0x20
+    mov     edx, 0x20
+    out dx, al
+    pop edx
+    pop eax
+    call tickC
     iret
 
 error_isr:
     add esp, 4
 no_error_isr:
     iret
-
-; Data section
-
-ticks: dd 0
-state: db 0 ; 0 .. menu
-            ; 1 .. sc
-	    ; 2 ..
-	    ; 3 .. 
-
-cursor: db 1 ; 1 .. start game
-             ; 2 .. fix 512 bug
-
-fix_bug: db 0
 
 align 16
 idtr:
@@ -131,4 +129,3 @@ idt:
     entry no_error_isr ; 32
     entry tick
 idt_end:
-

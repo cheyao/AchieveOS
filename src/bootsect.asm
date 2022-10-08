@@ -8,6 +8,28 @@ SECTORS equ 16
     mov ch, 0x3F
     int 0x10
 
+    mov ax, 0x7000
+    mov es, ax
+    mov di, 0xF000
+    mov ax, 0x4F01
+    mov cx, 0x0100
+    int 0x10
+    xor cx, cx
+    mov es, cx
+
+    cmp ax, 0x004F
+    je cont
+
+    mov     edx, -30208
+    mov     eax, edx
+    out dx, ax
+    mov     eax, -29984
+    out dx, ax
+
+    ; Bochs interrupt
+
+cont:
+
     mov bp, 0x7BFF
     mov sp, bp
 

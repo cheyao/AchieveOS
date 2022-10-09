@@ -84,6 +84,7 @@ return:
     ret
 
 DISK_ERROR: db "Disk error!", 0
+NO_VBE_ERROR: db "Error: No VBE support!", 0
 
 gdt_start:
     dd 0x0
@@ -132,7 +133,6 @@ init_pm:
 
 BOOT_DRIVE: db 0
 ADDRESS: dd 0
-
 
 times 510 - ($-$$) db 0
 dw 0xaa55

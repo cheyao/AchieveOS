@@ -24,5 +24,6 @@ typedef char s8int;
 #define BochsConsolePrintChar(c) outportb(0xe9, c)
 //stops simulation and breaks into the debug console
 #define BochsBreak() outw(0x8A00,0x8A00); outw(0x8A00,0x08AE0);
+#define BochsMagicBreak() __asm__ __volalite__ ("xchg $bx, $bx");
 
 #endif //PACMAN_TYPES_H

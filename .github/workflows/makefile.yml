@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: brew install nasm i686-elf-gcc i686-elf-binutils
+        run: brew install nasm x86_64-elf-gcc x86_64-elf-binutils
 
       - name: make OS.iso
         run: make OS.iso

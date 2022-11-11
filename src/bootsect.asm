@@ -19,7 +19,7 @@ LONG_MODE     equ 1 << 5
 
 bits 16
 
-    mov [BOOT_DRIVE], dl ; Save the boot diskCheck if there is some error - useless
+    mov [BOOT_DRIVE], dl ; Save the boot disk
 
     mov bp, 0x7BFF
     mov sp, bp ; Stack
@@ -151,7 +151,7 @@ init_pm:
 
     mov eax, cr0                 ; Set the A-register to control register 0.
     or eax, 1 << 31              ; Set the PG-bit, which is the 32nd bit (bit 31).
-    mov cr0, eax                 ; Set control register 0 to the A-register.
+    mov cr0, eax                 ; Set control register 0 to the A-register. ; Somehow bugs??
 
     jmp $
 

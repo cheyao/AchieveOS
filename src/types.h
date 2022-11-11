@@ -25,6 +25,8 @@ typedef unsigned short uint16_t;
 typedef short int16_t;
 typedef unsigned char uint8_t;
 typedef char int8_t;
+typedef signed long long intmax_t;
+typedef _Bool bool;
 
 #define BUFFER 0xB8000
 #define WIDTH 640
@@ -39,5 +41,10 @@ typedef char int8_t;
 #define BochsMagicBreak() __asm__ __volalite__ ("xchg $bx, $bx");
 
 #define EOF 0xFF
+
+#define True 1
+#define False 0
+#define true 1
+#define false 0
 
 #endif //PACMAN_TYPES_H

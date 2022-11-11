@@ -1,6 +1,9 @@
 org 0x7C00
-KERNEL_OFFSET equ 0x7E00
-SECTORS equ 16
+KERNEL_OFFSET equ 0x7D00
+SECTORS equ 28
+
+CODE_SEG equ gdt_code - gdt_start
+DATA_SEG equ gdt_data - gdt_start
 
 PRESENT        equ 1 << 7
 NOT_SYS        equ 1 << 4
@@ -13,6 +16,8 @@ ACCESSED       equ 1 << 0
 GRAN_4K       equ 1 << 7
 SZ_32         equ 1 << 6
 LONG_MODE     equ 1 << 5
+
+bits 16
 
     mov [BOOT_DRIVE], dl ; Save the boot diskCheck if there is some error - useless
 
@@ -34,19 +39,17 @@ LONG_MODE     equ 1 << 5
     mov dh, 0x00
     int 0x13
 
-    mov es, bx
-
     jc .disk_error  ; check for errors
 
     cmp al, SECTORS
     jne .disk_error
 
     cli ; 32 bit!
-    lgdt [GDT32.Pointer]
+    lgdt [gdt_descriptor]
     mov eax, cr0
-    or eax, 0x1 
+    or eax, 1
     mov cr0, eax
-    jmp GDT32.Code:init_pm
+    jmp CODE_SEG:init_pm
 
 .vbe_error:
     mov dx, VBE_ERROR
@@ -76,9 +79,33 @@ print:
 .return:
     ret
 
+gdt_start: ; null
+    dd 0x0
+    dd 0x0
+
+gdt_code:
+    dw 0xffff    ; segment limit, bits 0-15
+    dw 0x0000    ; segment base, bits 0-15
+    db 0x00      ; segment base, bits 16-23
+    db 10011010b ; flags (8 bits)
+    db 11001111b ; flags (4 bits) + limit, bits 16-19
+    db 0x00      ; segment base, bits 24-31
+
+gdt_data:
+    dw 0xffff
+    dw 0x0000
+    db 0x00
+    db 10010010b
+    db 11001111b
+    db 0x00
+
+gdt_descriptor:
+    dw gdt_descriptor - gdt_start - 1
+    dd gdt_start
+
 [bits 32]
 init_pm:
-    mov ax, GDT32.Data
+    mov ax, DATA_SEG
     mov ds, ax
     mov ss, ax
     mov es, ax
@@ -87,6 +114,8 @@ init_pm:
 
     mov ebp, 0x7FFFF
     mov esp, ebp
+
+    xchg bx, bx
 
     mov edi, 0x1000    ; Set the destination index to 0x1000.
     mov cr3, edi       ; Set control register 3 to the destination index.
@@ -101,7 +130,6 @@ init_pm:
     add edi, 0x1000              ; Add 0x1000 to the destination index.
     mov DWORD [edi], 0x4003      ; Set the uint32_t at the destination index to 0x4003.
     add edi, 0x1000              ; Add 0x1000 to the destination index.
-
 
     mov ebx, 0x00000003          ; Set the B-register to 0x00000003.
     mov ecx, 512                 ; Set the C-register to 512. loop counter
@@ -125,77 +153,55 @@ init_pm:
     or eax, 1 << 31              ; Set the PG-bit, which is the 32nd bit (bit 31).
     mov cr0, eax                 ; Set control register 0 to the A-register.
 
-    ; Into 32-bit compatibility submode!
-
-    lgdt [GDT64.Pointer]         ; Load the 64-bit global descriptor table.
-    jmp GDT64.Code:Realm64       ; Set the code segment and enter 64-bit long mode.
-
     jmp $
 
-; Use 64-bit.
-[BITS 64]
-
-Realm64:
-    cli                           ; Clear the interrupt flag.
-
-    mov ax, GDT64.Data            ; Set the A-register to the data descriptor.
-    mov ds, ax                    ; Set the data segment to the A-register.
-    mov es, ax                    ; Set the extra segment to the A-register.
-    mov fs, ax                    ; Set the F-segment to the A-register.
-    mov gs, ax                    ; Set the G-segment to the A-register.
-    mov ss, ax                    ; Set the stack segment to the A-register.
-
-
-    call KERNEL_OFFSET
-
-    jmp $
+;    ; Into 32-bit compatibility submode!
+;
+;    lgdt [gdt_descriptor]         ; Load the 64-bit global descriptor table.
+;    jmp GDT64.Code:Realm64       ; Set the code segment and enter 64-bit long mode.
+;
+;    jmp $
 
 BOOT_DRIVE: db 0
 ADDRESS: dd 0
 DISK_ERROR: db "Disk error!", 0
 VBE_ERROR: db "Error: No VBE support!", 0
 
-GDT64:
-    .Null: equ $ - GDT64
-        dq 0
-    .Code: equ $ - GDT64
-        dd 0xFFFF                                   ; Limit & Base (low, bits 0-15)
-        db 0                                        ; Base (mid, bits 16-23)
-        db PRESENT | NOT_SYS | EXEC | RW            ; Access
-        db GRAN_4K | LONG_MODE | 0xF                ; Flags & Limit (high, bits 16-19)
-        db 0                                        ; Base (high, bits 24-31)
-    .Data: equ $ - GDT64
-        dd 0xFFFF                                   ; Limit & Base (low, bits 0-15)
-        db 0                                        ; Base (mid, bits 16-23)
-        db PRESENT | NOT_SYS | RW                   ; Access
-        db GRAN_4K | SZ_32 | 0xF                    ; Flags & Limit (high, bits 16-19)
-        db 0                                        ; Base (high, bits 24-31)
-    .Pointer:
-        dw $ - GDT64 - 1
-        dq GDT64
-
-GDT32:
-    .Null: equ $ - GDT32
-    dd 0x0
-    dd 0x0
-
-    .Code: equ $ - GDT32
-    dw 0xffff
-    dw 0x0000
-    db 0x00
-    db 10011010b
-    db 11001111b
-    db 0x0
-    .Data: equ $ - GDT32
-    dw 0xffff
-    dw 0x0000
-    db 0x00
-    db 10010010b
-    db 11001111b
-    db 0x00
-    .Pointer:
-    dw $ - GDT32 - 1
-    dd GDT32
+;GDT64:
+;    .Null: equ $ - GDT64
+;        dq 0
+;        dq 0
+;    .Code: equ $ - GDT64
+;        dd 0xFFFF                                   ; Limit & Base (low, bits 0-15)
+;        db 0                                        ; Base (mid, bits 16-23)
+;        db PRESENT | NOT_SYS | EXEC | RW            ; Access
+;        db GRAN_4K | LONG_MODE | 0xF                ; Flags & Limit (high, bits 16-19)
+;        db 0                                        ; Base (high, bits 24-31)
+;    .Data: equ $ - GDT64
+;        dd 0xFFFF                                   ; Limit & Base (low, bits 0-15)
+;        db 0                                        ; Base (mid, bits 16-23)
+;        db PRESENT | NOT_SYS | RW                   ; Access
+;        db GRAN_4K | SZ_32 | 0xF                    ; Flags & Limit (high, bits 16-19)
+;        db 0                                        ; Base (high, bits 24-31)
+;    .Pointer:
+;        dw $ - GDT64 - 1
+;        dq GDT64
+;
+;[BITS 64]
+;
+;Realm64:
+;    cli                           ; Clear the interrupt flag.
+;
+;    mov ax, GDT64.Data            ; Set the A-register to the data descriptor.
+;    mov ds, ax                    ; Set the data segment to the A-register.
+;    mov es, ax                    ; Set the extra segment to the A-register.
+;    mov fs, ax                    ; Set the F-segment to the A-register.
+;    mov gs, ax                    ; Set the G-segment to the A-register.
+;    mov ss, ax                    ; Set the stack segment to the A-register.
+;
+;    call KERNEL_OFFSET
+;
+;    jmp $
 
 times 510 - ($-$$) db 0
 dw 0xaa55

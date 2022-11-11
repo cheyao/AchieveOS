@@ -7,10 +7,13 @@
 #define _STDIO_H
 
 #include "types.h"
+#include "stdarg.h"
 
-void printf(const char *restrict format, ...);
+__attribute__ ((format (printf, 1, 2))) int printf(const char *restrict format, ...);
 
-void putchar(char c);
+int vprintf(const char *format, va_list args);
+
+int putchar(char c);
 
 void print(const char *restrict str);
 

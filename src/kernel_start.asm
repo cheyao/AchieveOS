@@ -7,7 +7,8 @@ PASS equ 0xFFFF
 bits 64
 [extern mainC]
 [extern tickC]
-
+global main
+main:
     mov rdi, 0xB8000
     mov rax, 0x0F200F200F200F20 ; Clear screen :)
     mov rcx, 500

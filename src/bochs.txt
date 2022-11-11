@@ -7,7 +7,7 @@ romimage: file="/usr/local/Cellar/bochs/2.7/share/bochs/BIOS-bochs-latest", addr
 vgaromimage: file="/usr/local/Cellar/bochs/2.7/share/bochs/VGABIOS-lgpl-latest"
 boot: floppy
 floppy_bootsig_check: disabled=0
-floppya: 1_44=OS.iso, status=inserted
+floppya: 1_44=bootsect.iso, status=inserted
 # no floppyb
 ata0: enabled=true, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
 ata0-master: type=none

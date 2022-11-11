@@ -8,20 +8,29 @@
 }</component>
   <component name="CMakeRunConfigurationManager">
     <generated>
-      <config projectName="PacMan" targetName="all" />
-      <config projectName="PacMan" targetName="debug" />
+      <config projectName="AsmOS" targetName="all" />
+      <config projectName="AsmOS" targetName="debug" />
     </generated>
   </component>
   <component name="CMakeSettings">
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb242499-2148-404e-bd2e-2e4f87343656" name="Changes" comment="Save">
-      <change afterPath="$PROJECT_DIR$/peter-bochs-debugger.jar" afterDir="false" />
+    <list default="true" id="fb242499-2148-404e-bd2e-2e4f87343656" name="Changes" comment="64 bit mode! print stuff!">
+      <change afterPath="$PROJECT_DIR$/src/bochs.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/idtr.asm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stdarg.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bochs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/bochs.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/link.ld" beforeDir="false" afterPath="$PROJECT_DIR$/link.ld" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/bootsect.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/bootsect.asm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/idt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/idt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/idt.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/idt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel_start.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel_start.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stdio.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/stdio.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stdio.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/stdio.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,14 +82,14 @@
         <entry>
           <key>
             <ExternalProjectPojo>
-              <option name="name" value="PacMan" />
+              <option name="name" value="AsmOS" />
               <option name="path" value="$PROJECT_DIR$" />
             </ExternalProjectPojo>
           </key>
           <value>
             <list>
               <ExternalProjectPojo>
-                <option name="name" value="PacMan" />
+                <option name="name" value="AsmOS" />
                 <option name="path" value="$PROJECT_DIR$" />
               </ExternalProjectPojo>
             </list>
@@ -111,70 +120,68 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/ray/CLionProjects/PacMan",
+    "last_opened_file_path": "/Users/ray/AsmOS/src",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "CLionExternalConfigurable",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "structure.view.defaults.are.configured": "true"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
   <component name="RunManager" selected="Makefile Application.bochs">
-    <configuration name="bochs" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-f bochs.txt -q" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/bochs">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="bochs" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-f bochs.txt -q" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="AsmOS" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/bochs">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="clean" type="CLionNativeAppRunConfigurationType" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://." PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="clean" CONFIG_NAME="clean" version="1" RUN_PATH="/bin/echo">
+    <configuration name="clean" type="CLionNativeAppRunConfigurationType" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://." PASS_PARENT_ENVS_2="true" PROJECT_NAME="AsmOS" TARGET_NAME="clean" CONFIG_NAME="clean" version="1" RUN_PATH="/bin/echo">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="debug cpu" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-hdd OS.iso -no-reboot -D ./regs.log -d cpu" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
+    <configuration name="debug cpu" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-hdd OS.iso -no-reboot -D ./regs.log -d cpu" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="AsmOS" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="debug crash" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-hdd OS.iso -no-reboot -D ./regs.log -d int" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
+    <configuration name="debug crash" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-hdd OS.iso -no-reboot -D ./regs.log -d int" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="AsmOS" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="qemu monitor" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-hdd OS.iso -no-reboot -monitor stdio" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
+    <configuration name="qemu monitor" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-hdd OS.iso -no-reboot -monitor stdio" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="AsmOS" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="qemu" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-hdd OS.iso -no-reboot" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
+    <configuration name="qemu" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="-no-reboot -drive file=OS.iso,format=raw,media=disk" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="AsmOS" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="/usr/local/bin/qemu-system-x86_64">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="gdb" type="com.jetbrains.cidr.embedded.customgdbserver.type" factoryName="com.jetbrains.cidr.embedded.customgdbserver.factory" PROGRAM_PARAMS="-hdd OS.iso -no-reboot -S -s -d guest_errors,int" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://." PASS_PARENT_ENVS_2="true" PROJECT_NAME="PacMan" TARGET_NAME="debug" CONFIG_NAME="debug" version="1" RUN_PATH="$PROJECT_DIR$/src/kernel.elf">
-      <custom-gdb-server version="1" gdb-connect=":1234" executable="/usr/local/bin/qemu-system-x86_64" warmup-ms="1000" download-type="UPDATED_ONLY" reset-cmd="monitor reset" reset-type="AFTER_DOWNLOAD">
-        <debugger kind="GDB">/usr/local/bin/i386-elf-gdb</debugger>
-      </custom-gdb-server>
-      <method v="2">
-        <option name="CLION.COMPOUND.BUILD" enabled="true" />
-      </method>
+    <configuration name="gdb" type="qemu" factoryName="QEMU">
+      <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Embedded GDB Server.gdb" />
       <item itemvalue="Makefile Application.bochs" />
       <item itemvalue="Makefile Application.qemu" />
       <item itemvalue="Makefile Application.qemu monitor" />
       <item itemvalue="Makefile Application.debug crash" />
       <item itemvalue="Makefile Application.debug cpu" />
       <item itemvalue="Makefile Application.clean" />
+      <item itemvalue="QEMU.gdb" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
@@ -196,6 +203,7 @@
       <workItem from="1663443806147" duration="432000" />
       <workItem from="1665072470840" duration="8910000" />
       <workItem from="1665236563119" duration="13379000" />
+      <workItem from="1668112003811" duration="22704000" />
     </task>
     <task id="LOCAL-00001" summary="Some stuff">
       <created>1663407026568</created>
@@ -225,7 +233,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665260407502</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="64 bit mode! print stuff!">
+      <created>1668173427480</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1668173427480</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -246,9 +261,14 @@
     <MESSAGE value="Some stuff" />
     <MESSAGE value="Artifact" />
     <MESSAGE value="Save" />
-    <option name="LAST_COMMIT_MESSAGE" value="Save" />
+    <MESSAGE value="64 bit mode! print stuff!" />
+    <option name="LAST_COMMIT_MESSAGE" value="64 bit mode! print stuff!" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

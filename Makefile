@@ -6,11 +6,12 @@ OBJ = ${C_SOURCES:.c=.o}
 CFLAGS = -O3 -fverbose-asm -nostdlib -nostdinc -fno-stack-protector -nostartfiles \
 		 -nodefaultlibs -fno-builtin -fms-extensions -ffreestanding -g
 
-.PHONY: all clean debug
+CC = x86_64-elf-gcc
+LD = x86_64-elf-ld
+
+.PHONY: all clean
 
 all: OS.iso
-
-debug: src/kernel.elf OS.iso
 
 OS.iso: src/bootsect.bin src/kernel.bin
 	dd if=/dev/zero of=OS.iso bs=512 count=901
@@ -18,16 +19,13 @@ OS.iso: src/bootsect.bin src/kernel.bin
 	dd if=src/kernel.bin of=OS.iso conv=notrunc bs=512 seek=1 count=900
 
 src/kernel.bin: src/kernel_start.o ${OBJ}
-	i686-elf-ld -o $@ $^ -T link.ld --oformat binary -melf_i386
-
-src/kernel.elf: src/kernel_start.o ${OBJ}
-	i686-elf-ld -o $@ $^ -T link.ld --oformat elf32-i386 -melf_i386
+	$(LD) -o $@ $^ -T link.ld --oformat binary
 
 src/%.o: src/%.c ${HEADERS}
-	i686-elf-gcc ${CFLAGS} -c $< -o $@
+	$(CC) ${CFLAGS} -c $< -o $@
 
 src/%.o: src/%.asm
-	nasm $< -f elf32 -o $@
+	nasm $< -f elf64 -o $@
 
 src/%.bin: src/%.asm
 	nasm $< -f bin -o $@

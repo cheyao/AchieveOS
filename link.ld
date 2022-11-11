@@ -1,7 +1,7 @@
 ENTRY(main)
 
 SECTIONS {
-    . = 0x1000;
+    . = 0x7E00;
   .text : { *(.text)
             *(.text.*) }
   .rodata : {

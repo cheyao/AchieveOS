@@ -1,12 +1,15 @@
 #include "types.h"
+#include "keyboard.h"
+#include "stdio.h"
 
-static u32int ticks = 0;
+static u64int ticks = 0;
 
-void mainC() {
-    BochsBreak()
-    **((unsigned char **) (0x7F000 + 0x28)) = 6;
+void mainC(void) {
+    update_cursor(0);
+
+    printf("Hello world!");
 }
 
-void tickC() {
+void tickC(void) {
     ticks++;
 }

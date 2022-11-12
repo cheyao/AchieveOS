@@ -39,13 +39,16 @@ void fidtr(uint8_t vector, void *isr, uint8_t flags) {
     descriptor->ist = 0;
     descriptor->attributes = flags;
     descriptor->isr_mid = ((uint64_t) isr >> 16) & 0xFFFF;
-    descriptor->isr_high = ((uint64_t) isr >> 32) & 0xFFFFFFFF;
+    descriptor->isr_high = 0;//  ((uint64_t) isr >> 32) & 0xFFFFFFFF;
     descriptor->reserved = 0;
 }
 
 void init_idt(void) {
     idtr_t.base = (u64int) &idt_entry_t[0];
-    idtr_t.limit = (uint16_t) sizeof(IDTR) * 2 - 1;
+    idtr_t.limit = (u16int) sizeof(IDTR) * 2 - 1;
+
+    BochsBreak()
+    int i = sizeof(IDTR) * 2 - 1;
 
     fidtr(0, isr_0, inte);
     fidtr(1, isr_1, inte);

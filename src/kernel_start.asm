@@ -8,6 +8,7 @@ bits 64
 [extern mainC]
 [extern tickC]
 global main
+section text
 main:
     mov rdi, 0xB8000
     mov rax, 0x0F200F200F200F20 ; Clear screen :)

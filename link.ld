@@ -13,5 +13,5 @@ SECTIONS {
   .bss : { *(.bss)
            *(COMMON)
            *(.bss.*) }
-  PROVIDE(disk_start = . - 0x7E00);
+  PROVIDE(disk_start = . - 0x7E00 + 512);
 }

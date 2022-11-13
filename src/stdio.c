@@ -14,10 +14,19 @@
 // }
 
 int intlen(int i) {
-    int l = 1, t = i;
-    while (t >= 10) {
+    int l = 1;
+    while (i >= 10) {
         l++;
-        t /= 10;
+        i /= 10;
+    }
+    return l;
+}
+
+int hexlen(int i) {
+    int l = 1;
+    while (i >= 16) {
+        l++;
+        i /= 16;
     }
     return l;
 }
@@ -154,6 +163,71 @@ int vprintf(const char *restrict format, va_list args) {
                     j--;
                     break;
                 }
+                case 'x': {
+                    char str[12];
+                    int in = va_arg(args, int);
+                    int len = hexlen(in);
+
+                    if (dot && zp) {
+                        buff[j++ * 2] = '0';
+                        buff[j++ * 2] = 'x';
+                    }
+
+                    if (width != 0 && width > len)
+                        for (int k = width - len - (dot ? 2 : 0) - (pm ? 1 : 0); k != 0; k--, j++)
+                            buff[j * 2] = zp ? '0' : ' ';
+
+                    if (dot && !zp) {
+                        buff[j++ * 2] = '0';
+                        buff[j++ * 2] = 'x';
+                    }
+
+                    itoa(in, str, 16);
+
+                    if (pm) {
+                        buff[j * 2] = '+';
+                        j++;
+                    }
+
+                    for (int c = 0; str[c] != 0; c++, j++)
+                        buff[j * 2] = str[c];
+                    j--;
+                    break;
+                }
+                case 'X': {
+                    char str[12];
+                    int in = va_arg(args, int);
+                    int len = hexlen(in);
+
+                    if (dot && zp) {
+                        buff[j++ * 2] = '0';
+                        buff[j++ * 2] = 'X';
+                    }
+
+                    if (width != 0 && width > len)
+                        for (int k = width - len - (dot ? 2 : 0) - (pm ? 1 : 0); k != 0; k--, j++)
+                            buff[j * 2] = zp ? '0' : ' ';
+
+                    if (dot && !zp) {
+                        buff[j++ * 2] = '0';
+                        buff[j++ * 2] = 'X';
+                    }
+
+                    itoa(in, str, 16);
+
+                    if (pm) {
+                        buff[j * 2] = '+';
+                        j++;
+                    }
+
+                    for (int c = 0; str[c] != 0; c++, j++)
+                        if (str[c] >= 'a' && str[c] <= 'z')
+                            buff[j * 2] = str[c] - ('a' - 'A');
+                        else
+                            buff[j * 2] = str[c];
+                    j--;
+                    break;
+                }
                 case 'n':
                     switch (length) {
                         case 'h':
@@ -168,7 +242,7 @@ int vprintf(const char *restrict format, va_list args) {
                         case 'j':
                             *va_arg(args, intmax_t*) = j;
                             break;
-                        case 'x':
+                        case 'z':
                             *va_arg(args, size_t*) = j;
                             break;
                         case 't':

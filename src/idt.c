@@ -7,6 +7,7 @@
 #include "types.h"
 #include "stdio.h"
 #include "time.h"
+#include "keyboard.h"
 
 typedef struct {
     uint16_t isr_low;      // The lower 16 bits of the ISR's address
@@ -109,6 +110,7 @@ void init_idt(void) {
     fidtr(47, isr_normal_15);
 
     register_handler(32, tick);
+    register_handler(33, keyboard_call);
 
     outb(0x43, 0x36);
     outb(0x40, (u8int) (1193180 / 100 & 0xFF));
@@ -156,8 +158,8 @@ char *exception_messages[] = {
 };
 
 void exception_handler(int num, int err) {
-    print("Got interrupt: ");
-    print(exception_messages[num]);
+    printf("Got interrupt: ");
+    printf("%s", exception_messages[num]);
 }
 
 void register_handler(int num, isr_t fun) {

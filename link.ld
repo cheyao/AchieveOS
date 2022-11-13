@@ -1,7 +1,8 @@
-ENTRY(main)
+ENTRY(_start)
+OUTPUT_FORMAT(binary)
 
 SECTIONS {
-    . = 0x7D00;
+  . = 0x7E00;
   .text : { *(.text)
             *(.text.*) }
   .rodata : {
@@ -12,4 +13,5 @@ SECTIONS {
   .bss : { *(.bss)
            *(COMMON)
            *(.bss.*) }
+  PROVIDE(disk_start = . - 0x7E00);
 }

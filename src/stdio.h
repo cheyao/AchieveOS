@@ -11,10 +11,20 @@
 
 __attribute__ ((format (printf, 1, 2))) int printf(const char *restrict format, ...);
 
-int vprintf(const char *format, va_list args);
+int vprintf(const char *restrict format, va_list args);
 
+// int vfprintf(char *stream, const char *restrict format, va_list args);
 int putchar(char c);
 
-void print(const char *restrict str);
+void puts(const char *restrict str);
+
+extern void clear_screen(void);
+
+typedef struct {
+    char dummy[1];
+} FILE;
+
+static __attribute__((unused)) FILE *const stderr = (FILE *) -1;
+
 
 #endif //_STDIO_H

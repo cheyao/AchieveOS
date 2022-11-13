@@ -6,6 +6,12 @@
 #ifndef _STRING_H
 #define _STRING_H
 
-void itoa(int i, char *buffer);
+char *itoa(int num, char *buff, int base);
+
+void reverse(char str[], int length);
+
+unsigned long strlen(const char *str);
+
+typedef char *String;
 
 #endif //_STRING_H

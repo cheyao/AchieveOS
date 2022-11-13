@@ -6,6 +6,10 @@
 #include "types.h"
 #include "ports.h"
 
+void keyboard_call() {
+
+}
+
 void update_cursor(u16int pos) {
     outb(0x3D4, 0x0F);
     outb(0x3D5, (uint8_t) (pos & 0xFF));

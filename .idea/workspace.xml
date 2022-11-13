@@ -16,21 +16,404 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb242499-2148-404e-bd2e-2e4f87343656" name="Changes" comment="64 bit mode! print stuff!">
-      <change afterPath="$PROJECT_DIR$/src/bochs.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/idtr.asm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stdarg.h" afterDir="false" />
+    <list default="true" id="fb242499-2148-404e-bd2e-2e4f87343656" name="Changes" comment="Printf + nethack start">
+      <change afterPath="$PROJECT_DIR$/src/cstdint.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ctype.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ctype.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/disk.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/disk.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/Files" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/Porting" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/README" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Arch.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Barb.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Caveman.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/GENFILES" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Healer.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Knight.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Monk.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Priest.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Ranger.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Rogue.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Samurai.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Tourist.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Valkyrie.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/Wizard.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/bigroom.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/bogusmon.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/castle.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/cmdhelp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/data.base" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/dungeon.def" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/endgame.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/engrave.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/epitaph.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/gehennom.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/help" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/hh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/history" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/keyhelp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/knox.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/license" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/medusa.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/mines.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/opthelp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/oracle.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/oracles.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/quest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/rumors.fal" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/rumors.tru" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/sokoban.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/symbols" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/tower.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/tribute" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/wizhelp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/dat/yendor.des" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/align.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/amiconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/artifact.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/artilist.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/attrib.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/beconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/bitmfile.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/botl.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/color.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/config.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/config1.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/context.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/coord.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/decl.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/def_os2.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/dgn_file.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/display.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/dlb.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/dungeon.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/engrave.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/extern.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/flag.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/func_tab.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/gem_rsc.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/global.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/hack.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/integer.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/isaac64.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/lev.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/lint.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/load_img.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mac-carbon.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mac-qt.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mac-term.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/macconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/macpopup.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mactty.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/macwin.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mail.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mextra.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mfndpos.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/micro.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mkroom.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/monattk.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mondata.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/monflag.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/monst.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/monsym.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/mttypriv.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/ntconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/obj.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/objclass.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/os2conf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/patchlevel.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/pcconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/permonst.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/prop.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/qt_clust.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/qt_kde0.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/qt_win.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/qt_xpms.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/qtext.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/qttableview.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/quest.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/rect.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/region.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/rm.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/skills.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/sp_lev.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/spell.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/sys.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/system.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/tcap.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/tile2x11.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/tileset.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/timeout.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/tosconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/tradstdc.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/trampoli.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/trap.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/unixconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/vision.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/vmsconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/wceconf.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/winGnome.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/winX.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/winami.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/wincurs.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/wingem.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/winprocs.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/wintty.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/wintype.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/xwindow.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/xwindowp.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/you.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/include/youprop.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/allmain.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/alloc.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/apply.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/artifact.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/attrib.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/ball.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/bones.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/botl.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/cmd.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/dbridge.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/decl.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/detect.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/dig.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/display.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/dlb.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/do.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/do_name.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/do_wear.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/dog.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/dogmove.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/dokick.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/dothrow.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/drawing.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/dungeon.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/eat.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/end.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/engrave.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/exper.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/explode.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/extralev.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/files.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/fountain.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/hack.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/hacklib.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/invent.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/isaac64.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/light.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/lock.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mail.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/makemon.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mapglyph.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mcastu.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mhitm.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mhitu.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/minion.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mklev.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mkmap.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mkmaze.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mkobj.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mkroom.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mon.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mondata.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/monmove.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/monst.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mplayer.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/mthrowu.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/muse.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/music.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/o_init.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/objects.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/objnam.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/options.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/pager.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/pickup.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/pline.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/polyself.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/potion.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/pray.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/priest.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/quest.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/questpgr.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/read.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/rect.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/region.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/restore.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/rip.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/rnd.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/role.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/rumors.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/save.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/shk.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/shknam.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/sit.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/sounds.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/sp_lev.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/spell.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/steal.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/steed.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/sys.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/teleport.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/timeout.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/topten.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/track.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/trap.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/u_init.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/uhitm.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/vault.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/version.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/vision.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/weapon.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/were.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/wield.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/windows.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/wizard.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/worm.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/worn.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/write.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/src/zap.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/nhos/Makefile.dat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/nhos/Makefile.top" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/nhos/Makefile.utl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/NetHack.cnf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/cppregex.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/dgn_comp.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/dgn_lex.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/dgn_yacc.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/ioctl.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/lev_comp.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/lev_lex.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/lev_yacc.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/nhlan.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/pcmain.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/pcsys.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/pctty.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/pcunix.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/pmatchregex.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/posixregex.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/random.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/README" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/bell.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/bugle.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/erthdrum.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/firehorn.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/frsthorn.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/lethdrum.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/mgcflute.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/mgcharp.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/toolhorn.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/wdnflute.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/sounds/wdnharp.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/tclib.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/termcap" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/termcap.uu" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/unixtty.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/share/uudecode.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/Install.unx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/Makefile.doc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/project.pbxproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/project.xcworkspace/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/project.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/xcshareddata/xcschemes/NetHack.xcscheme" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/xcshareddata/xcschemes/makedefs.xcscheme" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NetHack.xcodeproj/xcshareddata/xcschemes/recover.xcscheme" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/NewInstall.unx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/README.linux" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/README.xcode" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/XCode.xcconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/cpp1.shr" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/cpp2.shr" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/cpp3.shr" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/depend.awk" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/gitinfo.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/linux" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/linux-chroot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/linux-minimal" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/linux-qt4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/linux-qt5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/linux-x11" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/macosx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/macosx.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/macosx10.10" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/macosx10.10-qt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/macosx10.14" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/macosx10.5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/macosx10.7" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/macosx10.8" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/solaris" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/solaris-playground" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/hints/unix" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/mkmkfile.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/nethack.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/setup.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/snd86unx.shr" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/sysconf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/unixmain.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/unixres.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/sys/unix/unixunix.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/dgn_comp.l" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/dgn_comp.y" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/dgn_main.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/dlb_main.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/lev_comp.l" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/lev_comp.y" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/lev_main.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/makedefs.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/mdgrep.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/mdgrep.pl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/panic.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/util/recover.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/bmptiles.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/gifread.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/giftiles.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/monsters.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/objects.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/other.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/ppmwrite.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/renumtiles.pl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/safeproc.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/thintile.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/tile.doc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/tile.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/tile2bmp.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/tilemap.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/tileset.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/share/tiletext.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/tty/getline.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/tty/termcap.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/tty/topl.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/nethack/win/tty/wintty.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stdlib.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stdlib.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/time.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/time.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/unistd.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/unistd.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bochs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/bochs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/link.ld" beforeDir="false" afterPath="$PROJECT_DIR$/link.ld" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bootsect.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/bootsect.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/idt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/idt.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/idt.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/idt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/idtr.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/idtr.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/kernel_start.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel_start.asm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/keyboard.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/keyboard.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stdio.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/stdio.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stdio.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/stdio.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/string.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/string.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/string.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/string.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/types.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -131,11 +514,13 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/nethack" />
+      <recent name="$PROJECT_DIR$/src/nethack/sys/nhos" />
+      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Makefile Application.bochs">
+  <component name="RunManager" selected="Makefile Application.qemu">
     <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="CLION.EXTERNAL.BUILD" enabled="true" />
@@ -203,7 +588,7 @@
       <workItem from="1663443806147" duration="432000" />
       <workItem from="1665072470840" duration="8910000" />
       <workItem from="1665236563119" duration="13379000" />
-      <workItem from="1668112003811" duration="22704000" />
+      <workItem from="1668112003811" duration="56459000" />
     </task>
     <task id="LOCAL-00001" summary="Some stuff">
       <created>1663407026568</created>
@@ -240,7 +625,28 @@
       <option name="project" value="LOCAL" />
       <updated>1668173427480</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Help">
+      <created>1668199240753</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1668199240755</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Help">
+      <created>1668200167273</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1668200167274</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Fix kernel offset">
+      <created>1668239175303</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1668239175303</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,11 +664,15 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Some stuff" />
     <MESSAGE value="Artifact" />
     <MESSAGE value="Save" />
     <MESSAGE value="64 bit mode! print stuff!" />
-    <option name="LAST_COMMIT_MESSAGE" value="64 bit mode! print stuff!" />
+    <MESSAGE value="Help" />
+    <MESSAGE value="Fix kernel offset" />
+    <MESSAGE value="Printf + nethack start" />
+    <option name="LAST_COMMIT_MESSAGE" value="Printf + nethack start" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

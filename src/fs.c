@@ -8,6 +8,11 @@
 #include "stdio.h"
 
 void read(void) {
+    if (inb(0x1F0) == 0xFF) {
+        printf("No device!");
+        return;
+    }
+
     outb(0x1F0, 0xA0); // Drive select
     outb(0x1F2, 0x00); // Sector count
     outb(0x1F3, 0x00);

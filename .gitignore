@@ -90,3 +90,5 @@ Temporary Items
 
 *.iso
 *.bin
+
+workspace.xml

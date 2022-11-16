@@ -7,15 +7,15 @@
 #include "ports.h"
 #include "stdio.h"
 
-void read(void) {
-    if (inb(0x1F0) == 0xFF) {
+void read(int port) {
+    if (inb(port + 0) == 0xFF) {
         printf("No device!");
         return;
     }
 
-    outb(0x1F0, 0xA0); // Drive select
-    outb(0x1F2, 0x00); // Sector count
-    outb(0x1F3, 0x00);
+    outb(port + 0, 0xA0); // Drive select
+    outb(port + 2, 0x00); // Sector count
+    outb(port + 3, 0x00);
     outb(0x1F4, 0x00);
     outb(0x1F5, 0x00);
     outb(0x1F6, 0xEC);

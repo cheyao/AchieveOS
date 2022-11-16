@@ -15,7 +15,7 @@ void read(void) {
     outb(0x1F5, 0x00);
     outb(0x1F6, 0xEC);
 
-    u8int in = inb(0x1F7);
+    u8int volatile in = inb(0x1F7);
 
     printf("%#0hhx", in);
     while (((in = inb(0x1F7)) & 0x8) != 0x8 || (in & 0x0) == 0x0);

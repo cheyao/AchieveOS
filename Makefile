@@ -2,7 +2,7 @@ C_SOURCES = $(wildcard src/*.c)
 HEADERS = $(wildcard src/*.h)
 OBJ = ${C_SOURCES:.c=.o src/idtr.o}
 
-CFLAGS = -O0 -fverbose-asm -nostdlib -nostdinc -fno-stack-protector -nostartfiles \
+CFLAGS = -O3 -fverbose-asm -nostdlib -nostdinc -fno-stack-protector -nostartfiles \
 		 -nodefaultlibs -fno-builtin -fms-extensions -ffreestanding -g -mcmodel=large \
 		 -mno-red-zone -mno-mmx -mno-sse -mno-sse2
 LDFLAGS = -T link.ld

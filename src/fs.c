@@ -18,7 +18,7 @@ void read(void) {
     u8int volatile in = inb(0x1F7);
 
     printf("%#0hhx", in);
-    while (((in = inb(0x1F7)) & 0x8) != 0x8 || (in & 0x0) == 0x0);
+    while (((in = inb(0x1F7)) & 0x8) != 0x8 && (in & 0x1) == 0x0);
     printf("%#0hhx", in); // Not printing
 
 }

@@ -31,6 +31,15 @@ int hexlen(int i) {
     return l;
 }
 
+int bin(int i) {
+    int l = 1;
+    while (i >= 2) {
+        l++;
+        i /= 2;
+    }
+    return l;
+}
+
 int vprintf(const char *restrict format, va_list args) {
     u16int pos = get_cursor_position();
     volatile char *buff = (char *) BUFFER + pos * 2;
@@ -165,7 +174,15 @@ int vprintf(const char *restrict format, va_list args) {
                 }
                 case 'x': {
                     char str[12];
-                    int in = va_arg(args, int);
+                    u64int in;
+                    switch (length) {
+                        case 'H':
+                            in = va_arg(args, int);
+                            break;
+                        default:
+                            in = va_arg(args, unsigned int);
+                            break;
+                    }
                     int len = hexlen(in);
 
                     if (dot && zp) {
@@ -204,7 +221,7 @@ int vprintf(const char *restrict format, va_list args) {
                         buff[j++ * 2] = 'X';
                     }
 
-                    if (width != 0 && width > len)
+                    if (width > len)
                         for (int k = width - len - (dot ? 2 : 0) - (pm ? 1 : 0); k != 0; k--, j++)
                             buff[j * 2] = zp ? '0' : ' ';
 
@@ -254,6 +271,26 @@ int vprintf(const char *restrict format, va_list args) {
                             break;
                     }
                     break;
+                case 'b':
+                    char str[65];
+                    u64int bin = 0;
+                    switch (length) {
+                        case 'H':
+                            bin = va_arg(args, int);
+                            break;
+                        default:
+                            bin = va_arg(args, unsigned int);
+                            break;
+                    }
+                    int len = hexlen(bin);
+
+                    if (len < width)
+                        for (int k = width - len - (dot ? 2 : 0) - (pm ? 1 : 0); k != 0; k--, j++)
+                            buff[j * 2] = zp ? '0' : ' ';
+
+
+                    for (int c = 0; str[c] != 0; c++, j++)
+                        buff[j * 2] = str[c];
                 default:
                     break;
             }

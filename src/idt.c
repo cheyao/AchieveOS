@@ -158,8 +158,9 @@ char *exception_messages[] = {
 };
 
 void exception_handler(int num, int err) {
-    printf("Got interrupt: ");
-    printf("%s", exception_messages[num]);
+    printf("Got interrupt: %s, error: %#x", exception_messages[num], err);
+
+    __asm__ __volatile__ ("hlt");
 }
 
 void register_handler(int num, isr_t fun) {

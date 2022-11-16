@@ -18,9 +18,9 @@ void keyboard_call() {
 
     u8int scancode = inb(0x60);
 
-    if (scancode == 0xE0 && inb(0x60) == 0x11)
-        printf("Ctrl + ");
-    printf("Received scancode: %d: %c\n", scancode, sc_ascii[scancode]);
+    // if (scancode == 0xE0 && inb(0x60) == 0x11)
+    //     printf("Ctrl + ");
+    // printf("Received scancode: %d: %c\n", scancode, sc_ascii[scancode]);
 }
 
 void update_cursor(u16int pos) {

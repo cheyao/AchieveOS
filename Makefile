@@ -17,7 +17,9 @@ all: OS.iso
 OS.iso: src/bootsect.bin src/kernel.bin
 	dd if=/dev/zero of=OS.iso bs=512 count=901
 	dd if=src/bootsect.bin of=OS.iso conv=notrunc bs=512 seek=0 count=1
-	dd if=src/kernel.bin of=OS.iso conv=notrunc bs=512 seek=1 count=900
+	export var=`gstat -L -c %s src/kernel.bin`; \
+	export var=`./src/util/portions $$var`; \
+	dd if=src/kernel.bin of=OS.iso conv=notrunc bs=512 seek=1 count=$$var
 
 src/kernel.bin: src/kernel_start.o ${OBJ}
 	${LD} -o $@ $^ ${LDFLAGS}

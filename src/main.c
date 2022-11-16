@@ -1,12 +1,13 @@
-#include "types.h"
 #include "keyboard.h"
-#include "stdio.h"
 #include "idt.h"
 #include "time.h"
+#include "fs.h"
 
 void mainC(void) {
     update_cursor(0);
     init_idt();
+
+    read();
 }
 
 void tickC(void) {

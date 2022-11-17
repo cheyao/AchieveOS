@@ -7,7 +7,7 @@ void mainC(void) {
     update_cursor(0);
     init_idt();
 
-    read(BUS_SECONDARY);
+    read(BUS_PRIMARY, CONTROL_PRIMARY);
 }
 
 void tickC(void) {

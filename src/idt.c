@@ -169,5 +169,7 @@ void register_handler(int num, isr_t fun) {
 }
 
 void isr_handler(int num) {
+    if (interrupt_handlers[num] == 0)
+        printf("Received irq %d\n", num);
     interrupt_handlers[num]();
 }

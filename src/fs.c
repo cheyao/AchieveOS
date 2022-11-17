@@ -7,22 +7,21 @@
 #include "ports.h"
 #include "stdio.h"
 
-void read(int port) {
-    if (inb(port + 0) == 0xFF) {
-        printf("No device!");
+void read(u16int io, u16int control) {
+    if (inb(io + 0) == 0xFF) {
+        printf("[ATA]: No device!");
         return;
     }
 
-    outb(port + 0, 0xA0); // Drive select
-    outb(port + 2, 0x00); // Sector count
-    outb(port + 3, 0x00);
-    outb(0x1F4, 0x00);
-    outb(0x1F5, 0x00);
-    outb(0x1F6, 0xEC);
+    outb(io + DS, 0xA0); // Drive select
+
+    outb(io + SCR, 0x00); // Sector count
+    outb(io + SNR, 0x00);
+    outb(io + CLR, 0x00);
+    outb(io + CHR, 0x00);
+    outb(io + CR, 0xEC);
 
     u8int volatile in = inb(0x1F7);
-
-    printf("%#0hhx", in); // Fist value
 
     while ((in & 0x8) != 0x8 && (in & 0x1) == 0x0) {
         in = inb(0x1F7);
@@ -30,6 +29,15 @@ void read(int port) {
         while (count--);
     }
 
-    printf("%#0hhx", in); // Not printing
+    if ((in & 0x1) != 0) {
+        printf("[ATA]: Error bit was set");
+        return;
+    }
 
+    printf("[ATA]: Identifying ATA device\n");
+
+    for (u16int volatile i = 0; i < 256; i++)
+        *((unsigned short *) 0x7000 + i) = inw(0x1F0);
+
+    printf("[ATA]: Total of %0#x addressable sectors\n", *((unsigned int *) 0x7060));
 }

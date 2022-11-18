@@ -1,5 +1,5 @@
 ENTRY(_start)
-OUTPUT_FORMAT(x86)
+OUTPUT_FORMAT(binary)
 
 SECTIONS {
   . = 0x7E00;

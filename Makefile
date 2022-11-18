@@ -1,37 +1,39 @@
-C_SOURCES = $(wildcard src/*.c)
-HEADERS = $(wildcard src/*.h)
-OBJ = ${C_SOURCES:.c=.o src/idtr.o}
+C_SOURCES = $(wildcard lib/*.c) $(wildcard libc/*.c)
+HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.c)
+OBJ = ${C_SOURCES:.c=.o lib/idtr.o}
 
 CFLAGS = -O3 -fverbose-asm -nostdlib -nostdinc -fno-stack-protector -nostartfiles \
 		 -nodefaultlibs -fno-builtin -fms-extensions -ffreestanding -g -mcmodel=large \
-		 -mno-red-zone -mno-mmx -mno-sse -mno-sse2
+		 -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -Iinclude
 LDFLAGS = -T link.ld
 
 CC = x86_64-elf-gcc
 LD = x86_64-elf-ld
+UTILS = util/portions
 
 .PHONY: all clean
 
 all: OS.iso
 
-OS.iso: src/bootsect.bin src/kernel.bin
-	dd if=/dev/zero of=OS.iso bs=512 count=901
-	dd if=src/bootsect.bin of=OS.iso conv=notrunc bs=512 seek=0 count=1
-	export var=`gstat -L -c %s src/kernel.bin`; \
-	export var=`./src/util/portions $$var`; \
-	dd if=src/kernel.bin of=OS.iso conv=notrunc bs=512 seek=1 count=$$var
+OS.iso: bootsect.bin kernel.bin $(UTILS)
+	dd if=/dev/zero of=OS.iso bs=512 count=501
+	dd if=bootsect.bin of=OS.iso conv=notrunc bs=512 seek=0 count=1
+	dd if=kernel.bin of=OS.iso conv=notrunc bs=512 seek=1 count=`./util/portions \`gstat -L -c %s kernel.bin\``
 
-src/kernel.bin: src/kernel_start.o ${OBJ}
+kernel.bin: lib/kernel_start.o ${OBJ}
 	${LD} -o $@ $^ ${LDFLAGS}
 
-src/%.o: src/%.c ${HEADERS}
-	${CC} ${CFLAGS} -c $< -o $@
-
-src/%.o: src/%.asm
-	nasm $< -f elf64 -o $@
-
-src/bootsect.bin: src/bootsect.asm
+bootsect.bin: boot/bootsect.asm
 	nasm $< -f bin -o $@
 
+%.o: %.c ${HEADERS}
+	${CC} ${CFLAGS} -c $< -o $@
+
+%.o: %.asm
+	nasm $< -f elf64 -o $@
+
+util/portions: util/portions.c
+	gcc-12 -O3 util/portions.c -o util/portions
+
 clean:
-	-rm -rf src/*.bin src/*.o src/*.elf
+	-rm -rf ${OBJ} kenel.bin bootsect.bin OS.iso

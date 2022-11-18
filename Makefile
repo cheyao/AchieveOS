@@ -2,8 +2,8 @@ C_SOURCES = $(wildcard lib/*.c) $(wildcard libc/*.c)
 HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.c)
 OBJ = ${C_SOURCES:.c=.o lib/idtr.o}
 
-CFLAGS = -O3 -fverbose-asm -nostdlib -nostdinc -fno-stack-protector -nostartfiles \
-		 -nodefaultlibs -fno-builtin -fms-extensions -ffreestanding -g -mcmodel=large \
+CFLAGS = -O1 -fverbose-asm -nostdlib -nostdinc -fno-stack-protector -nostartfiles \
+		 -nodefaultlibs -fno-builtin -fms-extensions -ffreestanding -mcmodel=large \
 		 -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -Iinclude
 LDFLAGS = -T link.ld
 

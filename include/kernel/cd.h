@@ -6,8 +6,10 @@
 #ifndef _CD_H
 #define _CD_H
 
-#include "ata.h"
+#include <kernel/ata.h>
 
-void atapi(int IO, int control);
+void atapi(Disk d);
+
+Disk makedisk(uint16_t port, uint8_t ds);
 
 #endif //_CD_H

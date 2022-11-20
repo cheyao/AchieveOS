@@ -10,7 +10,9 @@
 
 extern uint64_t ticks;
 
-uint32_t sleep(uint64_t seconds);
+uint64_t sleep(uint64_t seconds);
+
+uint64_t sleepms(uint64_t milliseconds);
 
 void tick(void);
 

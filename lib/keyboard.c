@@ -4,12 +4,15 @@
 
 #include <kernel/keyboard.h>
 #include <kernel/ports.h>
+#include <kernel/cd.h>
 #include <stdint.h>
 
 void keyboard_call(void) {
     outb(0x20, 0x20);
 
     uint8_t scancode = inb(0x60); /* Da scancode */
+
+    // atapi(BUS_PRIMARY, CONTROL_PRIMARY);
 }
 
 void update_cursor(uint16_t pos) {

@@ -20,7 +20,7 @@ void reverse(int str[], int length) {
 }
 
 int *itoa(int num, int *buff, int base) {
-    int register i = 0;
+    register int i = 0;
     bool n = false;
 
     if (num == 0) {

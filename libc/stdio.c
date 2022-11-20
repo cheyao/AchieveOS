@@ -246,8 +246,8 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
                     }
                     break;
                 case 'b':
-                    char str[65];
-                    int bin = 0;
+                    char str[65] = "";
+                    int bin;
                     switch (length) {
                         case 'H':
                             bin = va_arg(args, int);
@@ -293,9 +293,9 @@ __attribute__ ((format (printf, 1, 2))) int printf(const char *restrict format, 
 
 void puts(const char *str) {
     uint16_t pos = get_cursor_position();
-    int i = 0;
 
-    for (; str[i] != 0; ++pos, ++i)
+
+    for (int i = 0; str[i] != 0; ++pos, ++i)
         ((unsigned char *) BUFFER)[pos * 2] = str[i];
 
     update_cursor(pos);

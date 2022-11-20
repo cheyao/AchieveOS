@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: brew install nasm x86_64-elf-gcc x86_64-elf-binutils coreutils
+        run: brew install nasm x86_64-elf-gcc x86_64-elf-binutils coreutils cdrtools
 
       - name: make OS.iso
         run: make OS.iso
@@ -25,4 +25,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: OS.iso
-          path: OS.iso
+          path: cdrom.iso

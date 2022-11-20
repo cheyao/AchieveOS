@@ -10,11 +10,6 @@
 #include <stdint.h>
 
 void read(uint16_t io, uint16_t control) {
-    if (inb(io + 0) == 0xFF) {
-        printf("[ATA]: No device!");
-        return;
-    }
-
     /* Identify command */
     outw(io + DRIVE_SELECT, 0xA0); /* Drive select */
 

@@ -3,4 +3,10 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include "../include/stdlib.h"
+#include <stdlib.h>
+
+void swap(char *a, char *b) {
+    char _a = *a;
+    *a = *b;
+    *b = _a;
+}

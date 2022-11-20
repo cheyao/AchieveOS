@@ -16,8 +16,14 @@ void tick(void) {
     ticks++;
 }
 
-uint32_t sleep(uint64_t seconds) {
+uint64_t sleep(uint64_t seconds) {
     uint64_t to_wait = seconds * 100 + ticks;
     while (to_wait != ticks);
+    return 0;
+}
+
+uint64_t sleepms(uint64_t ms) {
+    uint64_t to_wait = ms + ticks;
+    while (to_wait > ticks);
     return 0;
 }

@@ -1,9 +1,3 @@
-FRAMEBUFFER equ 0xFD000000
-WIDTH equ 640
-HEIGHT equ 400
-NULL equ 0
-PASS equ 0xFFFF
-
 section .text
 bits 64
 extern main

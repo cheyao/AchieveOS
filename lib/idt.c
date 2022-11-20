@@ -123,7 +123,7 @@ void init_idt(void) {
     flush_idt((uint64_t) &idtr_t);
 }
 
-char *exception_messages[] = {
+const char *exception_messages[] = {
         "Division By Zero",
         "Debug",
         "Non Maskable Interrupt",
@@ -175,5 +175,6 @@ void register_handler(int num, isr_t fun) {
 void isr_handler(int num) {
     if (interrupt_handlers[num] == 0)
         printf("Received irq %d\n", num);
-    interrupt_handlers[num]();
+    else
+        interrupt_handlers[num]();
 }

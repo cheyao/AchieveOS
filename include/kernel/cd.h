@@ -8,7 +8,7 @@
 
 #include <kernel/ata.h>
 
-void atapi(Disk d);
+void atapi(Disk *d);
 
 Disk makedisk(uint16_t port, uint8_t ds);
 

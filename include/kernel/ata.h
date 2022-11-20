@@ -30,11 +30,11 @@
 #define DRIVE_CONTROL 1
 
 typedef struct {
-    enum DISK_TYPE {
-        UNDETECTED, UNKNOWN, CDROM, HARD_DISK
+    enum {
+        NONE, UNKNOWN, CDROM, HARD_DISK
     } type;
-    uint8_t port;
-    uint16_t drive_select_command;
+    uint16_t port;
+    uint8_t drive_select_command;
 } Disk;
 
 #endif //_ATA_H

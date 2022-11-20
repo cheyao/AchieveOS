@@ -11,6 +11,8 @@
 #include <time.h>
 
 void atapi(Disk d) {
+    reset_ata(d.port);
+
     outb(d.port + DRIVE_SELECT, d.drive_select_command); /* Drive select */
 
     sleepms(10);

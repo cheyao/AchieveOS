@@ -12,7 +12,7 @@ void main(void) {
     printf("[ATAPI]: Scanning primary bus slave\n");
     atapi(makedisk(BUS_PRIMARY, 0xB0));
     printf("[ATAPI]: Scanning secondary bus\n");
-    atapi(makedisk(BUS_PRIMARY, 0xA0));
+    atapi(makedisk(BUS_SECONDARY, 0xA0));
     printf("[ATAPI]: Scanning secondary bus slave\n");
-    atapi(makedisk(BUS_PRIMARY, 0xB0));
+    atapi(makedisk(BUS_SECONDARY, 0xB0));
 }

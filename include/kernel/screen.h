@@ -8,4 +8,4 @@
 
 #define BUFFER 0xB8000
 
-#endif //_SCREEN_H
+#endif  //_SCREEN_H

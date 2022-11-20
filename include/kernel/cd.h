@@ -12,4 +12,4 @@ void atapi(Disk *d);
 
 Disk makedisk(uint16_t port, uint8_t ds);
 
-#endif //_CD_H
+#endif  //_CD_H

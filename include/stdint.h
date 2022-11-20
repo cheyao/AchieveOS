@@ -48,4 +48,4 @@ typedef int32_t pid_t;
 typedef uint32_t uid_t;
 typedef uint32_t gid_t;
 
-#endif //_STDINT_H
+#endif  //_STDINT_H

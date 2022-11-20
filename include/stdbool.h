@@ -13,4 +13,4 @@ typedef _Bool bool;
 
 #define __bool_true_false_are_defined
 
-#endif //_STDBOOL_H
+#endif  //_STDBOOL_H

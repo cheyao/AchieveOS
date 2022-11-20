@@ -14,4 +14,4 @@
 typedef long long ptrdiff_t;
 typedef long unsigned int size_t;
 
-#endif //_STDDEF_H
+#endif  //_STDDEF_H

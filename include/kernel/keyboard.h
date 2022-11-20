@@ -13,4 +13,4 @@ void keyboard_call(void);
 
 uint16_t get_cursor_position(void);
 
-#endif //KEYBOARD_H
+#endif  // KEYBOARD_H

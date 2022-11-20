@@ -10,4 +10,4 @@
 
 bool isDigit(char i);
 
-#endif //_CTYPE_H
+#endif  //_CTYPE_H

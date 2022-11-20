@@ -4,20 +4,20 @@
 //
 
 #include <kernel/idt.h>
+#include <kernel/keyboard.h>
+#include <kernel/ports.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
-#include <kernel/keyboard.h>
-#include <kernel/ports.h>
 
 typedef struct {
-    uint16_t isr_low;      // The lower 16 bits of the ISR's address
-    uint16_t cs;           // The GDT segment selector that the CPU will load into CS before calling the ISR
-    uint8_t ist;          // The IST in the TSS that the CPU will load into RSP; set to zero for now
-    uint8_t attributes;   // Type and attributes; see the IDT page
-    uint16_t isr_mid;      // The higher 16 bits of the lower 32 bits of the ISR's address
-    uint32_t isr_high;     // The higher 32 bits of the ISR's address
-    uint32_t reserved;     // Set to zero
+    uint16_t isr_low;    // The lower 16 bits of the ISR's address
+    uint16_t cs;         // The GDT segment selector that the CPU will load into CS before calling the ISR
+    uint8_t ist;         // The IST in the TSS that the CPU will load into RSP; set to zero for now
+    uint8_t attributes;  // Type and attributes; see the IDT page
+    uint16_t isr_mid;    // The higher 16 bits of the lower 32 bits of the ISR's address
+    uint32_t isr_high;   // The higher 32 bits of the ISR's address
+    uint32_t reserved;   // Set to zero
 } __attribute__((packed)) IDTR;
 
 typedef struct {
@@ -25,11 +25,9 @@ typedef struct {
     uint64_t base;
 } __attribute__((packed)) IDTR_T;
 
-__attribute__((aligned(0x10)))
-static IDTR idt_entry_t[256];
+__attribute__((aligned(0x10))) static IDTR idt_entry_t[256];
 isr_t interrupt_handlers[224];
 static IDTR_T idtr_t;
-
 
 extern void flush_idt(uint64_t idt);
 
@@ -158,13 +156,12 @@ const char *exception_messages[] = {
         "Reserved",
         "Reserved",
         "Reserved",
-        "Reserved"
-};
+        "Reserved"};
 
 void exception_handler(int num, int err) {
     printf("Got interrupt: %s (%d), error: %#x", exception_messages[num], num, err);
 
-    __asm__ __volatile__ ("hlt");
+    __asm__ __volatile__("hlt");
 }
 
 void register_handler(int num, isr_t fun) {

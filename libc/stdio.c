@@ -3,11 +3,11 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
+#include <ctype.h>
 #include <kernel/keyboard.h>
 #include <kernel/screen.h>
-#include <stdio.h>
 #include <stdarg.h>
-#include <ctype.h>
+#include <stdio.h>
 #include <string.h>
 
 int intlen(int i, uint8_t base) {
@@ -33,10 +33,10 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
             // Values
             int width = 0;
             bool left = false;
-            bool pm = false; /* add the sign */
-            bool sp = false; /* space before if no sign */
+            bool pm = false;  /* add the sign */
+            bool sp = false;  /* space before if no sign */
             bool dot = false; /* contain decimal point even if no small digits*/
-            bool zp = false; /* zero padding */
+            bool zp = false;  /* zero padding */
             int precision = 0;
             char length = '\0';
 
@@ -227,21 +227,21 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
                 case 'n':
                     switch (length) {
                         case 'h':
-                            *va_arg(args, signed int*) = j;
+                            *va_arg(args, signed int *) = j;
                             break;
                         case 'H':
-                            *va_arg(args, signed char*) = (char) j;
+                            *va_arg(args, signed char *) = (char) j;
                             break;
                         case 'l':
                         case 'j':
                         case 'z':
                         case 't':
                             /* They are the same, just have different names */
-                            *va_arg(args, long int*) = j;
+                            *va_arg(args, long int *) = j;
                             break;
                         case '\0':
                         default:
-                            *va_arg(args, int*) = j;
+                            *va_arg(args, int *) = j;
                             break;
                     }
                     break;
@@ -262,7 +262,6 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
                         for (int k = width - len - (dot ? 2 : 0) - (pm ? 1 : 0); k != 0; k--, j++)
                             buff[j * 2] = zp ? '0' : ' ';
 
-
                     for (int c = 0; str[c] != 0; c++, j++)
                         buff[j * 2] = str[c];
                 default:
@@ -270,30 +269,29 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
             }
         } else {
             // Print!
-            if (format[i] == '\n') { // New line calculations
+            if (format[i] == '\n') {  // New line calculations
                 do {
                     buff[j * 2] = ' ';
                     j++;
                 } while (((uint64_t) buff + j * 2 - BUFFER) % 160 != 158);
-            } else buff[j * 2] = format[i]; // Normal print
+            } else
+                buff[j * 2] = format[i];  // Normal print
         }
     }
     update_cursor(pos + j);
     return j;
 }
 
-
-__attribute__ ((format (printf, 1, 2))) int printf(const char *restrict format, ...) {
+__attribute__((format(printf, 1, 2))) int printf(const char *restrict format, ...) {
     va_list list;
     va_start(list, format);
     int i = vprintf(format, list);
-    va_end (list);
+    va_end(list);
     return i;
 }
 
 void puts(const char *str) {
     uint16_t pos = get_cursor_position();
-
 
     for (int i = 0; str[i] != 0; ++pos, ++i)
         ((unsigned char *) BUFFER)[pos * 2] = str[i];

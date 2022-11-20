@@ -14,4 +14,4 @@ unsigned long strlen(const int *str);
 
 typedef char *String;
 
-#endif //_STRING_H
+#endif  //_STRING_H

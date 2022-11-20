@@ -60,4 +60,4 @@ typedef void (*isr_t)(void);
 
 void register_handler(int num, isr_t fun);
 
-#endif //IDT_H
+#endif  // IDT_H

@@ -18,4 +18,4 @@ void tick(void);
 
 typedef uint64_t time_t;
 
-#endif //_TIME_H
+#endif  //_TIME_H

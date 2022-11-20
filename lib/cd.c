@@ -3,11 +3,11 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
+#include <kernel/ata.h>
 #include <kernel/cd.h>
 #include <kernel/ports.h>
-#include <kernel/ata.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <time.h>
 
 void atapi(Disk *d) {

@@ -1,12 +1,14 @@
-#include <kernel/keyboard.h>
-#include <kernel/idt.h>
 #include <kernel/cd.h>
+#include <kernel/idt.h>
+#include <kernel/keyboard.h>
 #include <stdio.h>
 
-Disk disks[4] = {{.port = BUS_PRIMARY, .type = NONE, .drive_select_command = 0xA0},
-                 {.port = BUS_PRIMARY, .type = NONE, .drive_select_command = 0xB0},
-                 {.port = BUS_SECONDARY, .type = NONE, .drive_select_command = 0xA0},
-                 {.port = BUS_SECONDARY, .type = NONE, .drive_select_command = 0xB0},};
+Disk disks[4] = {
+        {.port = BUS_PRIMARY, .type = NONE, .drive_select_command = 0xA0},
+        {.port = BUS_PRIMARY, .type = NONE, .drive_select_command = 0xB0},
+        {.port = BUS_SECONDARY, .type = NONE, .drive_select_command = 0xA0},
+        {.port = BUS_SECONDARY, .type = NONE, .drive_select_command = 0xB0},
+};
 
 void main(void) {
     update_cursor(0);

@@ -13,4 +13,4 @@ unsigned short inw(unsigned short port);
 
 void outw(unsigned short port, unsigned short data);
 
-#endif //PACMAN_PORTS_H
+#endif  // PACMAN_PORTS_H

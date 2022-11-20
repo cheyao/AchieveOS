@@ -1,5 +1,5 @@
 C_SOURCES = $(wildcard lib/*.c) $(wildcard libc/*.c)
-HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.c)
+HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.h)
 OBJ = ${C_SOURCES:.c=.o lib/idtr.o}
 
 CFLAGS = -O2 -std=gnu11 -g -static -Wall -Wextra -Wno-unused-function -Wno-unused-parameter \

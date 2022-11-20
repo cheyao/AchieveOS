@@ -7,5 +7,5 @@
 #include <stdbool.h>
 
 bool isDigit(char i) {
-    return (i >= '0') & (i <= '9');
+	return (i >= '0') & (i <= '9');
 }

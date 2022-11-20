@@ -3,9 +3,9 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <string.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
 
 void reverse(int str[], int length) {
     int s = 0;

@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 #define reset_ata(port) outb(port + COMMAND_REGISTER, 0x08)
-#define insw(port, buffer, count) __asm__ ("cld; rep; insw" :: "D" (buffer), "d" (port), "c" (count))
+#define insw(port, buffer, count) __asm__("cld; rep; insw" ::"D"(buffer), "d"(port), "c"(count))
 
 #define BUS_PRIMARY 0x1F0
 #define BUS_SECONDARY 0x170
@@ -31,10 +31,13 @@
 
 typedef struct {
     enum {
-        NONE, UNKNOWN, CDROM, HARD_DISK
+        NONE,
+        UNKNOWN,
+        CDROM,
+        HARD_DISK
     } type;
     uint16_t port;
     uint8_t drive_select_command;
 } Disk;
 
-#endif //_ATA_H
+#endif  //_ATA_H

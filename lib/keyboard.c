@@ -2,9 +2,9 @@
 // Created by cheyao on 11.11.2022.
 //
 
+#include <kernel/cd.h>
 #include <kernel/keyboard.h>
 #include <kernel/ports.h>
-#include <kernel/cd.h>
 #include <stdint.h>
 
 void keyboard_call(void) {

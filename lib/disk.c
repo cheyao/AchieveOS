@@ -3,11 +3,11 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <kernel/disk.h>
 #include <kernel/ata.h>
+#include <kernel/disk.h>
 #include <kernel/ports.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 
 void read(uint16_t io, uint16_t control) {
     /* Identify command */
@@ -37,12 +37,10 @@ void read(uint16_t io, uint16_t control) {
     for (uint16_t volatile i = 0; i < 256; i++)
         *((unsigned short *) 0x7000 + i) = inw(0x1F0); /* get the identify and store to 0x7000 */
 
-    __asm__ __volatile__ ("mov (0x7060), %eax");
-    __asm__ __volatile__ ("mov (0x7061), %ebx");
-    __asm__ __volatile__ ("mov %ebx, (0x7060)");
-    __asm__ __volatile__ ("mov %eax, (0x7061)");
+    __asm__ __volatile__("mov (0x7060), %eax");
+    __asm__ __volatile__("mov (0x7061), %ebx");
+    __asm__ __volatile__("mov %ebx, (0x7060)");
+    __asm__ __volatile__("mov %eax, (0x7061)");
 
     printf("[ATA]: Total of %0x addressable sectors\n", *((unsigned int *) 0x7060));
 }
-
-

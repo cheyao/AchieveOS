@@ -8,7 +8,7 @@
 
 #include <stdarg.h>
 
-__attribute__ ((format (printf, 1, 2))) int printf(const char *restrict format, ...);
+__attribute__((format(printf, 1, 2))) int printf(const char *restrict format, ...);
 
 int vprintf(const char *restrict format, va_list args);
 
@@ -26,5 +26,4 @@ typedef struct {
 
 static __attribute__((unused)) FILE *const stderr = (FILE *) -1;
 
-
-#endif //_STDIO_H
+#endif  //_STDIO_H

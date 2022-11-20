@@ -10,4 +10,4 @@
 
 void read(uint16_t io, uint16_t control);
 
-#endif //_DISK_H
+#endif  //_DISK_H

@@ -5,6 +5,7 @@
 
 #include <kernel/ata.h>
 #include <kernel/cd.h>
+#include <kernel/idt.h>
 #include <kernel/ports.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -12,7 +13,6 @@
 
 void atapi(Disk *d) {
     reset_ata(d->port);
-    asm volatile("xchg %bx, %bx");
     outb(d->port + DRIVE_SELECT, d->drive_select_command); /* Drive select */
 
     sleepms(10);
@@ -26,13 +26,12 @@ void atapi(Disk *d) {
 
     uint8_t in = inb(d->port + COMMAND_REGISTER); /* Status */
 
+    sleepms(10);
+
     if (in == 0) {
-        printf("[ATAPI]: Nothing exists on port %0#x\n", d->port);
-        d->type = NONE;
+        d->type = UNKNOWN;
         return;
     }
-
-    printf("%#x\n", in); /* Prints 0xFF */
 
     /* Ready/Error */
     while ((in & 0x80) != 0 && (in & 0x1) == 0 && (in & 0x8) == 0) {
@@ -41,25 +40,60 @@ void atapi(Disk *d) {
     }
 
     if ((in & 0x1) == 1) {
-        printf("[ATAPI]: Error bit was set\n");
+        d->type = UNKNOWN;
         return;
     }
 
-    printf("[ATAPI]: Identifying ATA device\n");
+    insw(d->port + +DATA, ((unsigned short *) 0x7000), 256); /* Receive identify*/
 
-    insw(d->port + DATA, ((unsigned short *) 0x7000), 256);
+    if (*((unsigned short *) 0x7000) & 1 << 7)
+        d->removable = true;
 
-    printf("[ATAPI]: Config: %0x\n", *((uint16_t *) 0x7000));
+    if ((*((unsigned short *) 0x7000) >> 14 & 0b11) == 0b10)
+        d->protocol = ATAPI;
+    else
+        d->protocol = ATA;
+
+    switch (*((unsigned short *) 0x7000) >> 8 & 0b11111) {
+        case 0x00:
+            d->type = DIRECT_ACCESS;
+            break;
+        case 0x05:
+            d->type = CDROM;
+            break;
+        case 0x07:
+            d->type = OPTICAL;
+            break;
+        default:
+            d->type = UNKNOWN;
+    }
 
     reset_ata(d->port);
+}
 
-    if (inb(d->port + SECTOR_COUNT) == 0x01 &&
-        inb(d->port + LBA_LOW) == 0x00 &&
-        inb(d->port + LBA_MID) == 0x00 &&
-        inb(d->port + LBA_HIGH) == 0x00) {
-        printf("[ATAPI]: Detected non-packet device\n");
-    } else
-        printf("[ATAPI]: Detected packet device\n");
+void read_disk(Disk *d) {
+    uint8_t read_cmd[12] = {0xA8, 0, (0x10 >> 0x18) & 0xFF, (0x10 >> 0x10) & 0xFF, (0x10 >> 0x08) & 0xFF,
+                            (0x10 >> 0x00) & 0xFF, 0, 0, 0, 1, 0, 0};
 
-    d->type = CDROM;
+    outb(d->port + DRIVE_SELECT, d->drive_select_command);
+    sleepms(10);
+    outb(d->port + ERROR_R, 0x00);
+    outb(d->port + LBA_MID, 2048 & 0xFF);
+    outb(d->port + LBA_HIGH, 2048 >> 8);
+    outb(d->port + COMMAND_REGISTER, 0xA0); /* Packet command */
+    outsw(d->port + DATA, (uint16_t *) read_cmd, 6);
+
+    uint8_t in;
+    /* Poll until BSY is 0 and DRQ is 1 or until ERR is 1 or DF is 1*/
+    while (((in = inb(d->port + COMMAND_REGISTER)) & 0x80) != 0 && (in & 0x8) == 0 && (in % 0x1) == 0 &&
+           (in & 0x20) == 0);
+
+    if ((in % 0x1) == 1 && (in & 0x20) == 0x20) {
+        printf("[ATAPI]: Error! Error bit was set while reading disk!");
+    }
+    int size = ((((int) inb(d->port + LBA_HIGH))) << 8) | (int) (inb(d->port + LBA_MID));
+
+    insw(d->port + DATA, ((uint16_t *) 0x100000), size / 2);
+
+    while (inb(d->port + COMMAND_REGISTER) & 0x88);
 }

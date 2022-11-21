@@ -7,6 +7,9 @@
 #define IDT_H
 
 void init_idt(void);
+
+void schedule(int port);
+
 extern void isr_0(void);
 extern void isr_1(void);
 extern void isr_2(void);

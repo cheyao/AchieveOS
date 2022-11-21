@@ -3,9 +3,11 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
+#include <kernel/ata.h>
 #include <kernel/idt.h>
 #include <kernel/keyboard.h>
 #include <kernel/ports.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
@@ -170,8 +172,14 @@ void register_handler(int num, isr_t fun) {
 }
 
 void isr_handler(int num) {
-    if (interrupt_handlers[num] == 0)
+    if (num >= 8) outb(0xA0, 0x20); /* Keep this just so I remember the ports*/
+    outb(0x20, 0x20);
+
+    if (num == 14 || num == 15);
+    else if (interrupt_handlers[num] == 0)
         printf("Received irq %d\n", num);
     else
         interrupt_handlers[num]();
 }
+
+// /usr/local/bin/qemu-system-x86_64 -no-reboot -cdrom cdrom.iso --trace events=trace

@@ -7,10 +7,10 @@
 #define _ATA_H
 
 #include <kernel/ports.h>
+#include <stdbool.h>
 #include <stdint.h>
 
 #define reset_ata(port) outb(port + COMMAND_REGISTER, 0x08)
-#define insw(port, buffer, count) __asm__("cld; rep; insw" ::"D"(buffer), "d"(port), "c"(count))
 
 #define BUS_PRIMARY 0x1F0
 #define BUS_SECONDARY 0x170
@@ -18,7 +18,7 @@
 #define CONTROL_SECONDARY 0x376
 
 #define DATA 0
-#define ERROR 1
+#define ERROR_R 1
 #define SECTOR_COUNT 2
 #define LBA_LOW 3
 #define LBA_MID 4
@@ -30,14 +30,21 @@
 #define DRIVE_CONTROL 1
 
 typedef struct {
-    enum {
-        NONE,
-        UNKNOWN,
-        CDROM,
-        HARD_DISK
-    } type;
-    uint16_t port;
-    uint8_t drive_select_command;
+	enum TYPE {
+		UNKNOWN,
+		CDROM,
+		OPTICAL,
+		DIRECT_ACCESS
+	} type;
+	enum PROTOCOL {
+		OTHER,
+		ATA,
+		ATAPI
+	} protocol;
+	uint16_t port;
+	uint16_t control;
+	uint8_t drive_select_command;
+	bool removable;
 } Disk;
 
 #endif  //_ATA_H

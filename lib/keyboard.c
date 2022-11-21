@@ -8,8 +8,6 @@
 #include <stdint.h>
 
 void keyboard_call(void) {
-    outb(0x20, 0x20);
-
     uint8_t scancode = inb(0x60); /* Da scancode */
 
     // atapi(BUS_PRIMARY, CONTROL_PRIMARY);

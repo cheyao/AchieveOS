@@ -1,8 +1,9 @@
 All contributes are very welcome
 
-        You can also use C++ if you want
+You can also use C++ if you want
 
-            Feel free to correct me
+Feel free to correct me
 
-                But please respect these rules : 1. Keep in UTF -
-    8 encoding
+But please respect these rules :
+1. Keep in UTF - 8 encoding
+2. Run make format before committing

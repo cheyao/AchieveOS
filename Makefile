@@ -2,7 +2,7 @@ C_SOURCES = $(wildcard lib/*.c) $(wildcard libc/*.c)
 HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.h)
 OBJ = ${C_SOURCES:.c=.o lib/idtr.o}
 
-CFLAGS = -O2 -std=gnu11 -g -static -Wall -Wextra -Wno-unused-function -Wno-unused-parameter \
+CFLAGS = -O1 -std=gnu11 -g -static -Wall -Wextra -Wno-unused-function -Wno-unused-parameter \
 		 -Wstrict-prototypes -Wpointer-arith -Wcast-align -Wwrite-strings -Wshadow \
  	     -fverbose-asm -nostdlib -nostdinc -fno-stack-protector -nostartfiles -Wundef \
 		 -nodefaultlibs -fno-builtin -fms-extensions -ffreestanding -mcmodel=large \
@@ -15,7 +15,7 @@ LD = x86_64-elf-ld
 AS = nasm
 UTILS = util/portions
 
-.PHONY: all clean
+.PHONY: all clean format
 
 all: cdrom.iso
 
@@ -45,3 +45,6 @@ util/portions: util/portions.c
 
 clean:
 	-rm -rf ${OBJ} kenel.bin bootsect.bin kernel.iso
+
+format:
+	clang-format -Werror --style=file -i --verbose ${C_SOURCES} ${HEADERS}

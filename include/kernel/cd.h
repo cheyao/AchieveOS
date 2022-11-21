@@ -10,6 +10,6 @@
 
 void atapi(Disk *d);
 
-Disk makedisk(uint16_t port, uint8_t ds);
+void read_disk(Disk *d);
 
 #endif  //_CD_H

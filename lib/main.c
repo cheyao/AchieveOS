@@ -4,22 +4,30 @@
 #include <stdio.h>
 
 Disk disks[4] = {
-        {.port = BUS_PRIMARY, .type = NONE, .drive_select_command = 0xA0},
-        {.port = BUS_PRIMARY, .type = NONE, .drive_select_command = 0xB0},
-        {.port = BUS_SECONDARY, .type = NONE, .drive_select_command = 0xA0},
-        {.port = BUS_SECONDARY, .type = NONE, .drive_select_command = 0xB0},
+        {.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
+        {.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x3f6},
+        {.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x370},
+        {.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x370},
 };
+uint8_t cdrom_port = 5;
 
 void main(void) {
     update_cursor(0);
     init_idt();
 
-    printf("[ATAPI]: Scanning primary bus\n");
     atapi(&disks[0]);
-    printf("[ATAPI]: Scanning primary bus slave\n");
     atapi(&disks[1]);
-    printf("[ATAPI]: Scanning secondary bus\n");
     atapi(&disks[2]);
-    printf("[ATAPI]: Scanning secondary bus slave\n");
     atapi(&disks[3]);
+
+    for (int i = 0; i < 4; i++) {
+        if (disks[i].type == CDROM) {
+            cdrom_port = i;
+        }
+    }
+
+    printf("Reading disk %d\n", cdrom_port);
+    read_disk(&disks[cdrom_port]);
+
+    printf("Total of %d", *((int32_t *) 0x100050)); // 901
 }

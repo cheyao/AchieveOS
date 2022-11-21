@@ -11,10 +11,7 @@
 uint64_t ticks;
 
 void tick(void) {
-    // if (num >= 8) outb(0xA0, 0x20); /* Keep this just so I remember the ports*/
-    outb(0x20, 0x20);
-
-    ticks++;
+	ticks++;
 }
 
 uint64_t sleep(uint64_t seconds) {

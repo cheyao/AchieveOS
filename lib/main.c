@@ -4,30 +4,30 @@
 #include <stdio.h>
 
 Disk disks[4] = {
-        {.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
-        {.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x3f6},
-        {.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x370},
-        {.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x370},
+		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
+		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x3f6},
+		{.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x370},
+		{.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x370},
 };
 uint8_t cdrom_port = 5;
 
 void main(void) {
-    update_cursor(0);
-    init_idt();
+	update_cursor(0);
+	init_idt();
 
-    atapi(&disks[0]);
-    atapi(&disks[1]);
-    atapi(&disks[2]);
-    atapi(&disks[3]);
+	atapi(&disks[0]);
+	atapi(&disks[1]);
+	atapi(&disks[2]);
+	atapi(&disks[3]);
 
-    for (int i = 0; i < 4; i++) {
-        if (disks[i].type == CDROM) {
-            cdrom_port = i;
-        }
-    }
+	for (int i = 0; i < 4; i++) {
+		if (disks[i].type == CDROM) {
+			cdrom_port = i;
+		}
+	}
 
-    printf("Reading disk %d\n", cdrom_port);
-    read_disk(&disks[cdrom_port]);
+	printf("Reading disk %d\n", cdrom_port);
+	read_disk(&disks[cdrom_port]);
 
-    printf("Total of %d", *((int32_t *) 0x100050)); // 901
+	printf("Total of %d", *((int32_t *) 0x100050));  // 901
 }

@@ -5,7 +5,6 @@
 
 #include <kernel/ata.h>
 #include <kernel/cd.h>
-#include <kernel/idt.h>
 #include <kernel/ports.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -71,9 +70,10 @@ void atapi(Disk *d) {
 	reset_ata(d->port);
 }
 
-void read_disk(Disk *d) {
-	uint8_t read_cmd[12] = {0xA8, 0, (0x10 >> 0x18) & 0xFF, (0x10 >> 0x10) & 0xFF, (0x10 >> 0x08) & 0xFF,
-	                        (0x10 >> 0x00) & 0xFF, 0, 0, 0, 1, 0, 0};
+void read_cdrom(Disk *d, uint32_t lba, uint32_t sectors) {
+	uint8_t read_cmd[12] = {0xA8, 0, (lba >> 0x18) & 0xFF, (lba >> 0x10) & 0xFF, (lba >> 0x08) & 0xFF,
+	                        (lba >> 0x00) & 0xFF, (sectors >> 0x18) & 0xFF, (sectors >> 0x10) & 0xFF,
+	                        (sectors >> 0x08) & 0xFF, (sectors >> 0x00) & 0xFF, 0, 0};
 
 	outb(d->port + DRIVE_SELECT, d->drive_select_command);
 	sleepms(10);

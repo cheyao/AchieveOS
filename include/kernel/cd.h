@@ -10,6 +10,6 @@
 
 void atapi(Disk *d);
 
-void read_disk(Disk *d);
+void read_cdrom(Disk *d, uint32_t lba, uint32_t sectors);
 
 #endif  //_CD_H

@@ -20,10 +20,10 @@ UTILS = util/portions
 all: cdrom.iso
 
 cdrom.iso: bootsect.bin kernel.bin $(UTILS)
-	dd if=/dev/zero of=cdcontents/kernel.iso bs=512 count=2880
-	dd if=bootsect.bin of=cdcontents/kernel.iso conv=notrunc bs=512 seek=0 count=1
-	dd if=kernel.bin of=cdcontents/kernel.iso conv=notrunc bs=512 seek=1 count=`./util/portions \`gstat -L -c %s kernel.bin\``
-	mkisofs -o cdrom.iso -V AchiveOS -b kernel.iso cdcontents # Finally a cdrom
+	dd if=/dev/zero of=cdcontents/kernel.flp bs=512 count=2880
+	dd if=bootsect.bin of=cdcontents/kernel.flp conv=notrunc bs=512 seek=0 count=1
+	dd if=kernel.bin of=cdcontents/kernel.flp conv=notrunc bs=512 seek=1 count=`./util/portions \`gstat -L -c %s kernel.bin\``
+	mkisofs -U -o cdrom.iso -V AchiveOS -b kernel.flp cdcontents # Finally a cdrom
 
 kernel.bin: lib/kernel_start.o ${OBJ}
 	${LD} -o $@ $^ ${LDFLAGS} --oformat binary

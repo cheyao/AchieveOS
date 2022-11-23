@@ -1,6 +1,6 @@
 org 0x7C00
 KERNEL_OFFSET equ 0x7E00
-SECTORS equ 28
+SECTORS equ 40
 
 CODE_SEG equ gdt_code - gdt_start
 DATA_SEG equ gdt_data - gdt_start

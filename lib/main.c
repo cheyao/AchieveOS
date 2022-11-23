@@ -27,7 +27,7 @@ void main(void) {
 	}
 
 	printf("Reading disk %d\n", cdrom_port);
-	read_disk(&disks[cdrom_port]);
+	read_cdrom(&disks[cdrom_port], 0x10, 1);
 
-	printf("Total of %d", *((int32_t *) 0x100050));  // 901
+	printf("Total of %dMb", *((int32_t *) 0x100050) * 2);  // 901
 }

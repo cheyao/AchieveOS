@@ -8,8 +8,12 @@
 
 #include <kernel/ata.h>
 
-void atapi(Disk *d);
+void identify(Disk *d);
 
-void read_cdrom(Disk *d, uint32_t lba, uint32_t sectors);
+void read_cdrom(Disk *d, uint32_t lba, uint32_t sectors, uint16_t *buffer);
+
+void ls(void);
+
+void cd(void);
 
 #endif  //_CD_H

@@ -15,15 +15,8 @@ int vprintf(const char *restrict format, va_list args);
 // int vfprintf(char *stream, const char *restrict format, va_list args);
 int putchar(char c);
 
-void puts(const char *restrict str);
+int puts(const char *restrict str);
 
 extern void clear_screen(void);
-
-typedef struct {
-    char *addr;
-    char *read_to;
-} FILE;
-
-static __attribute__((unused)) FILE *const stderr = (FILE *) -1;
 
 #endif  //_STDIO_H

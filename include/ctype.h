@@ -10,4 +10,8 @@
 
 bool isDigit(char i);
 
+int tolower(int ch);
+
+int isspace(int c);
+
 #endif  //_CTYPE_H

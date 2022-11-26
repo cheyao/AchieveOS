@@ -34,7 +34,8 @@ typedef struct {
 		UNKNOWN,
 		CDROM,
 		OPTICAL,
-		DIRECT_ACCESS
+		DIRECT_ACCESS,
+		HARD_DISK
 	} type;
 	enum PROTOCOL {
 		OTHER,
@@ -44,6 +45,7 @@ typedef struct {
 	uint16_t port;
 	uint16_t control;
 	uint8_t drive_select_command;
+	uint32_t size;
 	bool removable;
 } Disk;
 

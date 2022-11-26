@@ -1,6 +1,7 @@
 #include <kernel/cd.h>
 #include <kernel/idt.h>
 #include <kernel/keyboard.h>
+#include <stdint.h>
 #include <stdio.h>
 
 Disk disks[4] = {
@@ -15,19 +16,24 @@ void main(void) {
 	update_cursor(0);
 	init_idt();
 
-	atapi(&disks[0]);
-	atapi(&disks[1]);
-	atapi(&disks[2]);
-	atapi(&disks[3]);
+	puts("One\n");
+	identify(&disks[0]);
+	puts("2\n");
+	identify(&disks[1]);
+	puts("3\n");
+	identify(&disks[2]);
+	printf("Type: %d\n", disks[0].type);
+	puts("Type: 4\n");
+	identify(&disks[3]);
 
 	for (int i = 0; i < 4; i++) {
 		if (disks[i].type == CDROM) {
 			cdrom_port = i;
 		}
 	}
+	//
+	// read_cdrom(&disks[cdrom_port], 0x10, 1, (uint16_t *)0x100000);
+	// read_cdrom(&disks[cdrom_port], *((int32_t *)0x10009e), 1, (uint16_t *)0x100000);
 
-	printf("Reading disk %d\n", cdrom_port);
-	read_cdrom(&disks[cdrom_port], 0x10, 1);
-
-	printf("Total of %dMb", *((int32_t *) 0x100050) * 2);  // 901
+	// puts("Welcome to Achieve OS\nUsage: Press [1] for ls, Press [2] for cd\n");
 }

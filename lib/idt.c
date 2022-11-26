@@ -3,11 +3,9 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <kernel/ata.h>
 #include <kernel/idt.h>
 #include <kernel/keyboard.h>
 #include <kernel/ports.h>
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
@@ -116,9 +114,11 @@ void init_idt(void) {
 	register_handler(32, tick);
 	register_handler(33, keyboard_call);
 
-	outb(0x43, 0x36);
-	outb(0x40, (uint8_t) (1193180 / 100 & 0xFF));
-	outb(0x40, (uint8_t) ((1193180 / 100 >> 8) & 0xFF));
+	{ /* Timer */
+		outb(0x43, 0x36);
+		outb(0x40, (uint8_t) (1193180 / 100 & 0xFF));
+		outb(0x40, (uint8_t) ((1193180 / 100 >> 8) & 0xFF));
+	}
 
 	flush_idt((uint64_t) &idtr_t);
 }

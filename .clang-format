@@ -1,6 +1,6 @@
 BasedOnStyle: Google
 IndentWidth: 4
-IndentCaseLabels: false
+IndentCaseLabels: true
 TabWidth: 4
 UseTab: ForIndentation
 ColumnLimit: 0

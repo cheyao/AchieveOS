@@ -10,7 +10,10 @@
 #include <stdio.h>
 #include <time.h>
 
-void atapi(Disk *d) {
+void identify(Disk *d) {
+	int command = 0xEC;
+
+	start:
 	reset_ata(d->port);
 	outb(d->port + DRIVE_SELECT, d->drive_select_command); /* Drive select */
 
@@ -21,13 +24,18 @@ void atapi(Disk *d) {
 	outb(d->port + LBA_MID, 0x00);
 	outb(d->port + LBA_HIGH, 0x00);
 
-	outb(d->port + COMMAND_REGISTER, 0xA1); /* ATAPI Identify command */
+	outb(d->port + COMMAND_REGISTER, command); /* Identify command */
 
 	uint8_t in = inb(d->port + COMMAND_REGISTER); /* Status */
 
 	sleepms(10);
 
 	if (in == 0) {
+		if (command == 0xEC) {
+			command = 0xA1;
+			goto start;
+		}
+
 		d->type = UNKNOWN;
 		return;
 	}
@@ -39,11 +47,28 @@ void atapi(Disk *d) {
 	}
 
 	if ((in & 0x1) == 1) {
+		if (command == 0xEC) {
+			command = 0xA1;
+			goto start;
+		}
+
 		d->type = UNKNOWN;
 		return;
 	}
 
 	insw(d->port + +DATA, ((unsigned short *) 0x7000), 256); /* Receive identify*/
+
+	if (command == 0xEC) {
+		if ((d->size = *((uint32_t *) (0x7000 + 60 * 2)))) {
+			d->type = HARD_DISK;
+			d->protocol = ATA;
+			d->removable = false;
+			return;
+		}
+
+		command = 0xA1;
+		goto start;
+	}
 
 	if (*((unsigned short *) 0x7000) & 1 << 7)
 		d->removable = true;
@@ -66,11 +91,9 @@ void atapi(Disk *d) {
 		default:
 			d->type = UNKNOWN;
 	}
-
-	reset_ata(d->port);
 }
 
-void read_cdrom(Disk *d, uint32_t lba, uint32_t sectors) {
+void read_cdrom(Disk *d, uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 	uint8_t read_cmd[12] = {0xA8, 0, (lba >> 0x18) & 0xFF, (lba >> 0x10) & 0xFF, (lba >> 0x08) & 0xFF,
 	                        (lba >> 0x00) & 0xFF, (sectors >> 0x18) & 0xFF, (sectors >> 0x10) & 0xFF,
 	                        (sectors >> 0x08) & 0xFF, (sectors >> 0x00) & 0xFF, 0, 0};
@@ -93,7 +116,7 @@ void read_cdrom(Disk *d, uint32_t lba, uint32_t sectors) {
 	}
 	int size = ((((int) inb(d->port + LBA_HIGH))) << 8) | (int) (inb(d->port + LBA_MID));
 
-	insw(d->port + DATA, ((uint16_t *) 0x100000), size / 2);
+	insw(d->port + DATA, buffer, size / 2);
 
 	while (inb(d->port + COMMAND_REGISTER) & 0x88);
 }

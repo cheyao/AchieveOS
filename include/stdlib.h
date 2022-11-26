@@ -6,4 +6,8 @@
 #ifndef _STDLIB_H
 #define _STDLIB_H
 
+int *itoa(int num, int *buff, int base);
+
+int atoi(const char *str);
+
 #endif  //_STDLIB_H

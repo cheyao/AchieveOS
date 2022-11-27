@@ -1,8 +1,8 @@
 section .text
 bits 64
 extern main
-global _start
-_start:
+global start
+start:
     call clear_screen
     call main
 

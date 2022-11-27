@@ -22,8 +22,6 @@ int intlen(int i, uint8_t base) {
 
 int vprintf(const char *restrict format, va_list args) { /* Ahh never knew printf is so hard */
 	/* the printf isn't finished but enough to use */
-	uint16_t pos = get_cursor_position();
-	volatile unsigned char *buff = (unsigned char *) BUFFER + pos * 2;
 	int i = 0;
 	int j = 0;
 
@@ -263,7 +261,6 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
 			putchar(format[i]);  // Normal print
 		}
 	}
-	update_cursor(pos + j);
 	return j;
 }
 

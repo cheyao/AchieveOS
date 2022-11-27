@@ -45,10 +45,7 @@ bits 16
     jne .disk_error
 
     in al, 0x92 ; enable a20
-    test al, 2
-    jnz .after
     or al, 2
-    and al, 0xFE
     out 0x92, al
 .after:
 
@@ -123,43 +120,57 @@ init_pm:
     mov ebp, 0x7FFFF
     mov esp, ebp
 
-    mov edi, 0x1000    ; Set the destination index to 0x1000.
+    mov edi, 0x7F000    ; Set the destination index to 0x1000.
     mov cr3, edi       ; Set control register 3 to the destination index.
     xor eax, eax       ; Nullify the A-register.
     mov ecx, 4096      ; Set the C-register to 4096.
     rep stosd          ; Clear the memory.
     mov edi, cr3       ; Set the destination index to control register 3.
 
-    mov DWORD [edi], 0x2003      ; Set the uint32_t at the destination index to 0x2003.
-    add edi, 0x1000              ; Add 0x1000 to the destination index.
-    mov DWORD [edi], 0x3003      ; Set the uint32_t at the destination index to 0x3003.
-    add edi, 0x1000              ; Add 0x1000 to the destination index.
-    mov DWORD [edi], 0x4003      ; Set the uint32_t at the destination index to 0x4003.
-    add edi, 0x1000              ; Add 0x1000 to the destination index.
+; 0x7F000 - 4
+    mov DWORD [edi], 0x7E003      ; Set the uint32_t at the destination index to 0x2003.
+    sub edi, 0x1000              ; Add 0x1000 to the destination index.
+; 0x7E000 - 3
+    mov DWORD [edi], 0x7D003      ; Set the uint32_t at the destination index to 0x3003.
+    mov DWORD [edi+24], 0x7B003    ; Set the uint32_t at the destination index to 0x2003.
+    sub edi, 0x1000              ; Add 0x1000 to the destination index.
+; 0x7D000 - 2
+    mov DWORD [edi], 0x7C003      ; Set the uint32_t at the destination index to 0x4003.
+    sub edi, 0x1000              ; Add 0x1000 to the destination index.
+; 0x7C000 - 1
 
     mov ebx, 0x00000003          ; Set the B-register to 0x00000003.
-    mov ecx, 512                 ; Set the C-register to 512. loop counter
+    mov ecx, 256                 ; Set the C-register to 256. loop counter
 
-.SetEntry:
+.mb1:
     mov DWORD [edi], ebx         ; Set the uint32_t at the destination index to the B-register.
     add ebx, 0x1000              ; Add 0x1000 to the B-register.
     add edi, 8                   ; Add eight to the destination index.
-    loop .SetEntry               ; Set the next entry.
+    loop .mb1                    ; Set the next entry.
+; 0x7B000 - 2
+    mov DWORD [0x7B000+0], 0x7A003
 
-    mov eax, cr4                 ; Set the A-register to control register 4.
-    or eax, 1 << 5               ; Set the PAE-bit, which is the 6th bit (bit 5).
-    mov cr4, eax                 ; Set control register 4 to the A-register.
+    mov edi, 0x7A000
+    mov ebx, 0x100003
+    mov ecx, 256
+.high_kernel:
+    mov [edi], ebx
+    add ebx, 0x1000
+    add edi, 8
+    loop .high_kernel
 
     mov ecx, 0xC0000080          ; Set the C-register to 0xC0000080, which is the EFER MSR.
     rdmsr                        ; Read from the model-specific register.
     or eax, 1 << 8               ; Set the LM-bit which is the 9th bit (bit 8).
     wrmsr                        ; Write to the model-specific register.
 
+    mov eax, cr4                 ; Set the A-register to control register 4.
+    or eax, 1 << 5               ; Set the PAE-bit, which is the 6th bit (bit 5).
+    mov cr4, eax                 ; Set control register 4 to the A-register.
+
     mov eax, cr0                 ; Set the A-register to control register 0.
     or eax, 1 << 31              ; Set the PG-bit, which is the 32nd bit (bit 31).
-    mov cr0, eax                 ; Set control register 0 to the A-register. ; Somehow bugs??
-
-    ; Into 32-bit compatibility submode!
+    mov cr0, eax                 ; Set control register 0 to the A-register.
 
     lgdt [GDT64.Pointer]         ; Load the 64-bit global descriptor table.
     jmp GDT_CODE:Realm64       ; Set the code segment and enter 64-bit long mode.
@@ -205,6 +216,9 @@ Realm64:
     mov fs, ax                    ; Set the F-segment to the A-register.
     mov gs, ax                    ; Set the G-segment to the A-register.
     mov ss, ax                    ; Set the stack segment to the A-register.
+
+    mov eax, 0xC0000000
+    mov BYTE [rax], 0xFF
 
     call KERNEL_OFFSET
 

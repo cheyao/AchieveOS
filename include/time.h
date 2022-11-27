@@ -6,6 +6,10 @@
 #ifndef _TIME_H
 #define _TIME_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 extern uint64_t ticks;
@@ -17,5 +21,9 @@ uint64_t sleepms(uint64_t milliseconds);
 void tick(void);
 
 typedef uint64_t time_t;
+
+#if defined(__cplusplus)
+} /* extern "C" */
+#endif
 
 #endif  //_TIME_H

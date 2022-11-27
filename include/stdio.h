@@ -6,6 +6,10 @@
 #ifndef _STDIO_H
 #define _STDIO_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 #include <stdarg.h>
 
 __attribute__((format(printf, 1, 2))) int printf(const char *restrict format, ...);
@@ -18,5 +22,9 @@ int putchar(char c);
 int puts(const char *restrict str);
 
 extern void clear_screen(void);
+
+#if defined(__cplusplus)
+} /* extern "C" */
+#endif
 
 #endif  //_STDIO_H

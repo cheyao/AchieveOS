@@ -11,6 +11,7 @@ CFLAGS = -O2 -std=gnu11 -g -static -Wall -Wextra -Wno-unused-function -Wno-unuse
 LDFLAGS = -T link.ld
 
 CC = x86_64-elf-gcc
+HOST_CC = gcc-12
 LD = x86_64-elf-ld
 AS = nasm
 UTILS = util/portions
@@ -35,7 +36,7 @@ elf: lib/kernel_start.o ${OBJ}
 	${LD} -o kernel.elf $^ ${LDFLAGS} --oformat elf64-x86-64
 
 bootsect.bin: boot/bootsect.asm
-	nasm $< -f bin -o $@
+	${AS} $< -f bin -o $@
 
 %.o: %.c ${HEADERS}
 	${CC} ${CFLAGS} -c $< -o $@
@@ -44,7 +45,7 @@ bootsect.bin: boot/bootsect.asm
 	${AS} $< -f elf64 -o $@
 
 util/portions: util/portions.c
-	gcc-12 -O3 util/portions.c -o util/portions
+	${HOST_CC} -O3 util/portions.c -o util/portions
 
 clean:
 	-rm -rf lib/kernel_start.o ${OBJ}

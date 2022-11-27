@@ -10,6 +10,7 @@ Disk disks[4] = {
 		{.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x370},
 		{.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x370},
 };
+
 uint8_t cdrom_port = 5;
 
 void main(void) {

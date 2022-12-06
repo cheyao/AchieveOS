@@ -1,9 +1,8 @@
 #include <kernel/cd.h>
 #include <kernel/idt.h>
-#include <kernel/keyboard.h>
+#include <string.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <kernel/screen.h>
+#include "kernel/screen.h"
 
 Disk disks[4] = {
 		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
@@ -22,27 +21,10 @@ const uint8_t gylphs[][8] = {
 void main(void) {
 	init_idt();
 
-	const uint8_t H[8] = {0xc6, 0xc6, 0xc6, 0xfe, 0xc6, 0xc6, 0xc6, 0x00};
+	circle(WIDTH / 2, HEIGHT / 2, 300);
+	circle(WIDTH / 2 - 100, HEIGHT / 3, 50);
+	circle(WIDTH / 2 + 100, HEIGHT / 3, 50);
 
-	for (uint8_t i = 0; i < 8; i++) {
-		for (uint8_t j = 0; j != 8; j++) {
-			if (H[i] & (1 << j)) {
-				*((uint16_t *) BUFFER + 8 - j + i * WIDTH * 2) = rgb(0xFF, 0xFF, 0xFF);
-				*((uint16_t *) BUFFER + 8 - j + i * WIDTH * 2 + WIDTH) = rgb(0xFF, 0xFF, 0xFF);
-			}
-		}
-	}
-
-	const uint8_t I[8] = {0x7e, 0x18, 0x18, 0x18, 0x18, 0x18, 0x7e, 0x00};
-
-	for (uint8_t i = 0; i < 8; i++) {
-		for (uint8_t j = 0; j != 8; j++) {
-			if (I[i] & (1 << j)) {
-				*((uint16_t *) BUFFER + 16 - j + i * WIDTH * 2) = rgb(0xFF, 0xFF, 0xFF);
-				*((uint16_t *) BUFFER + 16 - j + i * WIDTH * 2 + WIDTH) = rgb(0xFF, 0xFF, 0xFF);
-			}
-		}
-	}
 
 	// puts("One\n");
 	// identify(&disks[0]);

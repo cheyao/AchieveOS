@@ -29,11 +29,5 @@ unsigned long strlen(const int *str) {
 
 int strcmp(const char *l, const char *r) {
 	for (; *l == *r && *l; l++, r++);
-	return *(unsigned char *) l - *(unsigned char *) r; /* Copied from klange :P */
-}
-
-void *memcpy(void *restrict dest, const void *restrict src, size_t n) {
-	__asm__ __volatile__("rep movsb"::"D"(dest), "S"(src), "c"(n)
-			: "flags", "memory");
-	return dest;
+	return *(unsigned char *) l - *(unsigned char *) r;
 }

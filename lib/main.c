@@ -3,6 +3,7 @@
 #include <kernel/keyboard.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <kernel/screen.h>
 
 Disk disks[4] = {
 		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
@@ -13,25 +14,51 @@ Disk disks[4] = {
 
 uint8_t cdrom_port = 5;
 
+const uint8_t gylphs[][8] = {
+		{0xc6, 0xc6, 0xc6, 0xfe, 0xc6, 0xc6, 0xc6, 0x00},
+		{0x7e, 0x18, 0x18, 0x18, 0x18, 0x18, 0x7e, 0x00}
+};
+
 void main(void) {
-	update_cursor(0);
 	init_idt();
 
-	puts("One\n");
-	identify(&disks[0]);
-	puts("2\n");
-	identify(&disks[1]);
-	puts("3\n");
-	identify(&disks[2]);
-	printf("Type: %d\n", disks[0].type);
-	puts("Type: 4\n");
-	identify(&disks[3]);
+	const uint8_t H[8] = {0xc6, 0xc6, 0xc6, 0xfe, 0xc6, 0xc6, 0xc6, 0x00};
 
-	for (int i = 0; i < 4; i++) {
-		if (disks[i].type == CDROM) {
-			cdrom_port = i;
+	for (uint8_t i = 0; i < 8; i++) {
+		for (uint8_t j = 0; j != 8; j++) {
+			if (H[i] & (1 << j)) {
+				*((uint16_t *) BUFFER + 8 - j + i * WIDTH * 2) = rgb(0xFF, 0xFF, 0xFF);
+				*((uint16_t *) BUFFER + 8 - j + i * WIDTH * 2 + WIDTH) = rgb(0xFF, 0xFF, 0xFF);
+			}
 		}
 	}
+
+	const uint8_t I[8] = {0x7e, 0x18, 0x18, 0x18, 0x18, 0x18, 0x7e, 0x00};
+
+	for (uint8_t i = 0; i < 8; i++) {
+		for (uint8_t j = 0; j != 8; j++) {
+			if (I[i] & (1 << j)) {
+				*((uint16_t *) BUFFER + 16 - j + i * WIDTH * 2) = rgb(0xFF, 0xFF, 0xFF);
+				*((uint16_t *) BUFFER + 16 - j + i * WIDTH * 2 + WIDTH) = rgb(0xFF, 0xFF, 0xFF);
+			}
+		}
+	}
+
+	// puts("One\n");
+	// identify(&disks[0]);
+	// puts("2\n");
+	// identify(&disks[1]);
+	// puts("3\n");
+	// identify(&disks[2]);
+	// printf("Type: %d\n", disks[0].type);
+	// puts("Type: 4\n");
+	// identify(&disks[3]);
+	//
+	// for (int i = 0; i < 4; i++) {
+	//	if (disks[i].type == CDROM) {
+	//		cdrom_port = i;
+	//	}
+	//}
 	//
 	// read_cdrom(&disks[cdrom_port], 0x10, 1, (uint16_t *)0x100000);
 	// read_cdrom(&disks[cdrom_port], *((int32_t *)0x10009e), 1, (uint16_t *)0x100000);

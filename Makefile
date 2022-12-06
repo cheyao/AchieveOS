@@ -7,12 +7,11 @@ CFLAGS = -O2 -std=gnu11 -g -static -Wall -Wextra -Wno-unused-function -Wno-unuse
  	     -fno-stack-protector -Wundef -nostdlib -fno-builtin -nodefaultlibs \
 		 -fms-extensions -ffreestanding -mcmodel=large -fverbose-asm -nostartfiles \
 		 -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -Iinclude -Wfloat-equal
-# -nostdinc
-LDFLAGS = -T link.ld
+
+LDFLAGS = -T link.ld -ffreestanding -O2 -nostdlib -lgcc
 
 CC = x86_64-elf-gcc
 HOST_CC = gcc-12
-LD = x86_64-elf-ld
 AS = nasm
 UTILS = util/portions
 
@@ -26,14 +25,11 @@ cdrom.iso: bootsect.bin kernel.bin $(UTILS)
 	dd if=kernel.bin of=cdcontents/kernel.flp conv=notrunc bs=512 seek=1 count=`./util/portions \`gstat -L -c %s kernel.bin\``
 	rm cdcontents/.DS_Store; \
 	mkisofs -U -o cdrom.iso -V AchiveOS -b kernel.flp cdcontents # Finally a cdrom
-	-rm -rf disk.img bootsect.bin kernel.bin
+	-rm -rf disk.img
 	qemu-img create disk.img 20M
 
 kernel.bin: lib/kernel_start.o ${OBJ}
-	${LD} -o $@ $^ ${LDFLAGS} --oformat binary
-
-elf: lib/kernel_start.o ${OBJ}
-	${LD} -o kernel.elf $^ ${LDFLAGS} --oformat elf64-x86-64
+	${CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000 -fuse-ld=gold
 
 bootsect.bin: boot/bootsect.asm
 	${AS} $< -f bin -o $@

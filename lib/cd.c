@@ -13,7 +13,7 @@
 void identify(Disk *d) {
 	int command = 0xEC;
 
-	start:
+start:
 	reset_ata(d->port);
 	outb(d->port + DRIVE_SELECT, d->drive_select_command); /* Drive select */
 

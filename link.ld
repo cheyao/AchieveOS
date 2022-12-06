@@ -1,26 +1,41 @@
-ENTRY(start)
+ENTRY(_start)
+OUTPUT_FORMAT(binary)
+
 SECTIONS {
-  .text 0x7E00:
-  {
-    code = .; _code = .; __code = .;
-    *(.text)
-    . = ALIGN(0x1000);
-  }
+	. = 0x8000;
+	phys = .;
 
-  .data :
-  {
-     data = .; _data = .; __data = .;
-     *(.data)
-     *(.rodata)
-     . = ALIGN(0x1000);
-  }
+	.text ALIGN(0x1000): {
+		code = .;
+		*(.text)
+		. = ALIGN(0x1000);
+	}
 
-  .bss :
-  {
-    bss = .; _bss = .; __bss = .;
-    *(.bss)
-    . = ALIGN(0x1000);
-  }
+	.data ALIGN(0x1000): {
+		data = .;
+		*(.data)
+		. = ALIGN(0x1000);
+	}
 
-  end = .; _end = .; __end = .;
+	.rodata ALIGN(0x1000): {
+		*(.rodata*)
+		. = ALIGN(0x1000);
+	}
+
+	.bss ALIGN(0x1000): {
+		bss = .;
+		*(.bss)
+		. = ALIGN(0x1000);
+	}
+
+	end = .; _end = .; __end = .;
+
+	/*DISCARD/ : {
+		*(.comment)
+		*(.note.gnu.build-id)
+		*(.shstrtab)
+		*(.strtab)
+		*(.symtab)
+		*(.shstrtab)
+	}*/
 } 

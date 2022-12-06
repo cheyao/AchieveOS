@@ -1,5 +1,5 @@
 org 0x7C00
-KERNEL_OFFSET equ 0x7E00
+KERNEL_OFFSET equ 0x8000
 SECTORS equ 40
 
 CODE_SEG equ gdt_code - gdt_start
@@ -19,35 +19,29 @@ LONG_MODE     equ 1 << 5
 
 bits 16
 
-    mov [BOOT_DRIVE], dl ; Save the boot disk
-
     mov bp, 0x7BFF
     mov sp, bp ; Stack
 
-    mov ah, 0x01
-    mov ch, 0x00
-    mov cl, 0x15 ; Set up cursor :)
-    int 0x10
-
     mov bx, KERNEL_OFFSET
-    mov dl, [BOOT_DRIVE] ; Read from disk
-
     mov ah, 0x02
-    mov al, SECTORS 
+    mov al, SECTORS
     mov cl, 0x02
     mov ch, 0x00
     mov dh, 0x00
     int 0x13
 
-    jc .disk_error  ; check for errors
+    mov ax, 0x4F02
+    mov bx, 0x4117
+    int 0x10
 
-    cmp al, SECTORS
-    jne .disk_error
+    mov ax, 0x4F01
+    mov cx, 0x0117
+    mov di, 0x7E00
+    int 0x10
 
     in al, 0x92 ; enable a20
     or al, 2
     out 0x92, al
-.after:
 
     cli ; 32 bit!
     lgdt [gdt_descriptor]
@@ -55,34 +49,6 @@ bits 16
     or eax, 1
     mov cr0, eax
     jmp CODE_SEG:init_pm
-
-.vbe_error:
-    mov dx, VBE_ERROR
-    call print
-
-    jmp $
-
-.disk_error:
-.sectors_error:
-    mov dx, DISK_ERROR
-    call print
-
-    jmp $
-
-print:
-    cmp byte [bx], 0
-    je .return
-
-    mov ah, 0x0e
-    mov al, [bx]
-    int 0x10
-
-    add bx, 1
-
-    jmp print
-
-.return:
-    ret
 
 gdt_start: ; null
     dd 0x0
@@ -117,63 +83,47 @@ init_pm:
     mov fs, ax
     mov gs, ax
 
-    mov ebp, 0x7FFFF
-    mov esp, ebp
+    mov edi, 0x600000 ; Set page table address
+    mov cr3, edi
 
-    mov edi, 0x7F000    ; Set the destination index to 0x1000.
-    mov cr3, edi       ; Set control register 3 to the destination index.
-    xor eax, eax       ; Nullify the A-register.
-    mov ecx, 4096      ; Set the C-register to 4096.
-    rep stosd          ; Clear the memory.
-    mov edi, cr3       ; Set the destination index to control register 3.
+    ; PML4
+    mov DWORD [edi], 0x601003
 
-; 0x7F000 - 4
-    mov DWORD [edi], 0x7E003      ; Set the uint32_t at the destination index to 0x2003.
-    sub edi, 0x1000              ; Add 0x1000 to the destination index.
-; 0x7E000 - 3
-    mov DWORD [edi], 0x7D003      ; Set the uint32_t at the destination index to 0x3003.
-    mov DWORD [edi+24], 0x7B003    ; Set the uint32_t at the destination index to 0x2003.
-    sub edi, 0x1000              ; Add 0x1000 to the destination index.
-; 0x7D000 - 2
-    mov DWORD [edi], 0x7C003      ; Set the uint32_t at the destination index to 0x4003.
-    sub edi, 0x1000              ; Add 0x1000 to the destination index.
-; 0x7C000 - 1
+    ; PML3[0]
+    mov DWORD [edi+0x1000], 0x602003
 
-    mov ebx, 0x00000003          ; Set the B-register to 0x00000003.
-    mov ecx, 256                 ; Set the C-register to 256. loop counter
+    ; PML2[0]
+    mov DWORD [edi+0x2000], 0x000083 ; Point to bootsect
+    mov ebx, [0x7E28]
+    add ebx, 0x83
+    mov DWORD [edi+0x2000+8*1], ebx ; Framebuffer
+    mov DWORD [edi+0x2000+8*2], 0x200083 ; Second Framebuffer
 
-.mb1:
-    mov DWORD [edi], ebx         ; Set the uint32_t at the destination index to the B-register.
-    add ebx, 0x1000              ; Add 0x1000 to the B-register.
-    add edi, 8                   ; Add eight to the destination index.
-    loop .mb1                    ; Set the next entry.
-; 0x7B000 - 2
-    mov DWORD [0x7B000+0], 0x7A003
-
-    mov edi, 0x7A000
-    mov ebx, 0x100003
-    mov ecx, 256
-.high_kernel:
-    mov [edi], ebx
-    add ebx, 0x1000
+    mov ebx, 0x200083
+    mov edi, 0x602000+8*2
+    mov ecx, 32+94
+.kernel:
+    mov DWORD [edi], ebx
+    add ebx, 0x200000
     add edi, 8
-    loop .high_kernel
+    loop .kernel
 
-    mov ecx, 0xC0000080          ; Set the C-register to 0xC0000080, which is the EFER MSR.
-    rdmsr                        ; Read from the model-specific register.
-    or eax, 1 << 8               ; Set the LM-bit which is the 9th bit (bit 8).
-    wrmsr                        ; Write to the model-specific register.
+    ; Enable paging
+    mov ecx, 0xC0000080
+    rdmsr
+    or eax, 1 << 8
+    wrmsr
 
-    mov eax, cr4                 ; Set the A-register to control register 4.
-    or eax, 1 << 5               ; Set the PAE-bit, which is the 6th bit (bit 5).
-    mov cr4, eax                 ; Set control register 4 to the A-register.
+    mov eax, cr4
+    or eax, 1 << 5
+    mov cr4, eax
 
-    mov eax, cr0                 ; Set the A-register to control register 0.
-    or eax, 1 << 31              ; Set the PG-bit, which is the 32nd bit (bit 31).
-    mov cr0, eax                 ; Set control register 0 to the A-register.
+    mov eax, cr0
+    or eax, 1 << 31
+    mov cr0, eax
 
-    lgdt [GDT64.Pointer]         ; Load the 64-bit global descriptor table.
-    jmp GDT_CODE:Realm64       ; Set the code segment and enter 64-bit long mode.
+    lgdt [GDT64.Pointer]
+    jmp GDT_CODE:Realm64
 
     jmp $
 
@@ -217,8 +167,8 @@ Realm64:
     mov gs, ax                    ; Set the G-segment to the A-register.
     mov ss, ax                    ; Set the stack segment to the A-register.
 
-    mov eax, 0xC0000000
-    mov BYTE [rax], 0xFF
+    mov rbp, 0xC000000
+    mov rsp, rbp
 
     call KERNEL_OFFSET
 

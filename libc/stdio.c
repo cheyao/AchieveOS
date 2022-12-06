@@ -62,7 +62,7 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
 				}
 				i++;
 			}
-			le:
+		le:
 
 			// Width
 			if (isDigit(format[i])) {

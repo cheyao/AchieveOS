@@ -17,6 +17,12 @@ static __inline void putPixel(uint32_t __x, uint32_t __y, uint16_t __color) {
 	*((uint16_t *) BUFFER + __x + __y * WIDTH) = __color;
 }
 
-void circle(int32_t x, int32_t y, int32_t radius);
+typedef struct {
+	uint32_t x, y;
+} Vector2;
+
+void circle(Vector2 P0, int32_t radius, uint16_t color);
+
+void line(Vector2 P0, Vector2 P1, uint16_t color);
 
 #endif  //_SCREEN_H

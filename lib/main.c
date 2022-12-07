@@ -1,7 +1,7 @@
 #include <kernel/cd.h>
 #include <kernel/idt.h>
-#include <string.h>
 #include <stdint.h>
+
 #include "kernel/screen.h"
 
 Disk disks[4] = {
@@ -13,18 +13,14 @@ Disk disks[4] = {
 
 uint8_t cdrom_port = 5;
 
-const uint8_t gylphs[][8] = {
-		{0xc6, 0xc6, 0xc6, 0xfe, 0xc6, 0xc6, 0xc6, 0x00},
-		{0x7e, 0x18, 0x18, 0x18, 0x18, 0x18, 0x7e, 0x00}
-};
-
 void main(void) {
 	init_idt();
 
-	circle(WIDTH / 2, HEIGHT / 2, 300);
-	circle(WIDTH / 2 - 100, HEIGHT / 3, 50);
-	circle(WIDTH / 2 + 100, HEIGHT / 3, 50);
+	circle((Vector2) {WIDTH / 2, HEIGHT / 2}, 300, rgb(0xFF, 0xFF, 0xFF));
+	circle((Vector2) {WIDTH / 2 - 100, HEIGHT / 3}, 50, rgb(0xFF, 0xFF, 0xFF));
+	circle((Vector2) {WIDTH / 2 + 100, HEIGHT / 3}, 50, rgb(0xFF, 0xFF, 0xFF));
 
+	line((Vector2) {50, 60}, (Vector2) {580, 190}, rgb(0xFF, 0xFF, 0xFF));
 
 	// puts("One\n");
 	// identify(&disks[0]);

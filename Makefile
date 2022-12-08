@@ -33,7 +33,7 @@ cdrom.iso: bootsect.bin kernel.bin $(UTILS)
 	qemu-img create disk.img 20M
 
 kernel.bin: lib/kernel_start.o ${OBJ}
-	${CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000 -fuse-ld=gold -Wl,--oformat=binary
+	${CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000 -Wl,--oformat=binary
 
 bootsect.bin: boot/bootsect.asm
 	${AS} $< -f bin -o $@

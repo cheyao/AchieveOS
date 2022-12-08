@@ -19,6 +19,9 @@ LONG_MODE     equ 1 << 5
 
 bits 16
 
+    jmp 0:_start
+
+_start:
     mov bp, 0x7BFF
     mov sp, bp ; Stack
 

@@ -32,9 +32,6 @@ static IDTR_T idtr_t;
 extern void flush_idt(uint64_t idt);
 
 void fidtr(uint8_t vector, void *isr) {
-	for (int i = 0; i < 224; i++)
-		interrupt_handlers[i] = 0;
-
 	IDTR *descriptor = &idt_entry_t[vector];
 
 	descriptor->isr_low = (uint64_t) isr & 0xFFFF;
@@ -181,5 +178,3 @@ void isr_handler(int num) {
 	else
 		interrupt_handlers[num]();
 }
-
-// /usr/local/bin/qemu-system-x86_64 -no-reboot -cdrom cdrom.iso --trace events=trace

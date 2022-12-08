@@ -6,6 +6,9 @@
 #include <math.h>
 #include <stdint.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-compare"
+
 #define FORCE_EVAL(x)                             \
     do {                                          \
         if (sizeof(x) == sizeof(float)) {         \
@@ -182,6 +185,10 @@ double scalbn(double x, int n) {
 	u.i = (uint64_t) (0x3ff + n) << 52;
 	x = y * u.f;
 	return x;
+}
+
+int abs(int num) {
+	return num < 0 ? -num : num;
 }
 
 double fabs(double x) {
@@ -484,10 +491,10 @@ double pow(double x, double y) {
 		if (((j - 0x40900000) | i) != 0) /* if z > 1024 */
 			return s * huge * huge;      /* overflow */
 		if (p_l + ovt > z - p_h)
-			return s * huge * huge;                                /* overflow */
-	} else if ((j & 0x7fffffff) >= 0x4090cc00) { /* z <= -1075 */  // FIXME: instead of abs(j) use unsigned j
-		if (((j - 0xc090cc00) | i) != 0)                           /* z < -1075 */
-			return s * tiny * tiny;                                /* underflow */
+			return s * huge * huge;              /* overflow */
+	} else if ((j & 0x7fffffff) >= 0x4090cc00) { /* z <= -1075 */
+		if (((j - 0xc090cc00) | i) != 0)         /* z < -1075 */
+			return s * tiny * tiny;              /* underflow */
 		if (p_l <= z - p_h)
 			return s * tiny * tiny; /* underflow */
 	}
@@ -525,3 +532,5 @@ double pow(double x, double y) {
 		SET_HIGH_WORD(z, j);
 	return s * z;
 }
+
+#pragma GCC diagnostic pop

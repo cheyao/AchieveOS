@@ -56,7 +56,7 @@ start:
 		return;
 	}
 
-	insw(d->port + +DATA, ((unsigned short *) 0x7000), 256); /* Receive identify*/
+	insw(d->port + +DATA, ((unsigned short *) 0x7000), 256); /* Receive identify */
 
 	if (command == 0xEC) {
 		if ((d->size = *((uint32_t *) (0x7000 + 60 * 2)))) {

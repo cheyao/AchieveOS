@@ -4,9 +4,9 @@ OBJ = ${C_SOURCES:.c=.o lib/idtr.o}
 
 CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase \
 		 -nostdlib -ffreestanding -O2 -std=gnu11 -g -static -Wall -Wextra -Wwrite-strings \
-		 -Wno-unused-function -Wno-unused-parameter -Wstrict-prototypes -pedantic -Iinclude #  -mgeneral-regs-only
+		 -Wno-unused-function -Wno-unused-parameter -Wstrict-prototypes -pedantic -Iinclude
 		 # -O2 -std=gnu11 -g -static -Wall -Wextra -Wno-unused-function -Wno-unused-parameter \
-		 # -Wstrict-prototypes -Wwrite-strings -fno-omit-frame-pointer -mno-red-zone \
+		 # -Wstrict-prototypes -Wwrite-strings -fno-omit-frame-pointer -mno-red-zone  -mgeneral-regs-only \
 		 # -mgeneral-regs-only -nostdlib -Iinclude -Wwrite-strings \
  	     # -fno-stack-protector -fno-builtin -nodefaultlibs -fdiagnostics-show-option \
 		 # -fms-extensions -ffreestanding -mcmodel=large -nostartfiles

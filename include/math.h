@@ -12,6 +12,8 @@ double sqrt(double x);
 
 double fabs(double x);
 
+int abs(int num);
+
 typedef double double_t;
 
 #endif  // _MATH_H

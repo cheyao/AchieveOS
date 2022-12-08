@@ -15,7 +15,7 @@ extern "C" {
 #define BUFFER 0x200000
 #define WIDTH 1024
 #define HEIGHT 768
-#define rgb(r, g, b) (((uint16_t)(((r)&0b11111) << 11) + (((g)&0b111111) << 5) + ((b)&0b11111)))
+#define rgb(r, g, b) (((uint16_t)(((r)&0x1F) << 11) + (((g)&0x3F) << 5) + ((b)&0x1F)))
 
 static __inline void putPixel(uint32_t __x, uint32_t __y, uint16_t __color) {
 	*((uint16_t *) BUFFER + __x + __y * WIDTH) = __color;
@@ -23,7 +23,7 @@ static __inline void putPixel(uint32_t __x, uint32_t __y, uint16_t __color) {
 
 typedef struct {
 	uint32_t x, y;
-} Vector2;
+} __attribute__((packed)) Vector2;
 
 void circle(Vector2 P0, int32_t radius, uint16_t color);
 

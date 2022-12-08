@@ -160,7 +160,7 @@ const char *exception_messages[] = {
 void exception_handler(int num, int err) {
 	printf("Got interrupt: %s (%d), error: %#x", exception_messages[num], num, err);
 
-	__asm__ __volatile__("hlt");
+	__asm__ __volatile__("cli;hlt");
 }
 
 void register_handler(int num, isr_t fun) {

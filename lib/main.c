@@ -2,6 +2,7 @@
 #include <kernel/idt.h>
 #include <kernel/screen.h>
 #include <math.h>
+#include <stddef.h>
 #include <stdint.h>
 
 Disk disks[4] = {
@@ -13,70 +14,39 @@ Disk disks[4] = {
 
 uint8_t cdrom_port = 5;
 
-Vector2 midpoint(Vector2 p1, Vector2 p2) {
-	return (Vector2) {.x = (p2.x - p1.x) / 2 + p1.x, .y = (p2.y - p1.y) / 2 + p1.y};
+#define perpendicular(point) ((Vector2){.x = -(point).y, .y = (point).x})
+
+Vector2 calcBezierAtT(Vector2 p[4], double t) {
+	uint32_t x = (uint32_t) ((1 - t) * (1 - t) * (1 - t) * p[0].x + 3 * (1 - t) * (1 - t) * t * p[1].x +
+	                         3 * (1 - t) * t * t * p[2].x + t * t * t * p[3].x);
+	uint32_t y = (uint32_t) ((1 - t) * (1 - t) * (1 - t) * p[0].y + 3 * (1 - t) * (1 - t) * t * p[1].y +
+	                         3 * (1 - t) * t * t * p[2].y + t * t * t * p[3].y);
+	return (Vector2) {x, y};
 }
 
-void splitCurve(Vector2 p[4], Vector2 (*out)[2][4]) {
-	Vector2 p1 = p[0];
-	Vector2 p2 = p[1];
-	Vector2 p3 = p[2];
-	Vector2 p4 = p[3];
-	Vector2 p12 = midpoint(p1, p2);
-	Vector2 p23 = midpoint(p2, p3);
-	Vector2 p34 = midpoint(p4, p3);
-	Vector2 p123 = midpoint(p12, p23);
-	Vector2 p234 = midpoint(p23, p34);
-	Vector2 p1234 = {.x = (p234.x - p123.x) / 2 + p123.x,
-			.y = (p234.y - p123.y) / 2 + p123.y};
-	*out[0][0] = p1;
-	*out[0][1] = p12;
-	*out[0][2] = p123;
-	*out[0][3] = p1234;
-	*out[1][0] = p1234;
-	*out[1][1] = p234;
-	*out[1][2] = p34;
-	*out[1][3] = p4;
-}
+void curve(Vector2 points[4], uint16_t color) {
+	for (double i = 0; i <= 1; i += 0.0001) {
+		Vector2 v = calcBezierAtT(points, i);
 
-uint32_t flatness(Vector2 curve[4]) {
-	Vector2 p1 = curve[0];
-	Vector2 cp1 = curve[1];
-	Vector2 cp2 = curve[2];
-	Vector2 p2 = curve[3];
-	uint32_t ux = (3 * cp1.x - 2 * p1.x - p2.x) << 1;
-	uint32_t uy = (3 * cp1.y - 2 * p1.y - p2.y) << 1;
-	uint32_t vx = (3 * cp2.x - 2 * p2.x - p1.x) << 1;
-	uint32_t vy = (3 * cp2.y - 2 * p2.y - p1.y) << 1;
-	if (ux < vx) ux = vx;
-	if (uy < vy) uy = vy;
-	return ux + uy;
-}
-
-void curve(Vector2 P[4], uint16_t color) {
-	if (flatness(P) < 100) {
-		return line(P[0], P[3], color);
-	} else {
-		Vector2 split[2][4];
-		splitCurve(P, &split);
-		curve(split[0], color);
-		curve(split[1], color);
+		putPixel(v.x, v.y, color);
 	}
 }
 
 void main(void) {
-	init_idt();
+	// init_idt();
 
 	circle((Vector2) {WIDTH / 2, HEIGHT / 2}, 300, rgb(0xFF, 0xFF, 0xFF));
-	circle((Vector2) {WIDTH / 2 - 100, HEIGHT / 3}, 50, rgb(0xFF, 0xFF, 0xFF));
-	circle((Vector2) {WIDTH / 2 + 100, HEIGHT / 3}, 50, rgb(0xFF, 0xFF, 0xFF));
 
-	line((Vector2) {50, 60}, (Vector2) {580, 190}, rgb(0xFF, 0xFF, 0xFF));
+	curve((Vector2[4]) {{.x = WIDTH / 2 - 300, .y = HEIGHT / 2},
+	                    {.x = WIDTH / 5 * 2, .y = 50},
+	                    {.x = WIDTH / 5 * 3, .y = HEIGHT - 50},
+	                    {.x = WIDTH / 2 + 300, .y = HEIGHT / 2}},
+	      rgb(0xFF, 0xFF, 0xFF));
 
-	curve((Vector2[]) {{0,   0},
-	                   {0,   100},
-	                   {100, 100},
-	                   {100, 0}}, rgb(0xFF, 0xFF, 0xFF));
+	line((Vector2) {567, 333}, (Vector2) {630, 604}, rgb(0x4d, 0x25, 0x8e));
+	line((Vector2) {888, 539}, (Vector2) {93, 48}, rgb(0xb4, 0xfa, 0x7e));
+	line((Vector2) {441, 408}, (Vector2) {731, 229}, rgb(0xf6, 0xce, 0x6e));
+	line((Vector2) {137, 221}, (Vector2) {529, 612}, rgb(0x96, 0xe2, 0xde));
 
 	// puts("One\n");
 	// identify(&disks[0]);

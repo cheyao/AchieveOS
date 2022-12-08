@@ -4,6 +4,8 @@
 //
 
 #include <kernel/screen.h>
+#include <math.h>
+#include <stdbool.h>
 #include <stdint.h>
 
 void circle(Vector2 Pc, int32_t r, uint16_t color) {
@@ -40,62 +42,50 @@ void circle(Vector2 Pc, int32_t r, uint16_t color) {
 	}
 }
 
-static inline void plotLineLow(Vector2 P0, Vector2 P1, const uint16_t color) {
-	int32_t dx = (int32_t) (P1.x - P0.x);
-	int32_t dy = (int32_t) (P1.y - P0.y);
-	uint32_t yi = 1;
-	if (dy < 0) {
-		yi = -1;
-		dy = -dy;
+void line(Vector2 p0, Vector2 p1, uint16_t color) {
+	bool yLonger = false;
+	int shortLen = p1.y - p0.y;
+	int longLen = p1.x - p0.x;
+	if (abs(shortLen) > abs(longLen)) {
+		int swap = shortLen;
+		shortLen = longLen;
+		longLen = swap;
+		yLonger = true;
 	}
-	uint32_t D = (2 * dy) - dx;
-	uint32_t y = P0.y;
+	int decInc;
+	if (longLen == 0)
+		decInc = 0;
+	else
+		decInc = (shortLen << 16) / longLen;
 
-	for (uint32_t x = P0.x; x < P1.x; x++) {
-		putPixel(x, y, color);
-		if (D > 0) {
-			y = y + yi;
-			D = D + (2 * (dy - dx));
-		} else {
-			D = D + 2 * dy;
+	if (yLonger) {
+		if (longLen > 0) {
+			longLen += p0.y;
+			for (int j = 0x8000 + (p0.x << 16); p0.y <= longLen; ++p0.y) {
+				putPixel(j >> 16, p0.y, color);
+				j += decInc;
+			}
+			return;
 		}
+		longLen += p0.y;
+		for (int j = 0x8000 + (p0.x << 16); p0.y >= longLen; --p0.y) {
+			putPixel(j >> 16, p0.y, color);
+			j -= decInc;
+		}
+		return;
 	}
-}
 
-static void plotLineHigh(Vector2 P0, Vector2 P1, const uint16_t color) {
-	int32_t dx = (int32_t) (P1.x - P0.x);
-	int32_t dy = (int32_t) (P1.y - P0.y);
-	uint32_t xi = 1;
-	if (dx < 0) {
-		xi = -1;
-		dx = -dx;
+	if (longLen > 0) {
+		longLen += p0.x;
+		for (int j = 0x8000 + (p0.y << 16); p0.x <= longLen; ++p0.x) {
+			putPixel(p0.x, j >> 16, color);
+			j += decInc;
+		}
+		return;
 	}
-	uint32_t D = (2 * dx) - dy;
-	uint32_t x = P0.x;
-
-	for (uint32_t y = P0.y; y < P1.y; y++) {
-		putPixel(x, y, color);
-		if (D > 0) {
-			x = x + xi;
-			D = D + (2 * (dx - dy));
-		} else {
-			D = D + 2 * dx;
-		}
-	}
-}
-
-void line(Vector2 P0, Vector2 P1, const uint16_t color) {
-	if (P1.y - P0.y < P1.x - P0.x) {
-		if (P0.x > P1.x) {
-			plotLineLow(P1, P0, color);
-		} else {
-			plotLineLow(P0, P1, color);
-		}
-	} else {
-		if (P0.y > P1.y) {
-			plotLineHigh(P1, P0, color);
-		} else {
-			plotLineHigh(P0, P1, color);
-		}
+	longLen += p0.x;
+	for (int j = 0x8000 + (p0.y << 16); p0.x >= longLen; --p0.x) {
+		putPixel(p0.x, j >> 16, color);
+		j -= decInc;
 	}
 }

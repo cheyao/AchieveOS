@@ -31,11 +31,11 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
 
 			// Values
 			int width = 0;
-			bool left = false;
-			bool pm = false;  /* add the sign */
-			bool sp = false;  /* space before if no sign */
-			bool dot = false; /* contain decimal point even if no small digits*/
-			bool zp = false;  /* zero padding */
+			__attribute__((unused)) bool left = false;
+			bool pm = false;                         /* add the sign */
+			__attribute__((unused)) bool sp = false; /* space before if no sign */
+			bool dot = false;                        /* contain decimal point even if no small digits*/
+			bool zp = false;                         /* zero padding */
 			int precision = 0;
 			char length = '\0';
 
@@ -234,8 +234,8 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
 							break;
 					}
 					break;
-				case 'b':
-					char str[65] = "";
+				case 'b': {
+					char str[65] = {0};
 					int bin;
 					switch (length) {
 						case 'H':
@@ -253,6 +253,7 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
 
 					for (int c = 0; str[c] != 0; c++, j++)
 						putchar(str[c]);
+				}
 				default:
 					break;
 			}

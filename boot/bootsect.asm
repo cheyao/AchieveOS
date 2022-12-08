@@ -118,11 +118,12 @@ init_pm:
     wrmsr
 
     mov eax, cr4
-    or eax, 1 << 5
+    or eax, ((1 << 5) + (1 << 9) + (1 << 10))
     mov cr4, eax
 
     mov eax, cr0
-    or eax, 1 << 31
+    or eax, ((1 << 31) + (1 << 1))
+    and eax, ~(1 << 2)
     mov cr0, eax
 
     lgdt [GDT64.Pointer]
@@ -173,11 +174,7 @@ Realm64:
     mov rbp, 0xC000000
     mov rsp, rbp
 
-    xchg bx,bx
-
-    call KERNEL_OFFSET
-
-    jmp $
+    jmp KERNEL_OFFSET
 
 times 510 - ($-$$) db 0
 dw 0xaa55

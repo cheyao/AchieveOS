@@ -3,7 +3,6 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 

@@ -2,13 +2,17 @@ C_SOURCES = $(wildcard lib/*.c) $(wildcard libc/*.c)
 HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.h)
 OBJ = ${C_SOURCES:.c=.o lib/idtr.o}
 
-CFLAGS = -O2 -std=gnu11 -g -static -Wall -Wextra -Wno-unused-function -Wno-unused-parameter \
-		 -Wstrict-prototypes -Wpointer-arith -Wcast-align -Wwrite-strings -Wshadow \
- 	     -fno-stack-protector -Wundef -nostdlib -fno-builtin -nodefaultlibs \
-		 -fms-extensions -ffreestanding -mcmodel=large -fverbose-asm -nostartfiles \
-		 -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -Iinclude -Wfloat-equal
+CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase \
+		 -nostdlib -ffreestanding -O2 -std=gnu11 -g -static -Wall -Wextra -Wwrite-strings \
+		 -Wno-unused-function -Wno-unused-parameter -Wstrict-prototypes -pedantic -Iinclude #  -mgeneral-regs-only
+		 # -O2 -std=gnu11 -g -static -Wall -Wextra -Wno-unused-function -Wno-unused-parameter \
+		 # -Wstrict-prototypes -Wwrite-strings -fno-omit-frame-pointer -mno-red-zone \
+		 # -mgeneral-regs-only -nostdlib -Iinclude -Wwrite-strings \
+ 	     # -fno-stack-protector -fno-builtin -nodefaultlibs -fdiagnostics-show-option \
+		 # -fms-extensions -ffreestanding -mcmodel=large -nostartfiles
 
-LDFLAGS = -T link.ld -ffreestanding -O2 -nostdlib -lgcc
+LDFLAGS = -T link.ld -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only \
+          -nostdlib
 
 CC = x86_64-elf-gcc
 HOST_CC = gcc-12
@@ -29,7 +33,7 @@ cdrom.iso: bootsect.bin kernel.bin $(UTILS)
 	qemu-img create disk.img 20M
 
 kernel.bin: lib/kernel_start.o ${OBJ}
-	${CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000 -fuse-ld=gold
+	${CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000 -fuse-ld=gold -Wl,--oformat=binary
 
 bootsect.bin: boot/bootsect.asm
 	${AS} $< -f bin -o $@

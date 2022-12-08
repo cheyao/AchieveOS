@@ -6,6 +6,10 @@
 #ifndef _SCREEN_H
 #define _SCREEN_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 #define BUFFER 0x200000
@@ -24,5 +28,9 @@ typedef struct {
 void circle(Vector2 P0, int32_t radius, uint16_t color);
 
 void line(Vector2 P0, Vector2 P1, uint16_t color);
+
+#if defined(__cplusplus)
+} /* extern "C" */
+#endif
 
 #endif  //_SCREEN_H

@@ -6,6 +6,10 @@
 #ifndef _ATA_H
 #define _ATA_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 #include <kernel/ports.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -48,5 +52,9 @@ typedef struct {
 	uint32_t size;
 	bool removable;
 } Disk;
+
+#if defined(__cplusplus)
+} /* extern "C" */
+#endif
 
 #endif  //_ATA_H

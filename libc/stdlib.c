@@ -48,7 +48,7 @@ int atoi(const char *str) {
 	switch (*str) {
 		case '-':
 			neg = 1;
-			[[fallthrough]];
+			__attribute__((fallthrough));
 		case '+':
 			str++;
 	}

@@ -1,0 +1,433 @@
+/usr/local/bin/bochs -f bochs.txt -q -unlock
+00000000000i[      ] LTDL_LIBRARY_PATH not set. using compile time default '/usr/local/Cellar/bochs/2.7/lib/bochs/plugins'
+========================================================================
+                        Bochs x86 Emulator 2.7
+              Built from SVN snapshot on August  1, 2021
+                Timestamp: Sun Aug  1 10:07:00 CEST 2021
+========================================================================
+00000000000i[      ] BXSHARE not set. using compile time default '/usr/local/Cellar/bochs/2.7/share/bochs'
+00000000000i[      ] lt_dlhandle is 0x7ff30d6117f0
+00000000000i[PLUGIN] loaded plugin libbx_serial.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d614a40
+00000000000i[PLUGIN] loaded plugin libbx_speaker.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d730980
+00000000000i[PLUGIN] loaded plugin libbx_unmapped.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d615370
+00000000000i[PLUGIN] loaded plugin libbx_parallel.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d40f010
+00000000000i[PLUGIN] loaded plugin libbx_biosdev.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d40c7c0
+00000000000i[PLUGIN] loaded plugin libbx_iodebug.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d40f820
+00000000000i[PLUGIN] loaded plugin libbx_extfpuirq.so
+00000000000i[      ] reading configuration from bochs.txt
+00000000000i[      ] Stopping on magic break points
+00000000000i[      ] lt_dlhandle is 0x7ff30d40fd20
+00000000000i[PLUGIN] loaded plugin libbx_textconfig.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d40fd80
+00000000000i[PLUGIN] loaded plugin libbx_sdl2_gui.so
+00000000000i[      ] installing sdl2 module as the Bochs GUI
+00000000000i[SDL2  ] maximum host resolution: x=2560 y=1600
+00000000000i[      ] Bochs x86 Emulator 2.7
+00000000000i[      ]   Built from SVN snapshot on August  1, 2021
+00000000000i[      ]   Timestamp: Sun Aug  1 10:07:00 CEST 2021
+00000000000i[      ] System configuration
+00000000000i[      ]   processors: 1 (cores=1, HT threads=1)
+00000000000i[      ]   A20 line support: yes
+00000000000i[      ] IPS is set to 10000000
+00000000000i[      ] CPU configuration
+00000000000i[      ]   SMP support: no
+00000000000i[      ]   Using pre-defined CPU configuration: corei7_skylake_x
+00000000000i[      ] Optimization configuration
+00000000000i[      ]   RepeatSpeedups support: yes
+00000000000i[      ]   Fast function calls: yes
+00000000000i[      ]   Handlers Chaining speedups: no
+00000000000i[      ] Devices configuration
+00000000000i[      ]   PCI support: i440FX i430FX i440BX
+00000000000i[      ]   Networking: no
+00000000000i[      ]   Sound support: no
+00000000000i[      ]   USB support: UHCI
+00000000000i[      ]   VGA extension support: vbe cirrus
+00000000000i[IMG   ] Disk image modules
+00000000000i[IMG   ]   flat concat sparse dll growing undoable volatile vmware3
+00000000000i[IMG   ]   vbox vvfat vpc vmware4
+00000000000i[USBCTL] Pluggable USB devices
+00000000000i[USBCTL]   disk cdrom mouse tablet keypad keyboard hub floppy
+00000000000i[USBCTL]   printer
+00000000000i[MEM0  ] allocated memory at 0x7ff2ed400000. after alignment, vector=0x7ff2ed400000
+00000000000i[MEM0  ] 256.00MB
+00000000000i[MEM0  ] mem block size = 0x00020000, blocks=2048
+00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/local/Cellar/bochs/2.7/share/bochs/BIOS-bochs-latest')
+00000000000i[CPU0  ] WARNING: RDRAND would not produce true random numbers !
+00000000000i[CPU0  ] WARNING: RDSEED would not produce true random numbers !
+00000000000i[DEV   ] will paste characters every 100 iodev timer ticks
+00000000000i[      ] lt_dlhandle is 0x7ff2fe04def0
+00000000000i[PLUGIN] loaded plugin libbx_pci.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d6d34f0
+00000000000i[PLUGIN] loaded plugin libbx_pci2isa.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d4eb280
+00000000000i[PLUGIN] loaded plugin libbx_usb_uhci.so
+00000000000i[      ] lt_dlhandle is 0x7ff2fe04f9e0
+00000000000i[PLUGIN] loaded plugin libbx_acpi.so
+00000000000i[      ] lt_dlhandle is 0x7ff2fe04fec0
+00000000000i[PLUGIN] loaded plugin libbx_hpet.so
+00000000000i[      ] lt_dlhandle is 0x7ff2fe0501a0
+00000000000i[PLUGIN] loaded plugin libbx_cmos.so
+00000000000i[      ] lt_dlhandle is 0x7ff2fe050210
+00000000000i[PLUGIN] loaded plugin libbx_dma.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d4eb2e0
+00000000000i[PLUGIN] loaded plugin libbx_pic.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d6d3a30
+00000000000i[PLUGIN] loaded plugin libbx_pit.so
+00000000000i[      ] lt_dlhandle is 0x7ff2fe050930
+00000000000i[PLUGIN] loaded plugin libbx_vga.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d4101f0
+00000000000i[PLUGIN] loaded plugin libbx_floppy.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d7f0bf0
+00000000000i[PLUGIN] loaded plugin libbx_ioapic.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d6d3e10
+00000000000i[PLUGIN] loaded plugin libbx_keyboard.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d4ec250
+00000000000i[PLUGIN] loaded plugin libbx_harddrv.so
+00000000000i[      ] lt_dlhandle is 0x7ff30d6d4120
+00000000000i[PLUGIN] loaded plugin libbx_pci_ide.so
+00000000000i[PLUGIN] init_dev of 'pci' plugin device by virtual method
+00000000000i[DEV   ] i440FX PMC present at device 0, function 0
+00000000000i[PLUGIN] init_dev of 'pci2isa' plugin device by virtual method
+00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
+00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
+00000000000i[CMOS  ] Using local time for initial clock
+00000000000i[CMOS  ] Setting initial clock to: Thu Dec  8 15:18:24 2022 (time0=1670509104)
+00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
+00000000000i[DMA   ] channel 4 used by cascade
+00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'pit' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'vga' plugin device by virtual method
+00000000000i[MEM0  ] Register memory access handlers: 0x0000000a0000 - 0x0000000bffff
+00000000000i[VGA   ] interval=500000, mode=realtime
+00000000000i[VGA   ] VSYNC using standard mode
+00000000000i[MEM0  ] Register memory access handlers: 0x0000e0000000 - 0x0000e0ffffff
+00000000000i[BXVGA ] VBE Bochs Display Extension Enabled
+00000000000i[SDL2  ] disabled host keyboard repeat
+00000000000i[MEM0  ] rom at 0xc0000/38400 ('/usr/local/Cellar/bochs/2.7/share/bochs/VGABIOS-lgpl-latest')
+00000000000i[PLUGIN] init_dev of 'floppy' plugin device by virtual method
+00000000000i[DMA   ] channel 2 used by Floppy Drive
+00000000000i[FLOPPY] Using boot sequence cdrom, none, none
+00000000000i[FLOPPY] Floppy boot signature check is enabled
+00000000000i[PLUGIN] init_dev of 'acpi' plugin device by virtual method
+00000000000i[DEV   ] ACPI Controller present at device 1, function 3
+00000000000i[PLUGIN] init_dev of 'hpet' plugin device by virtual method
+00000000000i[HPET  ] initializing HPET
+00000000000i[MEM0  ] Register memory access handlers: 0x0000fed00000 - 0x0000fed003ff
+00000000000i[PLUGIN] init_dev of 'ioapic' plugin device by virtual method
+00000000000i[IOAPIC] initializing I/O APIC
+00000000000i[MEM0  ] Register memory access handlers: 0x0000fec00000 - 0x0000fec00fff
+00000000000i[IOAPIC] IOAPIC enabled (base address = 0xfec00000)
+00000000000i[PLUGIN] init_dev of 'keyboard' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'harddrv' plugin device by virtual method
+00000000000i[HD    ] CD on ata1-0: 'cdrom.iso'
+00000000000i[CD1   ] load cdrom with path=cdrom.iso
+00000000000i[CD1   ] Opening image file as a cd.
+00000000000i[HD    ] Media present in CD-ROM drive
+00000000000i[HD    ] Capacity is 897 sectors (1.75 MB)
+00000000000i[PLUGIN] init_dev of 'pci_ide' plugin device by virtual method
+00000000000i[DEV   ] PIIX3 PCI IDE controller present at device 1, function 1
+00000000000i[PLUGIN] init_dev of 'serial' plugin device by virtual method
+00000000000e[DEV   ] IO device address conflict(read) at IO address 3FCh
+00000000000e[DEV   ]   conflicting devices: ATA0 & Serial Port 1
+00000000000e[DEV   ] IO device address conflict(write) at IO address 3FCh
+00000000000e[DEV   ]   conflicting devices: ATA0 & Serial Port 1
+00000000000e[DEV   ] IO device address conflict(read) at IO address 3FDh
+00000000000e[DEV   ]   conflicting devices: ATA0 & Serial Port 1
+00000000000e[DEV   ] IO device address conflict(write) at IO address 3FDh
+00000000000e[DEV   ]   conflicting devices: ATA0 & Serial Port 1
+00000000000i[SER   ] com1 at 0x03f8 irq 4 (mode: null)
+00000000000i[PLUGIN] init_dev of 'speaker' plugin device by virtual method
+00000000000i[PCSPK ] Forwarding beep to gui
+00000000000i[PLUGIN] init_dev of 'unmapped' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'parallel' plugin device by virtual method
+00000000000i[PAR   ] parallel port 1 at 0x0378 irq 7
+00000000000i[PLUGIN] init_dev of 'biosdev' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'iodebug' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'extfpuirq' plugin device by virtual method
+00000000000i[PLUGIN] init_dev of 'usb_uhci' plugin device by virtual method
+00000000000i[DEV   ] USB UHCI present at device 1, function 2
+00000000000i[UHCI  ] USB UHCI initialized
+00000000000i[PLUGIN] register state of 'pci' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'pci2isa' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'cmos' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'dma' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'pic' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'pit' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'vga' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'floppy' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'serial' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'speaker' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'unmapped' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'parallel' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'biosdev' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'iodebug' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'extfpuirq' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'usb_uhci' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'acpi' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'hpet' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'ioapic' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'keyboard' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'harddrv' plugin device by virtual method
+00000000000i[PLUGIN] register state of 'pci_ide' plugin device by virtual method
+00000000000i[SYS   ] bx_pc_system_c::Reset(HARDWARE) called
+00000000000i[CPU0  ] cpu hardware reset
+00000000000i[APIC0 ] allocate APIC id=0 (MMIO enabled) to 0x0000fee00000
+00000000000i[CPU0  ] CPUID[0x00000000]: 00000016 756e6547 6c65746e 49656e69
+00000000000i[CPU0  ] CPUID[0x00000001]: 00050654 00010800 77faf3bf afebfbff
+00000000000i[CPU0  ] CPUID[0x00000002]: 76036301 00f0b5ff 00000000 00c30000
+00000000000i[CPU0  ] CPUID[0x00000003]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000004]: 1c004121 01c0003f 0000003f 00000000
+00000000000i[CPU0  ] CPUID[0x00000005]: 00000040 00000040 00000003 00002020
+00000000000i[CPU0  ] CPUID[0x00000006]: 00000075 00000002 00000009 00000000
+00000000000i[CPU0  ] CPUID[0x00000007]: 00000000 d19f27eb 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000008]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000009]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] WARNING: Architectural Performance Monitoring is not implemented
+00000000000i[CPU0  ] CPUID[0x0000000a]: 07300404 00000000 00000000 00000603
+00000000000i[CPU0  ] CPUID[0x0000000b]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x0000000c]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x0000000d]: 000000e7 00000240 00000a80 00000000
+00000000000i[CPU0  ] CPUID[0x0000000e]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x0000000f]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000010]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000011]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000012]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000013]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000014]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000015]: 00000002 00000124 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x00000016]: 00000dac 00000fa0 00000064 00000000
+00000000000i[CPU0  ] CPUID[0x80000000]: 80000008 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x80000001]: 00000000 00000000 00000121 2c100000
+00000000000i[CPU0  ] CPUID[0x80000002]: 65746e49 2952286c 726f4320 4d542865
+00000000000i[CPU0  ] CPUID[0x80000003]: 37692029 3038372d 43205830 40205550
+00000000000i[CPU0  ] CPUID[0x80000004]: 352e3320 7a484730 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x80000005]: 00000000 00000000 00000000 00000000
+00000000000i[CPU0  ] CPUID[0x80000006]: 00000000 00000000 01006040 00000000
+00000000000i[CPU0  ] CPUID[0x80000007]: 00000000 00000000 00000000 00000100
+00000000000i[CPU0  ] CPUID[0x80000008]: 00003028 00000000 00000000 00000000
+00000000000i[CPU0  ] CPU Features supported:
+00000000000i[CPU0  ] 		x87
+00000000000i[CPU0  ] 		486ni
+00000000000i[CPU0  ] 		pentium_ni
+00000000000i[CPU0  ] 		p6ni
+00000000000i[CPU0  ] 		mmx
+00000000000i[CPU0  ] 		debugext
+00000000000i[CPU0  ] 		vme
+00000000000i[CPU0  ] 		pse
+00000000000i[CPU0  ] 		pae
+00000000000i[CPU0  ] 		pge
+00000000000i[CPU0  ] 		pse36
+00000000000i[CPU0  ] 		mtrr
+00000000000i[CPU0  ] 		pat
+00000000000i[CPU0  ] 		sysenter_sysexit
+00000000000i[CPU0  ] 		clflush
+00000000000i[CPU0  ] 		clflushopt
+00000000000i[CPU0  ] 		clwb
+00000000000i[CPU0  ] 		sse
+00000000000i[CPU0  ] 		sse2
+00000000000i[CPU0  ] 		sse3
+00000000000i[CPU0  ] 		ssse3
+00000000000i[CPU0  ] 		sse4_1
+00000000000i[CPU0  ] 		sse4_2
+00000000000i[CPU0  ] 		popcnt
+00000000000i[CPU0  ] 		mwait
+00000000000i[CPU0  ] 		vmx
+00000000000i[CPU0  ] 		longmode
+00000000000i[CPU0  ] 		lm_lahf_sahf
+00000000000i[CPU0  ] 		nx
+00000000000i[CPU0  ] 		1g_pages
+00000000000i[CPU0  ] 		cmpxhg16b
+00000000000i[CPU0  ] 		rdtscp
+00000000000i[CPU0  ] 		xsave
+00000000000i[CPU0  ] 		xsaveopt
+00000000000i[CPU0  ] 		xsavec
+00000000000i[CPU0  ] 		xsaves
+00000000000i[CPU0  ] 		aes_pclmulqdq
+00000000000i[CPU0  ] 		movbe
+00000000000i[CPU0  ] 		fsgsbase
+00000000000i[CPU0  ] 		invpcid
+00000000000i[CPU0  ] 		avx
+00000000000i[CPU0  ] 		avx2
+00000000000i[CPU0  ] 		avx_f16c
+00000000000i[CPU0  ] 		avx_fma
+00000000000i[CPU0  ] 		lzcnt
+00000000000i[CPU0  ] 		bmi1
+00000000000i[CPU0  ] 		bmi2
+00000000000i[CPU0  ] 		rdrand
+00000000000i[CPU0  ] 		adx
+00000000000i[CPU0  ] 		smap
+00000000000i[CPU0  ] 		rdseed
+00000000000i[CPU0  ] 		avx512
+00000000000i[CPU0  ] 		avx512cd
+00000000000i[CPU0  ] 		avx512dq
+00000000000i[CPU0  ] 		avx512bw
+00000000000i[CPU0  ] 		avx512vl
+00000000000i[CPU0  ] 		xapic
+00000000000i[CPU0  ] 		x2apic
+00000000000i[CPU0  ] 		pcid
+00000000000i[CPU0  ] 		smep
+00000000000i[CPU0  ] 		tsc_adjust
+00000000000i[CPU0  ] 		tsc_deadline
+00000000000i[CPU0  ] 		fcs_fds_deprecation
+00000000000i[CPU0  ] 		fdp_deprecation
+00000000000i[PLUGIN] reset of 'pci' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'pci2isa' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'cmos' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'dma' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'pic' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'pit' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'vga' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'floppy' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'acpi' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'hpet' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'ioapic' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'keyboard' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'harddrv' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'pci_ide' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'serial' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'speaker' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'unmapped' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'parallel' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'biosdev' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'iodebug' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'extfpuirq' plugin device by virtual method
+00000000000i[PLUGIN] reset of 'usb_uhci' plugin device by virtual method
+Next at t=0
+(0) [0x0000fffffff0] f000:fff0 (unk. ctxt): jmpf 0xf000:e05b          ; ea5be000f0
+<bochs:1> 00000000000i[      ] set SIGINT handler to bx_debug_ctrlc_handler
+c
+00000004662i[BIOS  ] $Revision: 14314 $ $Date: 2021-07-14 18:10:19 +0200 (Wed, 14 Jul 2021) $
+00000320070i[KBD   ] reset-disable command received
+00000325816i[BIOS  ] Starting rombios32
+00000326254i[BIOS  ] Shutdown flag 0
+00000326862i[BIOS  ] ram_size=0x10000000
+00000327317i[BIOS  ] ram_end=256MB
+00000427504i[BIOS  ] Found 1 cpu(s)
+00000441157i[BIOS  ] bios_table_addr: 0x000f9d98 end=0x000fcc00
+00000768973i[PCI   ] i440FX PMC write to PAM register 59 (TLB Flush)
+00001096908i[P2ISA ] PCI IRQ routing: PIRQA# set to 0x0b
+00001096932i[P2ISA ] PCI IRQ routing: PIRQB# set to 0x09
+00001096956i[P2ISA ] PCI IRQ routing: PIRQC# set to 0x0b
+00001096980i[P2ISA ] PCI IRQ routing: PIRQD# set to 0x09
+00001096990i[P2ISA ] write: ELCR2 = 0x0a
+00001097759i[BIOS  ] PIIX3/PIIX4 init: elcr=00 0a
+00001111435i[BIOS  ] PCI: bus=0 devfn=0x00: vendor_id=0x8086 device_id=0x1237 class=0x0600
+00001113779i[BIOS  ] PCI: bus=0 devfn=0x08: vendor_id=0x8086 device_id=0x7000 class=0x0601
+00001115962i[BIOS  ] PCI: bus=0 devfn=0x09: vendor_id=0x8086 device_id=0x7010 class=0x0101
+00001116197i[PIDE  ] BAR #4: i/o base address = 0xc000
+00001116813i[BIOS  ] region 4: 0x0000c000
+00001118848i[BIOS  ] PCI: bus=0 devfn=0x0a: vendor_id=0x8086 device_id=0x7020 class=0x0c03
+00001119061i[UHCI  ] BAR #4: i/o base address = 0xc020
+00001119677i[BIOS  ] region 4: 0x0000c020
+00001119805i[UHCI  ] new IRQ line = 9
+00001121727i[BIOS  ] PCI: bus=0 devfn=0x0b: vendor_id=0x8086 device_id=0x7113 class=0x0680
+00001122003i[ACPI  ] new IRQ line = 11
+00001122017i[ACPI  ] new IRQ line = 9
+00001122045i[ACPI  ] new PM base address: 0xb000
+00001122059i[ACPI  ] new SM base address: 0xb100
+00001122087i[PCI   ] setting SMRAM control register to 0x4a
+00001286222i[CPU0  ] Enter to System Management Mode
+00001286222i[CPU0  ] enter_system_management_mode: temporary disable VMX while in SMM mode
+00001286232i[CPU0  ] RSM: Resuming from System Management Mode
+00001450288i[PCI   ] setting SMRAM control register to 0x0a
+00001476953i[BIOS  ] MP table addr=0x000f9e70 MPC table addr=0x000f9da0 size=0xc8
+00001478660i[BIOS  ] SMBIOS table addr=0x000f9e80
+00001480749i[BIOS  ] ACPI tables: RSDP addr=0x000f9fa0 ACPI DATA addr=0x0fff0000 size=0xff8
+00001483733i[BIOS  ] Firmware waking vector 0xfff00cc
+00001485987i[PCI   ] i440FX PMC write to PAM register 59 (TLB Flush)
+00001486717i[BIOS  ] bios_table_cur_addr: 0x000f9fc4
+00001604837i[VBIOS ] VGABios $Id: vgabios.c 288 2021-05-28 19:05:28Z vruppert $
+00001604908i[BXVGA ] VBE known Display Interface b0c0
+00001604940i[BXVGA ] VBE known Display Interface b0c5
+00001607583i[VBIOS ] VBE Bios $Id: vbe.c 292 2021-06-03 12:24:22Z vruppert $
+00005262390i[BIOS  ] IDE time out
+00035981151i[BIOS  ] Booting from 07c0:0000
+00035991766i[BXVGA ] VBE set bpp (16)
+00035991785i[BXVGA ] VBE set xres (1024)
+00035991804i[BXVGA ] VBE set yres (768)
+00035991892i[BXVGA ] VBE enabling x 1024, y 768, bpp 16, 1572864 bytes visible
+00035995043i[CPU0  ] [35995043] Stopped on MAGIC BREAKPOINT
+(0) Magic breakpoint
+Next at t=35995043
+(0) [0x000000007d66] 0010:0000000000007d66 (unk. ctxt): call .+661  (0x00008000)  ; e895020000
+<bochs:2> trace on
+Tracing enabled for CPU0
+<bochs:3> c
+(0).[35995043] [0x000000007d66] 0010:0000000000007d66 (unk. ctxt): call .+661  (0x00008000)  ; e895020000
+(0).[35995044] [0x000000008000] 0010:0000000000008000 (unk. ctxt): call .+16379  (0x0000c000) ; e8fb3f0000
+(0).[35995045] [0x00000000c000] 0010:000000000000c000 (unk. ctxt): push rbp                  ; 55
+(0).[35995046] [0x00000000c001] 0010:000000000000c001 (unk. ctxt): mov rbp, rsp              ; 4889e5
+(0).[35995047] [0x00000000c004] 0010:000000000000c004 (unk. ctxt): sub rsp, 0x0000000000000020 ; 4883ec20
+(0).[35995048] [0x00000000c008] 0010:000000000000c008 (unk. ctxt): call .-14637  (0x000086e0) ; e8d3c6ffff
+(0).[35995049] [0x0000000086e0] 0010:00000000000086e0 (unk. ctxt): mov qword ptr ds:[rip+32791], 0x0000000000010710 ; 48c7051780000010070100
+(0).[35995050] [0x0000000086eb] 0010:00000000000086eb (unk. ctxt): mov eax, 0x00000fff       ; b8ff0f0000
+(0).[35995051] [0x0000000086f0] 0010:00000000000086f0 (unk. ctxt): mov word ptr ds:[rip+32777], ax ; 66890509800000
+(0).[35995052] [0x0000000086f7] 0010:00000000000086f7 (unk. ctxt): mov eax, 0x00000011       ; b811000000
+(0).[35995053] [0x0000000086fc] 0010:00000000000086fc (unk. ctxt): out 0x20, al              ; e620
+(0).[35995054] [0x0000000086fe] 0010:00000000000086fe (unk. ctxt): out 0xa0, al              ; e6a0
+(0).[35995055] [0x000000008700] 0010:0000000000008700 (unk. ctxt): mov eax, 0x00000020       ; b820000000
+(0).[35995056] [0x000000008705] 0010:0000000000008705 (unk. ctxt): out 0x21, al              ; e621
+(0).[35995057] [0x000000008707] 0010:0000000000008707 (unk. ctxt): mov eax, 0x00000028       ; b828000000
+(0).[35995058] [0x00000000870c] 0010:000000000000870c (unk. ctxt): out 0xa1, al              ; e6a1
+(0).[35995059] [0x00000000870e] 0010:000000000000870e (unk. ctxt): mov eax, 0x00000004       ; b804000000
+(0).[35995060] [0x000000008713] 0010:0000000000008713 (unk. ctxt): out 0x21, al              ; e621
+(0).[35995061] [0x000000008715] 0010:0000000000008715 (unk. ctxt): mov eax, 0x00000002       ; b802000000
+(0).[35995062] [0x00000000871a] 0010:000000000000871a (unk. ctxt): out 0xa1, al              ; e6a1
+(0).[35995063] [0x00000000871c] 0010:000000000000871c (unk. ctxt): mov eax, 0x00000001       ; b801000000
+(0).[35995064] [0x000000008721] 0010:0000000000008721 (unk. ctxt): out 0x21, al              ; e621
+(0).[35995065] [0x000000008723] 0010:0000000000008723 (unk. ctxt): out 0xa1, al              ; e6a1
+(0).[35995066] [0x000000008725] 0010:0000000000008725 (unk. ctxt): xor eax, eax              ; 31c0
+(0).[35995067] [0x000000008727] 0010:0000000000008727 (unk. ctxt): out 0x21, al              ; e621
+(0).[35995068] [0x000000008729] 0010:0000000000008729 (unk. ctxt): out 0xa1, al              ; e6a1
+(0).[35995069] [0x00000000872b] 0010:000000000000872b (unk. ctxt): mov edx, 0x00010000       ; ba00000100
+(0).[35995070] [0x000000008730] 0010:0000000000008730 (unk. ctxt): mov eax, 0x00010700       ; b800070100
+(0).[35995071] [0x000000008735] 0010:0000000000008735 (unk. ctxt): pxor xmm0, xmm0           ; 660fefc0
+CPU 0: Exception 0x06 - (#UD) undefined opcode occurred (error_code=0x0000)
+CPU 0: Interrupt 0x06 occurred (error_code=0x0000)
+CPU 0: Exception 0x0d - (#GP) general protection fault occurred (error_code=0x0033)
+CPU 0: Interrupt 0x0d occurred (error_code=0x0033)
+CPU 0: Exception 0x0d - (#GP) general protection fault occurred (error_code=0x006b)
+CPU 0: Exception 0x08 - (#DF) double fault occurred (error_code=0x0000)
+CPU 0: Interrupt 0x08 occurred (error_code=0x0000)
+CPU 0: Exception 0x0d - (#GP) general protection fault occurred (error_code=0x0043)
+(0).[35995071] [0x000000008735] 0010:0000000000008735 (unk. ctxt): pxor xmm0, xmm0           ; 660fefc0
+00035995071e[CPU0  ] interrupt(long mode): IDT entry extended attributes DWORD4 TYPE != 0
+00035995071e[CPU0  ] interrupt(long mode): IDT entry extended attributes DWORD4 TYPE != 0
+00035995071e[CPU0  ] interrupt(long mode): IDT entry extended attributes DWORD4 TYPE != 0
+00035995071i[CPU0  ] CPU is in long mode (active)
+00035995071i[CPU0  ] CS.mode = 64 bit
+00035995071i[CPU0  ] SS.mode = 64 bit
+00035995071i[CPU0  ] EFER   = 0x00000500
+00035995071i[CPU0  ] | RAX=0000000000010700  RBX=000000000fe00083
+00035995071i[CPU0  ] | RCX=00000000c0000080  RDX=0000000000010000
+00035995071i[CPU0  ] | RSP=000000000bffffc0  RBP=000000000bffffe8
+00035995071i[CPU0  ] | RSI=00000000000e0000  RDI=0000000000602400
+00035995071i[CPU0  ] |  R8=0000000000000000   R9=0000000000000000
+00035995071i[CPU0  ] | R10=0000000000000000  R11=0000000000000000
+00035995071i[CPU0  ] | R12=0000000000000000  R13=0000000000000000
+00035995071i[CPU0  ] | R14=0000000000000000  R15=0000000000000000
+00035995071i[CPU0  ] | IOPL=0 id vip vif ac vm RF nt of df if tf sf ZF af PF cf
+00035995071i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00035995071i[CPU0  ] |  CS:0010( 0002| 0|  0) 00000000 ffffffff 1 0
+00035995071i[CPU0  ] |  DS:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+00035995071i[CPU0  ] |  SS:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+00035995071i[CPU0  ] |  ES:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+00035995071i[CPU0  ] |  FS:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+00035995071i[CPU0  ] |  GS:0018( 0003| 0|  0) 00000000 ffffffff 1 1
+00035995071i[CPU0  ] |  MSR_FS_BASE:0000000000000000
+00035995071i[CPU0  ] |  MSR_GS_BASE:0000000000000000
+00035995071i[CPU0  ] | RIP=0000000000008735 (0000000000008735)
+00035995071i[CPU0  ] | CR0=0xe0000011 CR2=0x0000000000000000
+00035995071i[CPU0  ] | CR3=0x0000000000600000 CR4=0x00000020
+00035995071p[CPU0  ] >>PANIC<< exception(): 3rd (13) exception with no resolution
+00035995071e[CPU0  ] WARNING: Any simulation after this point is completely bogus !
+CPU 0: HALTED
+Next at t=35995072
+(0) [0x000000008735] 0010:0000000000008735 (unk. ctxt): pxor xmm0, xmm0           ; 660fefc0
+<bochs:4>

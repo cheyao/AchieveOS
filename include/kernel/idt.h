@@ -6,14 +6,22 @@
 #ifndef IDT_H
 #define IDT_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 void init_idt(void);
 
 void schedule(int port);
 
 extern void isr_0(void);
+
 extern void isr_1(void);
+
 extern void isr_2(void);
+
 extern void isr_3(void);
+
 extern void isr_4(void);
 extern void isr_5(void);
 extern void isr_6(void);
@@ -53,14 +61,23 @@ extern void isr_normal_7(void);
 extern void isr_normal_8(void);
 extern void isr_normal_9(void);
 extern void isr_normal_10(void);
+
 extern void isr_normal_11(void);
+
 extern void isr_normal_12(void);
+
 extern void isr_normal_13(void);
+
 extern void isr_normal_14(void);
+
 extern void isr_normal_15(void);
 
 typedef void (*isr_t)(void);
 
 void register_handler(int num, isr_t fun);
+
+#if defined(__cplusplus)
+} /* extern "C" */
+#endif
 
 #endif  // IDT_H

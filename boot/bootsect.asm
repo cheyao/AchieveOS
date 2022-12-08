@@ -1,6 +1,6 @@
 org 0x7C00
 KERNEL_OFFSET equ 0x8000
-SECTORS equ 40
+SECTORS equ 60
 
 CODE_SEG equ gdt_code - gdt_start
 DATA_SEG equ gdt_data - gdt_start
@@ -169,6 +169,8 @@ Realm64:
 
     mov rbp, 0xC000000
     mov rsp, rbp
+
+    xchg bx,bx
 
     call KERNEL_OFFSET
 

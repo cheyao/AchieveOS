@@ -159,6 +159,7 @@ void irq_handler(struct regs *r) {
 }
 
 __attribute__((unused)) void interrupt_handler(struct regs *r) {
+	__asm__ __volatile__("cli;hlt");
 	if (r->int_no < 32)
 		exception_handler(r);
 	else

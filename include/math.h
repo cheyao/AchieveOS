@@ -6,6 +6,10 @@
 #ifndef _MATH_H
 #define _MATH_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 double pow(double base, double exponent);
 
 double sqrt(double x);
@@ -15,5 +19,9 @@ double fabs(double x);
 int abs(int num);
 
 typedef double double_t;
+
+#if defined(__cplusplus)
+} /* extern "C" */
+#endif
 
 #endif  // _MATH_H

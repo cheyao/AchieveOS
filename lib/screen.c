@@ -89,3 +89,57 @@ void line(Vector2 p0, Vector2 p1, uint16_t color) {
 		j -= decInc;
 	}
 }
+
+static Vector2 midpoint(Vector2 p1, Vector2 p2) {
+	return (Vector2) {.x = (int) (p2.x - p1.x) / 2 + p1.x, .y = (int) (p2.y - p1.y) / 2 + p1.y};
+}
+
+static void split_curve(Vector2 p[4], Vector2 out[2][4]) {
+	const Vector2 p1 = p[0];
+	const Vector2 p2 = p[1];
+	const Vector2 p3 = p[2];
+	const Vector2 p4 = p[3];
+	const Vector2 p12 = midpoint(p1, p2);
+	const Vector2 p23 = midpoint(p2, p3);
+	const Vector2 p34 = midpoint(p4, p3);
+	const Vector2 p123 = midpoint(p12, p23);
+	const Vector2 p234 = midpoint(p23, p34);
+	const Vector2 p1234 = {.x = (int) (p234.x - p123.x) / 2 + p123.x,
+			.y = (int) (p234.y - p123.y) / 2 + p123.y};
+	out[0][0] = p1;
+	out[0][1] = p12;
+	out[0][2] = p123;
+	out[0][3] = p1234;
+	out[1][0] = p1234;
+	out[1][1] = p234;
+	out[1][2] = p34;
+	out[1][3] = p4;
+}
+
+static uint32_t flatness(Vector2 p[4]) {
+	const Vector2 p1 = p[0];
+	const Vector2 cp1 = p[1];
+	const Vector2 cp2 = p[2];
+	const Vector2 p2 = p[3];
+	uint32_t ux = (3 * cp1.x - 2 * p1.x - p2.x) * (3 * cp1.x - 2 * p1.x - p2.x);
+	uint32_t uy = (3 * cp1.y - 2 * p1.y - p2.y) * (3 * cp1.y - 2 * p1.y - p2.y);
+	uint32_t vx = (3 * cp2.x - 2 * p2.x - p1.x) * (3 * cp2.x - 2 * p2.x - p1.x);
+	uint32_t vy = (3 * cp2.y - 2 * p2.y - p1.y) * (3 * cp2.y - 2 * p2.y - p1.y);
+	if (ux < vx) ux = vx;
+	if (uy < vy) uy = vy;
+	return ux + uy;
+}
+
+void cubic_bezier_curve(const Vector2 p[4], const color_t color) {
+#define THRESHOLD 10
+	if (flatness(p) < THRESHOLD) {
+		line(p[0], p[3], color);
+		return;
+	} else {
+		Vector2 split[2][4] = {{[3] = {0, 0}},
+		                       {[3] = {0, 0}}};
+		split_curve(p, split);
+		curve(split[0], color);
+		curve(split[1], color);
+	}
+}

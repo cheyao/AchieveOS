@@ -29,6 +29,10 @@ void circle(Vector2 P0, int32_t radius, uint16_t color);
 
 void line(Vector2 P0, Vector2 P1, uint16_t color);
 
+typedef uint16_t color_t;
+
+void cubic_bezier_curve(const Vector2 p[4], color_t color);
+
 #if defined(__cplusplus)
 } /* extern "C" */
 #endif

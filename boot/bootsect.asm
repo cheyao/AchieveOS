@@ -1,6 +1,6 @@
 org 0x7C00
 KERNEL_OFFSET equ 0x8000
-SECTORS equ 60
+SECTORS equ 120
 
 CODE_SEG equ gdt_code - gdt_start
 DATA_SEG equ gdt_data - gdt_start
@@ -12,7 +12,6 @@ DC             equ 1 << 2
 RW             equ 1 << 1
 ACCESSED       equ 1 << 0
 
-; Flags bits
 GRAN_4K       equ 1 << 7
 SZ_32         equ 1 << 6
 LONG_MODE     equ 1 << 5

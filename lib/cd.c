@@ -73,12 +73,12 @@ start:
 	if (*((unsigned short *) 0x7000) & 1 << 7)
 		d->removable = true;
 
-	if ((*((unsigned short *) 0x7000) >> 14 & 0b11) == 0b10)
+	if ((*((unsigned short *) 0x7000) >> 14 & 0x3) == 0x2)
 		d->protocol = ATAPI;
 	else
 		d->protocol = ATA;
 
-	switch (*((unsigned short *) 0x7000) >> 8 & 0b11111) {
+	switch (*((unsigned short *) 0x7000) >> 8 & 0x1F) {
 		case 0x00:
 			d->type = DIRECT_ACCESS;
 			break;

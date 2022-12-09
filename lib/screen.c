@@ -44,8 +44,8 @@ void circle(Vector2 Pc, int32_t r, uint16_t color) {
 
 void line(Vector2 p0, Vector2 p1, uint16_t color) {
 	bool yLonger = false;
-	int shortLen = p1.y - p0.y;
-	int longLen = p1.x - p0.x;
+	int32_t shortLen = (int32_t) (p1.y - p0.y);
+	int32_t longLen = (int32_t) (p1.x - p0.x);
 	if (abs(shortLen) > abs(longLen)) {
 		int swap = shortLen;
 		shortLen = longLen;
@@ -60,15 +60,15 @@ void line(Vector2 p0, Vector2 p1, uint16_t color) {
 
 	if (yLonger) {
 		if (longLen > 0) {
-			longLen += p0.y;
-			for (int j = 0x8000 + (p0.x << 16); p0.y <= longLen; ++p0.y) {
+			longLen += (int32_t) p0.y;
+			for (int j = (int32_t) (0x8000 + (p0.x << 16)); (int32_t) p0.y <= longLen; ++p0.y) {
 				putPixel(j >> 16, p0.y, color);
 				j += decInc;
 			}
 			return;
 		}
-		longLen += p0.y;
-		for (int j = 0x8000 + (p0.x << 16); p0.y >= longLen; --p0.y) {
+		longLen += (int32_t) p0.y;
+		for (int j = (int32_t) (0x8000 + (p0.x << 16)); (int32_t) p0.y >= longLen; --p0.y) {
 			putPixel(j >> 16, p0.y, color);
 			j -= decInc;
 		}
@@ -76,15 +76,15 @@ void line(Vector2 p0, Vector2 p1, uint16_t color) {
 	}
 
 	if (longLen > 0) {
-		longLen += p0.x;
-		for (int j = 0x8000 + (p0.y << 16); p0.x <= longLen; ++p0.x) {
+		longLen += (int32_t) p0.x;
+		for (int j = (int32_t) (0x8000 + (p0.y << 16)); (int32_t) p0.x <= longLen; ++p0.x) {
 			putPixel(p0.x, j >> 16, color);
 			j += decInc;
 		}
 		return;
 	}
-	longLen += p0.x;
-	for (int j = 0x8000 + (p0.y << 16); p0.x >= longLen; --p0.x) {
+	longLen += (int32_t) p0.x;
+	for (int j = (int32_t) (0x8000 + (p0.y << 16)); (int32_t) p0.x >= longLen; --p0.x) {
 		putPixel(p0.x, j >> 16, color);
 		j -= decInc;
 	}

@@ -16,7 +16,14 @@ void reverse(int str[], int length);
 
 unsigned long strlen(const int *str);
 
-void *memcpy(void *destination, const void *source, size_t num);
+// From asmlib:
+extern void *__memset(void *dest, int c, size_t count);
+
+#define memset __memset
+
+extern void *__memcpy(void *dest, const void *src, size_t count);
+
+#define memcpy __memcpy
 
 typedef char *String;
 

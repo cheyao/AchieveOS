@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void circle(Vector2 Pc, int32_t r, uint16_t color) {
+void circle(Vector2 Pc, int32_t r, const uint16_t color) {
 	int32_t x = 0, y = r;
 	int32_t d = 3 - 2 * r;
 
@@ -42,7 +42,7 @@ void circle(Vector2 Pc, int32_t r, uint16_t color) {
 	}
 }
 
-void line(Vector2 p0, Vector2 p1, uint16_t color) {
+void line(Vector2 p0, Vector2 p1, const uint16_t color) {
 	bool yLonger = false;
 	int32_t shortLen = (int32_t) (p1.y - p0.y);
 	int32_t longLen = (int32_t) (p1.x - p0.x);
@@ -94,7 +94,7 @@ static Vector2 midpoint(Vector2 p1, Vector2 p2) {
 	return (Vector2) {.x = (int) (p2.x - p1.x) / 2 + p1.x, .y = (int) (p2.y - p1.y) / 2 + p1.y};
 }
 
-static void split_curve(Vector2 p[4], Vector2 out[2][4]) {
+static void split_curve(const Vector2 p[4], Vector2 out[2][4]) {
 	const Vector2 p1 = p[0];
 	const Vector2 p2 = p[1];
 	const Vector2 p3 = p[2];
@@ -116,7 +116,7 @@ static void split_curve(Vector2 p[4], Vector2 out[2][4]) {
 	out[1][3] = p4;
 }
 
-static uint32_t flatness(Vector2 p[4]) {
+static uint32_t flatness(const Vector2 p[4]) {
 	const Vector2 p1 = p[0];
 	const Vector2 cp1 = p[1];
 	const Vector2 cp2 = p[2];
@@ -139,7 +139,37 @@ void cubic_bezier_curve(const Vector2 p[4], const color_t color) {
 		Vector2 split[2][4] = {{[3] = {0, 0}},
 		                       {[3] = {0, 0}}};
 		split_curve(p, split);
-		curve(split[0], color);
-		curve(split[1], color);
+		cubic_bezier_curve(split[0], color);
+		cubic_bezier_curve(split[1], color);
+	}
+}
+
+static void quadratic_split_curve(const Vector2 p[3], Vector2 out[2][3]) {
+	const Vector2 p12 = midpoint(p[0], p[1]);
+	const Vector2 p23 = midpoint(p[1], p[2]);
+	const Vector2 p123 = midpoint(p12, p23);
+	out[0][0] = p[0];
+	out[0][1] = p12;
+	out[0][2] = p123;
+	out[1][0] = p123;
+	out[1][1] = p23;
+	out[1][2] = p[2];
+}
+
+static int32_t quadratic_flatness(const Vector2 p[3]) {
+	return ((int32_t) p[1].x - (((int32_t) p[0].x + (int32_t) p[2].x) / 2) +
+	        (int32_t) p[1].y - (((int32_t) p[0].y + (int32_t) p[2].y) / 2));
+}
+
+void quadratic_bezier_curve(const Vector2 p[3], const color_t color) {
+	if (quadratic_flatness(p) < 2) {
+		line(p[0], p[2], color);
+		return;
+	} else {
+		Vector2 split[2][3] = {{[2] = {0, 0}},
+		                       {[2] = {0, 0}}};
+		quadratic_split_curve(p, split);
+		quadratic_bezier_curve(split[0], color);
+		quadratic_bezier_curve(split[1], color);
 	}
 }

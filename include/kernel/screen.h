@@ -33,6 +33,8 @@ typedef uint16_t color_t;
 
 void cubic_bezier_curve(const Vector2 p[4], color_t color);
 
+void quadratic_bezier_curve(const Vector2 p[3], color_t color);
+
 #if defined(__cplusplus)
 } /* extern "C" */
 #endif

@@ -283,18 +283,18 @@ int puts(const char *str) {
 }
 
 int putchar(const char c) {
-	uint16_t pos = get_cursor_position();
-
-	if (c == '\n') {  // New line calculations
-		while (pos % 80 != 0) {
-			((unsigned char *) BUFFER)[pos * 2] = ' ';
-			pos++;
-		}
-	} else {
-		((unsigned char *) BUFFER)[pos * 2] = c;
-		pos++;
-	}
-
-	update_cursor(pos);
+	// uint16_t pos = get_cursor_position();
+//
+	// if (c == '\n') {  // New line calculations
+	// 	while (pos % 80 != 0) {
+	// 		((unsigned char *) BUFFER)[pos * 2] = ' ';
+	// 		pos++;
+	// 	}
+	// } else {
+	// 	((unsigned char *) BUFFER)[pos * 2] = c;
+	// 	pos++;
+	// }
+//
+	// update_cursor(pos);
 	return c;
 }

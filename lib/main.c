@@ -1,9 +1,6 @@
-#include <assert.h>
 #include <kernel/cd.h>
-#include <kernel/idt.h>
 #include <kernel/screen.h>
-#include <math.h>
-#include <stddef.h>
+#include <string.h>
 #include <stdint.h>
 
 Disk disks[4] = {
@@ -38,16 +35,16 @@ void main(void) {
 
 	circle((Vector2) {WIDTH / 2, HEIGHT / 2}, 300, rgb(0xFF, 0xFF, 0xFF));
 
-	cubic_bezier_curve((Vector2[4]) {{.x = WIDTH / 2 - 300, .y = HEIGHT / 2},
-	                                 {.x = WIDTH / 5 * 2, .y = 50},
-	                                 {.x = WIDTH / 5 * 3, .y = HEIGHT - 50},
-	                                 {.x = WIDTH / 2 + 300, .y = HEIGHT / 2}},
-	                   rgb(0xFF, 0xFF, 0xFF));
+	quadratic_bezier_curve((Vector2[4]) {{.x = 50, .y = 50},
+	                                     {.x = 75, .y = 100},
+	                                     {.x = 100, .y = 50}},
+	                       rgb(0xFF, 0xFF, 0xFF));
+
+	memset((uint16_t *) BUFFER, rgb(0xFF, 0, 0xFF), WIDTH * HEIGHT / 2);
 
 	line((Vector2) {567, 333}, (Vector2) {630, 604}, rgb(0x4d, 0x25, 0x8e));
-	line((Vector2) {888, 539}, (Vector2) {93, 48}, rgb(0xb4, 0xfa, 0x7e));
-	line((Vector2) {441, 408}, (Vector2) {731, 229}, rgb(0xf6, 0xce, 0x6e));
-	line((Vector2) {137, 221}, (Vector2) {529, 612}, rgb(0x96, 0xe2, 0xde));
+
+
 
 	// puts("One\n");
 	// identify(&disks[0]);

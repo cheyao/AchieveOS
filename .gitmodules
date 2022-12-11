@@ -1,0 +1,6 @@
+[submodule "util/binutils-gdb-achieveos"]
+	path = util/binutils-gdb-achieveos
+	url = https://github.com/cheyao/binutils-gdb-achieveos
+[submodule "util/gcc-achieve"]
+	path = util/gcc-achieve
+	url = https://github.com/cheyao/gcc-achieve

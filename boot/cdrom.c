@@ -78,63 +78,64 @@ static void ata_io_wait(void) {
 }
 
 void read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
-	uint8_t read_cmd[12] = {0xA8, 0,
-	                        ((lba) >> 0x18) & 0xFF, ((lba) >> 0x10) & 0xFF, ((lba) >> 0x08) & 0xFF,
-	                        ((lba) >> 0x00) & 0xFF,
-	                        (sectors >> 0x18) & 0xFF, (sectors >> 0x10) & 0xFF, (sectors >> 0x08) & 0xFF,
-	                        (sectors >> 0x00) & 0xFF,
-	                        0, 0};
+	for (uint32_t i = 0; i < sectors; i++) {
+		uint8_t read_cmd[12] = {0xA8, 0,
+		                        (lba >> 0x18) & 0xFF, (lba >> 0x10) & 0xFF, (lba >> 0x08) & 0xFF, (lba >> 0x00) & 0xFF,
+		                        (sectors >> 0x18) & 0xFF, (sectors >> 0x10) & 0xFF, (sectors >> 0x08) & 0xFF,
+		                        (sectors >> 0x00) & 0xFF,
+		                        0, 0};
 
-	outb(port + DRIVE_SELECT, 0xA0);
-	ata_io_wait();
-	outb(port + ERROR_R, 0x00);
-	outb(port + LBA_MID, 2048 & 0xFF);
-	outb(port + LBA_HIGH, 2048 >> 8);
-	outb(port + COMMAND_REGISTER, 0xA0); /* Packet command */
+		outb(port + DRIVE_SELECT, 0xA0);
+		ata_io_wait();
+		outb(port + ERROR_R, 0x00);
+		outb(port + LBA_MID, 2048 & 0xFF);
+		outb(port + LBA_HIGH, 2048 >> 8);
+		outb(port + COMMAND_REGISTER, 0xA0); /* Packet command */
 
-	int timeout = 100;
-	while (1) {
-		uint8_t status = inb(port + COMMAND_REGISTER);
-		if ((status & 0x01)) {
-			puts_parallel("err!");
-			return;
+		int timeout = 100;
+		while (1) {
+			uint8_t status = inb(port + COMMAND_REGISTER);
+			if ((status & 0x01)) {
+				puts_parallel("err!");
+				return;
+			}
+			if (timeout-- < 0) {
+				puts_parallel("Timeout 1!");
+				return;
+			}
+			if (!(status & 0x80) && (status & 0x08)) break;
 		}
-		if (timeout-- < 0) {
-			puts_parallel("Timeout 1!");
-			return;
+
+		outsw(port + DATA, (uint16_t *) read_cmd, 6);
+
+		timeout = 100;
+		while (1) {
+			uint8_t status = inb(port + COMMAND_REGISTER);
+			if ((status & 0x01)) {
+				puts_parallel("err!");
+				return;
+			}
+			if (timeout-- < 0) {
+				puts_parallel("Timeout 2!");
+				return;
+			}
+			if (!(status & 0x80) && (status & 0x08)) break;
 		}
-		if (!(status & 0x80) && (status & 0x08)) break;
-	}
 
-	outsw(port + DATA, (uint16_t *) read_cmd, 6);
+		int size = inb(port + LBA_HIGH) << 8
+		           | inb(port + LBA_MID);
 
-	timeout = 100;
-	while (1) {
-		uint8_t status = inb(port + COMMAND_REGISTER);
-		if ((status & 0x01)) {
-			puts_parallel("err!");
-			return;
+		insw(port + DATA, (uint16_t *) ((uint8_t *) buffer + i * 0x800), size / 2);
+
+		/* Wait until the ports are clean*/
+		while (1) {
+			uint8_t status = inb(port + COMMAND_REGISTER);
+			if ((status & 0x01)) {
+				puts_parallel("err!");
+				return;
+			}
+			if (!(status & 0x80) && (status & 0x08)) break;
 		}
-		if (timeout-- < 0) {
-			puts_parallel("Timeout 2!");
-			return;
-		}
-		if (!(status & 0x80) && (status & 0x08)) break;
-	}
-
-	int size = inb(port + LBA_HIGH) << 8
-	           | inb(port + LBA_MID);
-
-	insw(port + DATA, (uint16_t *) ((uint8_t *) buffer), size / 2);
-
-	/* Wait until the ports are clean*/
-	while (1) {
-		uint8_t status = inb(port + COMMAND_REGISTER);
-		if ((status & 0x01)) {
-			puts_parallel("err!");
-			return;
-		}
-		if (!(status & 0x80) && (status & 0x08)) break;
 	}
 }
 

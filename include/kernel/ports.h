@@ -1,6 +1,6 @@
 //
 // Created by cheyao on 08.10.2022.
-// Huge thanks to soso for the code :)
+// Huge thanks to SOSO for the code :)
 // https://github.com/ozkl/soso
 //
 
@@ -11,78 +11,80 @@
 extern "C" {
 #endif
 
-static __inline void outb(unsigned short __port, unsigned char __val) {
-	__asm__ volatile("outb %0,%1"::"a"(__val), "dN"(__port));
+#include <stdint.h>
+
+static __inline__ void outb(uint16_t __port, uint8_t __val) {
+	__asm__ __volatile__("outb %0,%1"::"a"(__val), "dN"(__port));
 }
 
-static __inline void outw(unsigned short __port, unsigned short __val) {
-	__asm__ volatile("outw %0,%1"
+static __inline__ void outw(uint16_t __port, uint16_t __val) {
+	__asm__ __volatile__("outw %0,%1"
 			:
 			: "a"(__val), "dN"(__port));
 }
 
-static __inline void outl(unsigned short __port, unsigned int __val) {
-	__asm__ volatile("outl %0,%1"
+static __inline__ void outl(uint16_t __port, uint32_t __val) {
+	__asm__ __volatile__("outl %0,%1"
 			:
 			: "a"(__val), "dN"(__port));
 }
 
-static __inline unsigned char inb(unsigned short __port) {
-	unsigned char __val;
-	__asm__ volatile("inb %1,%0"
+static __inline__ uint8_t inb(uint16_t __port) {
+	uint8_t __val;
+	__asm__ __volatile__("inb %1,%0"
 			: "=a"(__val)
 			: "dN"(__port));
 	return __val;
 }
 
-static __inline unsigned short inw(unsigned short __port) {
-	unsigned short __val;
-	__asm__ volatile("inw %1,%0"
+static __inline__ uint16_t inw(uint16_t __port) {
+	uint16_t __val;
+	__asm__ __volatile__("inw %1,%0"
 			: "=a"(__val)
 			: "dN"(__port));
 	return __val;
 }
 
-static __inline unsigned int inl(unsigned short __port) {
-	unsigned int __val;
-	__asm__ volatile("inl %1,%0"
+static __inline__ uint32_t inl(uint16_t __port) {
+	uint32_t __val;
+	__asm__ __volatile__("inl %1,%0"
 			: "=a"(__val)
 			: "dN"(__port));
 	return __val;
 }
 
-static __inline void outsb(unsigned short __port, const void *__buf, unsigned long __n) {
-	__asm__ volatile("cld; rep; outsb"
+static __inline__ void outsb(uint16_t __port, const void *__buf, unsigned long __n) {
+	__asm__ __volatile__("cld; rep; outsb"
 			: "+S"(__buf), "+c"(__n)
 			: "d"(__port));
 }
 
-static __inline void outsw(unsigned short __port, const void *__buf, unsigned long __n) {
-	__asm__ volatile("cld; rep; outsw"
+static __inline__ void outsw(uint16_t __port, const void *__buf, unsigned long __n) {
+	__asm__ __volatile__("cld; rep; outsw"
 			: "+S"(__buf), "+c"(__n)
 			: "d"(__port));
 }
 
-static __inline void outsl(unsigned short __port, const void *__buf, unsigned long __n) {
-	__asm__ volatile("cld; rep; outsl"
+static __inline void outsl(uint16_t __port, const void *__buf, unsigned long __n) {
+	__asm__ __volatile__("cld; rep; outsl"
 			: "+S"(__buf), "+c"(__n)
 			: "d"(__port));
 }
 
-static __inline void insb(unsigned short __port, void *__buf, unsigned long __n) {
-	__asm__ volatile("cld; rep; insb"
+static __inline__ void insb(uint16_t __port, void *__buf, unsigned long __n) {
+	__asm__ __volatile__("cld; rep; insb"
 			: "+D"(__buf), "+c"(__n)
 			: "d"(__port));
 }
 
-static __inline void insw(unsigned short __port, void *__buf, unsigned long __n) {
-	__asm__ volatile("cld; rep; insw"
+static __inline void insw(uint16_t __port, void *__buf, unsigned long __n) {
+	__asm__ __volatile__("cld; rep; insw"
 			: "+D"(__buf), "+c"(__n)
 			: "d"(__port));
 }
 
-static __inline void insl(unsigned short __port, void *__buf, unsigned long __n) {
-	__asm__ volatile("cld; rep; insl"
+static __inline void insl(uint16_t __port, void *__buf, unsigned long __n) {
+	__asm__ __volatile__("cld; rep; insl"
 			: "+D"(__buf), "+c"(__n)
 			: "d"(__port));
 }

@@ -2,8 +2,10 @@ org 0x7C00
 KERNEL_OFFSET equ 0x8000
 SECTORS equ 120
 
-CODE_SEG equ gdt_code - gdt_start
-DATA_SEG equ gdt_data - gdt_start
+GDT32_DATA equ GDT32.Data - GDT32
+GDT32_CODE equ GDT32.Code - GDT32
+GDT64_DATA equ GDT64.Data - GDT64
+GDT64_CODE equ GDT64.Code - GDT64
 
 PRESENT        equ 1 << 7
 NOT_SYS        equ 1 << 4
@@ -46,39 +48,15 @@ _start:
     out 0x92, al
 
     cli ; 32 bit!
-    lgdt [gdt_descriptor]
+    lgdt [GDT32.Pointer]
     mov eax, cr0
     or eax, 1
     mov cr0, eax
-    jmp CODE_SEG:init_pm
+    jmp GDT32_CODE:init_pm
 
-gdt_start: ; null
-    dd 0x0
-    dd 0x0
-
-gdt_code:
-    dw 0xffff    ; segment limit, bits 0-15
-    dw 0x0000    ; segment base, bits 0-15
-    db 0x00      ; segment base, bits 16-23
-    db 10011010b ; flags (8 bits)
-    db 11001111b ; flags (4 bits) + limit, bits 16-19
-    db 0x00      ; segment base, bits 24-31
-
-gdt_data:
-    dw 0xffff
-    dw 0x0000
-    db 0x00
-    db 10010010b
-    db 11001111b
-    db 0x00
-
-gdt_descriptor:
-    dw gdt_descriptor - gdt_start - 1
-    dd gdt_start
-
-[bits 32]
+bits 32
 init_pm:
-    mov ax, DATA_SEG
+    mov ax, GDT32_DATA
     mov ds, ax
     mov ss, ax
     mov es, ax
@@ -126,14 +104,50 @@ init_pm:
     mov cr0, eax
 
     lgdt [GDT64.Pointer]
-    jmp GDT_CODE:Realm64
+    jmp GDT64_CODE:Realm64
 
     jmp $
+
+bits 64
+Realm64:
+    mov ax, GDT32_DATA
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
+    mov rbp, 0xC000000
+    mov rsp, rbp
+
+    jmp KERNEL_OFFSET
 
 BOOT_DRIVE: db 0
 ADDRESS: dd 0
 DISK_ERROR: db "Disk error!", 0
 VBE_ERROR: db "Error: No VBE support!", 0
+
+GDT32:
+    .Null:
+        dd 0x0
+        dd 0x0
+    .Code:
+        dw 0xffff    ; segment limit, bits 0-15
+        dw 0x0000    ; segment base, bits 0-15
+        db 0x00      ; segment base, bits 16-23
+        db 10011010b ; flags (8 bits)
+        db 11001111b ; flags (4 bits) + limit, bits 16-19
+        db 0x00      ; segment base, bits 24-31
+    .Data:
+        dw 0xffff
+        dw 0x0000
+        db 0x00
+        db 10010010b
+        db 11001111b
+        db 0x00
+    .Pointer:
+        dw GDT32.Pointer - GDT32 - 1
+        dd GDT32
 
 GDT64:
     .Null:
@@ -154,26 +168,6 @@ GDT64:
     .Pointer:
         dw GDT64.Pointer - GDT64 - 1
         dq GDT64
-
-GDT_DATA equ GDT64.Data - GDT64
-GDT_CODE equ GDT64.Code - GDT64
-
-[BITS 64]
-
-Realm64:
-    cli                           ; Clear the interrupt flag.
-
-    mov ax, GDT_DATA              ; Set the A-register to the data descriptor.
-    mov ds, ax                    ; Set the data segment to the A-register.
-    mov es, ax                    ; Set the extra segment to the A-register.
-    mov fs, ax                    ; Set the F-segment to the A-register.
-    mov gs, ax                    ; Set the G-segment to the A-register.
-    mov ss, ax                    ; Set the stack segment to the A-register.
-
-    mov rbp, 0xC000000
-    mov rsp, rbp
-
-    jmp KERNEL_OFFSET
 
 times 510 - ($-$$) db 0
 dw 0xaa55

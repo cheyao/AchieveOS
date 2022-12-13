@@ -14,7 +14,7 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-#define reset_ata(port) outb(port + COMMAND_REGISTER, 0x08)
+#define reset_ata(port) outb((port) + COMMAND_REGISTER, 0x08)
 
 #define BUS_PRIMARY 0x1F0
 #define BUS_SECONDARY 0x170
@@ -32,6 +32,8 @@ extern "C" {
 
 #define ALTERNATE_STATUS 0
 #define DRIVE_CONTROL 1
+
+#define CONTROL 0x206
 
 typedef struct {
 	enum TYPE {

@@ -1,7 +1,7 @@
 #include <kernel/cd.h>
 #include <kernel/screen.h>
-#include <string.h>
 #include <stdint.h>
+#include <string.h>
 
 Disk disks[4] = {
 		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
@@ -43,8 +43,6 @@ void main(void) {
 	memset((uint16_t *) BUFFER, rgb(0xFF, 0, 0xFF), WIDTH * HEIGHT / 2);
 
 	line((Vector2) {567, 333}, (Vector2) {630, 604}, rgb(0x4d, 0x25, 0x8e));
-
-
 
 	// puts("One\n");
 	// identify(&disks[0]);

@@ -56,7 +56,7 @@ start:
 		return;
 	}
 
-	insw(d->port + +DATA, ((unsigned short *) 0x7000), 256); /* Receive identify */
+	insw(d->port + DATA, ((unsigned short *) 0x7000), 256); /* Receive identify */
 
 	if (command == 0xEC) {
 		if ((d->size = *((uint32_t *) (0x7000 + 60 * 2)))) {
@@ -108,7 +108,7 @@ void read_cdrom(Disk *d, uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 
 	uint8_t in;
 	/* Poll until BSY is 0 and DRQ is 1 or until ERR is 1 or DF is 1*/
-	while (((in = inb(d->port + COMMAND_REGISTER)) & 0x80) != 0 && (in & 0x8) == 0 && (in % 0x1) == 0 &&
+	while (((in = inb(d->port + COMMAND_REGISTER)) & 0x80) != 0 && (in & 0x8) == 0 && (in & 0x1) == 0 &&
 	       (in & 0x20) == 0);
 
 	if ((in % 0x1) == 1 && (in & 0x20) == 0x20) {

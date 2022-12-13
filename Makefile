@@ -37,6 +37,7 @@ cdromC.bin: boot/cdrom.c boot/cdromstart.asm
 	i686-elf-gcc -o $@ boot/cdromstart.o boot/cdrom.o -z max-page-size=0x1000 -Wl,--oformat=binary -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only -nostdlib -T boot/link.ld
 
 cdcontents/bootsect.bin: boot/bootsect.asm
+	mkdir cdcontents
 	${AS} $< -f bin -o $@
 
 cdrombootsect.bin: boot/cdromboot.asm

@@ -26,6 +26,12 @@ _start:
     mov bp, 0x7BFF
     mov sp, bp ; Stack
 
+    mov ah, 0x0e
+    mov al, 'D'
+    int 0x10
+
+    jmp $
+
     mov bx, KERNEL_OFFSET
     mov ah, 0x02
     mov al, SECTORS

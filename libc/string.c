@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <string.h>
 
-void reverse(int str[], int length) {
+void reverse(int str[], const int length) {
 	int s = 0;
 	int e = length - 1;
 	while (s < e) {

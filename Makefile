@@ -3,7 +3,7 @@ HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.h)
 OBJ = ${C_SOURCES:.c=.o} lib/idtr.o asmlib/memset.o asmlib/instrset.o asmlib/cachesize.o asmlib/cputype.o \
 	asmlib/unalignedisfaster.o asmlib/memcpy.o
 
-CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase \
+CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase -DDEBUG \
 		 -nostdlib -ffreestanding -O2 -std=gnu11 -g -static -Wall -Wextra -Wwrite-strings \
 		 -Wno-unused-function -Wno-unused-parameter -Wstrict-prototypes -pedantic -Iinclude
 
@@ -37,7 +37,7 @@ cdromC.bin: boot/cdrom.c boot/cdromstart.asm
 	i686-elf-gcc -o $@ boot/cdromstart.o boot/cdrom.o -z max-page-size=0x1000 -Wl,--oformat=binary -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only -nostdlib -T boot/link.ld
 
 cdcontents/bootsect.bin: boot/bootsect.asm
-	mkdir cdcontents
+	-mkdir cdcontents
 	${AS} $< -f bin -o $@
 
 cdrombootsect.bin: boot/cdromboot.asm

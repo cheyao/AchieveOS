@@ -45,5 +45,5 @@ com2: enabled=false
 com3: enabled=false
 com4: enabled=false
 speaker: enabled=true, mode=gui
-parport1: enabled=true, file=stdio
+parport1: enabled=true, file=
 parport2: enabled=false

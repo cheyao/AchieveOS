@@ -50,10 +50,10 @@ void puts_parallel(const char *restrict string) {
 #endif
 
 bool strcmp(const char a[], const char b[]) {
-	for (int i = 0; a[i] != 0; i++) {
+	for (int i = 0; a[i] != 0; i++)
 		if (a[i] != b[i])
 			return false;
-	}
+
 	return true;
 }
 
@@ -75,8 +75,7 @@ void main(void) {
 			goto end;
 	}
 	end:
-	read_cdrom(0x10, 2, (uint16_t *) 0x100000);
-	return;
+	read_cdrom(0x10, 1, (uint16_t *) 0x100000);
 	read_cdrom(*((uint32_t *) 0x10009E), 1, (uint16_t *) 0x100000);
 
 	// Detecting hard disk
@@ -106,12 +105,21 @@ void main(void) {
 				read_cdrom(*((uint32_t *) (addr + 2)), 1, (uint16_t *) 0x100000);
 
 				write_disk(1, 1, (uint16_t *) 0x100000);
-				return;
+				goto next;
 			}
 
 			addr += *((uint8_t *) addr);
 		}
 	}
+	next:
+	{}
+
+	uint8_t good = 0x02;
+	while (good & 0x02)
+		good = inb(0x64);
+	outb(0x64, 0xFE);
+
+	__asm__ __volatile__ ("int $0");
 }
 
 bool identify(void) {
@@ -188,7 +196,7 @@ void read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 	                        (sectors >> 0x00) & 0xFF,
 	                        0, 0};
 
-	outb(port + DRIVE_SELECT, 0xA0);
+	outb(port + DRIVE_SELECT, drive_select);
 	ata_io_wait(port);
 	outb(port + ERROR_R, 0x00);
 	outb(port + LBA_MID, 2048 & 0xFF);
@@ -237,6 +245,8 @@ void write_disk(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 	ata_io_wait(drive_port);
 
 	for (uint32_t i = 0; i < sectors; i++) {
+		ata_io_wait(drive_port);
+
 		while (1) {
 			uint8_t status = inb(drive_port + COMMAND_REGISTER);
 			if ((status & 0x01)) {

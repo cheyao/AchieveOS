@@ -160,17 +160,17 @@ GDT64:
         dq 0
         dq 0
     .Code:
-        dd 0xFFFF                                   ; Limit & Base (low, bits 0-15)
-        db 0                                        ; Base (mid, bits 16-23)
-        db PRESENT | NOT_SYS | EXEC | RW            ; Access
-        db GRAN_4K | LONG_MODE | 0xF                ; Flags & Limit (high, bits 16-19)
-        db 0                                        ; Base (high, bits 24-31)
+        dd 0xFFFF
+        db 0
+        db PRESENT | NOT_SYS | EXEC | RW
+        db GRAN_4K | LONG_MODE | 0xF
+        db 0
     .Data:
-        dd 0xFFFF                                   ; Limit & Base (low, bits 0-15)
-        db 0                                        ; Base (mid, bits 16-23)
-        db PRESENT | NOT_SYS | RW                   ; Access
-        db GRAN_4K | SZ_32 | 0xF                    ; Flags & Limit (high, bits 16-19)
-        db 0                                        ; Base (high, bits 24-31)
+        dd 0xFFFF
+        db 0
+        db PRESENT | NOT_SYS | RW
+        db GRAN_4K | SZ_32 | 0xF
+        db 0
     .Pointer:
         dw GDT64.Pointer - GDT64 - 1
         dq GDT64

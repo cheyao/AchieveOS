@@ -1,9 +1,8 @@
 section .start
-bits 64
+bits 32
 extern main
 global _start
 _start:
-    xchg bx,bx
     call main
 
     jmp $

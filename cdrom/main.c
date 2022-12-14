@@ -15,17 +15,14 @@ int drive_select = 0x00;
 int drive_port = 0x00;
 int drive_drive_select = 0x00;
 
-void read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer);
+int read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer);
 
 void write_disk(uint32_t lba, uint32_t sectors, uint16_t *buffer);
-
 static void ata_io_wait(uint8_t p);
-
 bool identify(void);
-
 bool ata_identify(void);
 
-#ifdef DEBUG
+void eject_cdrom(void);
 
 void puts_parallel(const char *restrict string) {
 	for (int i = 0; string[i] != 0; i++) {
@@ -45,10 +42,6 @@ void puts_parallel(const char *restrict string) {
 			ata_io_wait(port);
 	}
 }
-
-#else
-#define puts_parallel(str)
-#endif
 
 bool strcmp(const char a[], const char b[]) {
 	for (int i = 0; a[i] != 0; i++)
@@ -118,6 +111,8 @@ void main(void) {
 			addr += *((uint8_t *) addr);
 		}
 	}
+
+	eject_cdrom();
 
 	uint8_t good = 0x02;
 	while (good & 0x02)
@@ -192,14 +187,53 @@ static void ata_io_wait(const uint8_t p) {
 	inb(p + ALTERNATE_STATUS + CONTROL);
 }
 
-void read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
-	puts_parallel("Reading from CR-ROM\n");
+int read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
+	volatile uint8_t read_cmd[12] = {0xA8, 0,
+	                                 (lba >> 0x18) & 0xFF, (lba >> 0x10) & 0xFF, (lba >> 0x08) & 0xFF,
+	                                 (lba >> 0x00) & 0xFF,
+	                                 (sectors >> 0x18) & 0xFF, (sectors >> 0x10) & 0xFF, (sectors >> 0x08) & 0xFF,
+	                                 (sectors >> 0x00) & 0xFF,
+	                                 0, 0};
 
-	uint8_t read_cmd[12] = {0xA8, 0,
-	                        (lba >> 0x18) & 0xFF, (lba >> 0x10) & 0xFF, (lba >> 0x08) & 0xFF, (lba >> 0x00) & 0xFF,
-	                        (sectors >> 0x18) & 0xFF, (sectors >> 0x10) & 0xFF, (sectors >> 0x08) & 0xFF,
-	                        (sectors >> 0x00) & 0xFF,
-	                        0, 0};
+	outb(port + DRIVE_SELECT, drive_select);
+	ata_io_wait(port);
+	outb(port + ERROR_R, 0x00);
+	outb(port + LBA_MID, 2048 & 0xFF);
+	outb(port + LBA_HIGH, 2048 >> 8);
+	outb(port + COMMAND_REGISTER, 0xA0); /* Packet command */
+	ata_io_wait(port);
+
+	while (1) {
+		uint8_t status = inb(port + COMMAND_REGISTER);
+		if ((status & 0x01) == 1)
+			return 1;
+		if (!(status & 0x80) && (status & 0x08))
+			break;
+		ata_io_wait(port);
+	}
+
+	outsw(port + DATA, (uint16_t *) read_cmd, 6);
+
+	for (uint32_t i = 0; i < sectors; i++) {
+		while (1) {
+			uint8_t status = inb(port + COMMAND_REGISTER);
+			if (status & 0x01)
+				return 1;
+			if (!(status & 0x80) && (status & 0x08))
+				break;
+		}
+
+		int size = inb(port + LBA_HIGH) << 8
+		           | inb(port + LBA_MID);
+
+		insw(port + DATA, (uint16_t *) ((uint8_t *) buffer + i * 0x800), size / 2);
+	}
+
+	return 0;
+}
+
+void eject_cdrom(void) {
+	volatile uint8_t read_cmd[12] = {0x1B, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0};
 
 	outb(port + DRIVE_SELECT, drive_select);
 	ata_io_wait(port);
@@ -210,36 +244,17 @@ void read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 
 	while (1) {
 		uint8_t status = inb(port + COMMAND_REGISTER);
-		if ((status & 0x01)) {
-			puts_parallel("err 1!");
+		if (HEDLEY_UNLIKELY(status & 0x01))
 			return;
-		}
-		if (!(status & 0x80) && (status & 0x08)) break;
+		if (!(status & 0x80) && (status & 0x08))
+			break;
 	}
 
 	outsw(port + DATA, (uint16_t *) read_cmd, 6);
-
-	for (uint32_t i = 0; i < sectors; i++) {
-		while (1) {
-			uint8_t status = inb(port + COMMAND_REGISTER);
-			if ((status & 0x01)) {
-				puts_parallel("err!");
-				return;
-			}
-			if (!(status & 0x80) && (status & 0x08)) break;
-		}
-
-		int size = inb(port + LBA_HIGH) << 8
-		           | inb(port + LBA_MID);
-
-		insw(port + DATA, (uint16_t *) ((uint8_t *) buffer + i * 0x800), size / 2);
-	}
 }
 
 void write_disk(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
-	puts_parallel("Writing to hard disk\n");
-
-	outb(drive_port + DRIVE_SELECT, 0xA0);
+	outb(drive_port + DRIVE_SELECT, drive_drive_select);
 	ata_io_wait(drive_port);
 	outb(drive_port + SECTOR_COUNT, sectors);
 	outb(drive_port + LBA_LOW, (uint8_t) lba);
@@ -254,17 +269,23 @@ void write_disk(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 
 		while (1) {
 			uint8_t status = inb(drive_port + COMMAND_REGISTER);
-			if ((status & 0x01)) {
-				puts_parallel("err1!");
+			if (status & 0x01)
 				return;
-			}
-			if (!(status & 0x80) && (status & 0x08)) break;
+			if (!(status & 0x80) && (status & 0x08))
+				break;
 		}
 
-		for (int j = 0; j < 256; j++, buffer++) {
+		for (int j = 0; j < 256; j++, buffer++)
 			outw(drive_port + DATA, *buffer);
-		}
 
 		ata_io_wait(drive_port);
 	}
+
+	outb(drive_port + DRIVE_SELECT, 0xA0);
+
+	ata_io_wait(drive_port);
+
+	outb(drive_port + COMMAND_REGISTER, 0xE7); // Flush cache
+
+	ata_io_wait(drive_port);
 }

@@ -7,7 +7,6 @@ SECTIONS {
 	.start ALIGN(0x1000): {
 		code = .;
 		*(.start)
-		. = ALIGN(0x1000);
 	}
 
 	.text : {

@@ -34,7 +34,7 @@ cdcontents/kernel.bin: lib/kernel_start.o ${OBJ}
 cdrom/kernel.bin: cdrom/main.c cdrom/start.asm
 	${AS} cdrom/start.asm -o cdrom/start.o -f elf32
 	i686-elf-gcc ${CFLAGS} -m32 -c cdrom/main.c -o cdrom/main.o
-	i686-elf-gcc -o $@ cdrom/start.o cdrom/main.o -T cdrom/link.ld -z max-page-size=0x1000 -Wl,--oformat=binary -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only -nostdlib
+	i686-elf-gcc -o $@ cdrom/start.o cdrom/main.o -T boot/link.ld -z max-page-size=0x1000 -Wl,--oformat=binary -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only -nostdlib
 
 cdrom/bootsect.bin: cdrom/bootsect.asm
 	${AS} $< -f bin -o $@
@@ -50,7 +50,7 @@ cdcontents/bootsect.bin: boot/bootsect.asm
 	${AS} -DUNIX -Worphan-labels $< -f elf64 -o $@
 
 clean:
-	-rm -rf lib/kernel_start.o ${OBJ} cdromC.bin cdrombootsect.bin boot/cdrom.o boot/cdromstart.o
+	-rm -rf lib/kernel_start.o ${OBJ} cdromC.bin cdrombootsect.bin cdrom/*.o cdrom/*.bin
 
 format:
-	clang-format -Werror --style=file -i --verbose ${C_SOURCES} ${HEADERS} boot/cdrom.c
+	clang-format -Werror --style=file -i --verbose ${C_SOURCES} ${HEADERS} cdrom/main.c

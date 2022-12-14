@@ -4,9 +4,10 @@
 //
 
 #include <math.h>
+#include <hedley.h>
 #include <stdint.h>
 
-#pragma GCC diagnostic push
+HEDLEY_DIAGNOSTIC_PUSH
 #pragma GCC diagnostic ignored "-Wsign-compare"
 
 #define FORCE_EVAL(x)                             \
@@ -533,4 +534,4 @@ double pow(double x, double y) {
 	return s * z;
 }
 
-#pragma GCC diagnostic pop
+HEDLEY_DIAGNOSTIC_POP

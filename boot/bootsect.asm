@@ -1,6 +1,5 @@
 org 0x7C00
 KERNEL_OFFSET equ 0x8000
-SECTORS equ 240
 
 GDT32_DATA equ GDT32.Data - GDT32
 GDT32_CODE equ GDT32.Code - GDT32
@@ -23,14 +22,22 @@ bits 16
     jmp 0:_start
 
 _start:
+    mov ax, 0 ; Init segments
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+
     mov bp, 0x7BFF
     mov sp, bp ; Stack
 
+    ; Read disk
     mov bx, KERNEL_OFFSET
     mov ah, 0x02
-    mov al, SECTORS
-    mov cl, 0x02
+    mov al, 0x3f ; Sectors (max, don't increase!)
     mov ch, 0x00
+    mov cl, 0x02
     mov dh, 0x00
     int 0x13
 
@@ -42,6 +49,8 @@ _start:
     mov cx, 0x0117
     mov di, 0x7E00
     int 0x10
+
+    jmp $
 
     in al, 0x92 ; enable a20
     or al, 2
@@ -108,7 +117,6 @@ init_pm:
 
 bits 64
 Realm64:
-    xchg bx,bx
     mov ax, GDT64_DATA
     mov ds, ax
     mov es, ax

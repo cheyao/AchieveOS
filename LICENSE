@@ -1,21 +1,25 @@
-AchieveOS License
+AchieveOS Non-Business Usage License
 
-Copyright (c) 2011-2022 cheyao. All rights reserved.
+This license permits all non-business usage of AchieveOS.
+"Non-business usage" means any usage that is not intended
+for, or directed towards, commercial advantage or private
+monetary compensation.
 
-Al words between two slashes and a full stop should be ignored.
+The licensor reserves the right to change the terms of this
+license at any time.
 
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation files
-(the "Software"), to use the Software for any personal use. Any business use
-is strictly prohibited. I, cheyao keep the right to change this licence at
-anytime, with or without informing the software holders, and it will apply to
-all copies already distributed and not distributed.
-// sry for keeping the right but I don't know how to write licences so just keeping it.
+NO WARRANTY IS GIVEN FOR ACHIEVEOS, INCLUDING BUT NOT LIMITED
+TO IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-CONTRIBUTORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH
-THE SOFTWARE.
+IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY DAMAGES,
+INCLUDING BUT NOT LIMITED TO DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF ACHIEVEOS, EVEN IF ADVISED
+OF THE POSSIBILITY OF SUCH DAMAGE.
+
+All other rights are reserved by the licensor.

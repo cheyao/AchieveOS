@@ -6,19 +6,7 @@
 #include <stdint.h>
 #include <string.h>
 
-void reverse(int str[], const int length) {
-	int s = 0;
-	int e = length - 1;
-	while (s < e) {
-		int temp = *(str + s);
-		*(str + s) = *(str + e);
-		*(str + e) = temp;
-		s++;
-		e--;
-	}
-}
-
-unsigned long strlen(const int *str) {
+size_t strlen(const char *str) {
 	uint64_t len = 0;
 
 	while (str[len] != 0) len++;

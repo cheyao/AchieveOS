@@ -12,9 +12,7 @@ extern "C" {
 
 #include <stddef.h>
 
-void reverse(int str[], int length);
-
-unsigned long strlen(const int *str);
+size_t strlen(const char *str);
 
 // From asmlib:
 extern void *__memset(void *dest, int c, size_t count);

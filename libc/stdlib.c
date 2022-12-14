@@ -7,36 +7,48 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <hedley.h>
 
-int *itoa(int num, int *buff, int base) {
-	register int i = 0;
-	bool n = false;
+void reverse(char *str) {
+	size_t n = strlen(str);
+
+	for (size_t i = 0; i < n / 2; i++) {
+		char temp = str[i];
+		str[i] = str[n - i - 1];
+		str[n - i - 1] = temp;
+	}
+}
+
+char *itoa(int num, char *str, int base) {
+	int i = 0;
+	bool isNegative = false;
 
 	if (num == 0) {
-		buff[i] = '0';
-		buff[++i] = '\0';
-		return buff;
+		str[i++] = '0';
+		str[i] = '\0';
+		return str;
 	}
 
 	if (num < 0 && base == 10) {
-		n = true;
+		isNegative = true;
 		num = -num;
 	}
 
 	while (num != 0) {
 		int rem = num % base;
-		buff[i++] = rem > 9 ? rem - 10 + 'a' : rem + '0';
+
+		str[i++] = rem > 9 ? rem - 10 + 'a' : rem + '0';
 		num = num / base;
 	}
 
-	if (n)
-		buff[i++] = '-';
+	if (isNegative)
+		str[i++] = '-';
 
-	buff[i] = '\0';
+	str[i] = '\0';
 
-	reverse(buff, i);
+	reverse(str);
 
-	return buff;
+	return str;
 }
 
 int atoi(const char *str) {

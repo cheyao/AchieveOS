@@ -6,6 +6,7 @@
 #include <kernel/ata.h>
 #include <kernel/ports.h>
 #include <stdint.h>
+#include <hedley.h>
 
 #define BUFFER 0xB8000
 
@@ -101,18 +102,22 @@ void main(void) {
 		addr += *((uint8_t *) addr);
 		while (*((uint8_t *) addr) != 0) {
 			// If the file is bootsect.bin
-			if (strcmp("bootsect.bin", (const char *) (addr + 33)) != 0) {
-				read_cdrom(*((uint32_t *) (addr + 2)), 1, (uint16_t *) 0x100000);
+			if (HEDLEY_UNLIKELY(strcmp("bootsect.bin", (const char *) (addr + 33)) != 0)) {
+				read_cdrom(*((uint32_t *) (addr + 2)), 1, (uint16_t *) 0x100800);
 
-				write_disk(1, 1, (uint16_t *) 0x100000);
-				goto next;
+				write_disk(1, 1, (uint16_t *) 0x100800);
+			}
+
+			// If the file is kernel.bin
+			if (HEDLEY_UNLIKELY(strcmp("kernel.bin", (const char *) (addr + 33)) != 0)) {
+				read_cdrom(*((uint32_t *) (addr + 2)), *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
+
+				write_disk(2, *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 			}
 
 			addr += *((uint8_t *) addr);
 		}
 	}
-	next:
-	{}
 
 	uint8_t good = 0x02;
 	while (good & 0x02)
@@ -206,7 +211,7 @@ void read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 	while (1) {
 		uint8_t status = inb(port + COMMAND_REGISTER);
 		if ((status & 0x01)) {
-			puts_parallel("err1!");
+			puts_parallel("err 1!");
 			return;
 		}
 		if (!(status & 0x80) && (status & 0x08)) break;

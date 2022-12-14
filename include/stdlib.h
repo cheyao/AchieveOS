@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-int *itoa(int num, int *buff, int base);
+char *itoa(int num, char *buff, int base);
 
 int atoi(const char *str);
 

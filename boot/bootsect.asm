@@ -1,6 +1,6 @@
 org 0x7C00
 KERNEL_OFFSET equ 0x8000
-SECTORS equ 120
+SECTORS equ 240
 
 GDT32_DATA equ GDT32.Data - GDT32
 GDT32_CODE equ GDT32.Code - GDT32
@@ -25,12 +25,6 @@ bits 16
 _start:
     mov bp, 0x7BFF
     mov sp, bp ; Stack
-
-    mov ah, 0x0e
-    mov al, 'D'
-    int 0x10
-
-    jmp $
 
     mov bx, KERNEL_OFFSET
     mov ah, 0x02
@@ -112,11 +106,10 @@ init_pm:
     lgdt [GDT64.Pointer]
     jmp GDT64_CODE:Realm64
 
-    jmp $
-
 bits 64
 Realm64:
-    mov ax, GDT32_DATA
+    xchg bx,bx
+    mov ax, GDT64_DATA
     mov ds, ax
     mov es, ax
     mov fs, ax
@@ -127,11 +120,6 @@ Realm64:
     mov rsp, rbp
 
     jmp KERNEL_OFFSET
-
-BOOT_DRIVE: db 0
-ADDRESS: dd 0
-DISK_ERROR: db "Disk error!", 0
-VBE_ERROR: db "Error: No VBE support!", 0
 
 GDT32:
     .Null:

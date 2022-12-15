@@ -50,8 +50,6 @@ _start:
     mov di, 0x7E00
     int 0x10
 
-    jmp $
-
     in al, 0x92 ; enable a20
     or al, 2
     out 0x92, al
@@ -72,30 +70,23 @@ init_pm:
     mov fs, ax
     mov gs, ax
 
-    mov edi, 0x600000 ; Set page table address
+    mov edi, 0x400000 ; Set page table address
     mov cr3, edi
 
-    ; PML4
-    mov DWORD [edi], 0x601003
+    ; TBL
+    mov DWORD [edi], 0x401003
 
-    ; PML3[0]
-    mov DWORD [edi+0x1000], 0x602003
+    ; TBL[0]
+    mov DWORD [edi+0x1000], 0x402003
 
-    ; PML2[0]
+    ; TBL[0][0] ; Random - 0x0000000 to 0x1000000 (0 to 16 Mib) map to itself
     mov DWORD [edi+0x2000], 0x000083 ; Point to bootsect
     mov ebx, [0x7E28]
     add ebx, 0x83
     mov DWORD [edi+0x2000+8*1], ebx ; Framebuffer
     mov DWORD [edi+0x2000+8*2], 0x200083 ; Second Framebuffer
-
-    mov ebx, 0x200083
-    mov edi, 0x602000+8*2
-    mov ecx, 32+94
-.kernel:
-    mov DWORD [edi], ebx
-    add ebx, 0x200000
-    add edi, 8
-    loop .kernel
+    mov DWORD [edi+0x2000+8*3], 0x400083 ; Page table
+    mov DWORD [edi+0x2000+8*4], 0x600083 ; Page table
 
     ; Enable paging
     mov ecx, 0xC0000080
@@ -126,6 +117,26 @@ Realm64:
 
     mov rbp, 0xC000000
     mov rsp, rbp
+
+    ; mov QWORD [0x600000+8*3], 0x403003
+
+    ; TBL[3]
+    mov QWORD [0x600000+0x1000+8*3], 0x404003
+
+    ; TBL[3][0]
+    ; Kernel memory - 0x1000000 to 0x8000000 (16 Mib to 128 Mib) map to 0xC0000000 - 0xC8000000
+    mov rcx, 56
+    mov rdi, 0x604000
+    mov rbx, 0x1000083
+.kernel:
+    mov [rdi], rbx
+
+    add rdi, 8
+    add rbx, 0x200000
+
+    loop .kernel
+
+    xchg bx,bx
 
     jmp KERNEL_OFFSET
 

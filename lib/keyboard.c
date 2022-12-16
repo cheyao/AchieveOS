@@ -2,12 +2,11 @@
 // Created by cheyao on 11.11.2022.
 //
 
-#include <kernel/cd.h>
-#include <kernel/keyboard.h>
-#include <kernel/ports.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
+#include <kernel/keyboard.h>  // for get_cursor_position, keyboard_call, upd...
+#include <kernel/ports.h>     // for outb, inb
+#include <stdbool.h>          // for bool, false, true
+#include <stdint.h>           // for uint16_t, uint8_t
+
 
 bool volatile stdin = false;
 int volatile stdinb;

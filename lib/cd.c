@@ -3,17 +3,18 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <kernel/ata.h>
-#include <kernel/cd.h>
-#include <kernel/ports.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <time.h>
+#include <kernel/ata.h>    // for Disk, COMMAND_REGISTER, DATA, LBA_HIGH
+#include <kernel/cd.h>     // for identify, read_cdrom
+#include <kernel/ports.h>  // for outb, inb, insw, outsw
+#include <stdbool.h>       // for false, true
+#include <stdint.h>        // for uint32_t, uint8_t, uint16_t
+#include <stdio.h>         // for printf
+#include <time.h>          // for sleepms
 
 void identify(Disk *d) {
 	int command = 0xEC;
 
-start:
+	start:
 	reset_ata(d->port);
 	outb(d->port + DRIVE_SELECT, d->drive_select_command); /* Drive select */
 

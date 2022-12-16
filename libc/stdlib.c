@@ -4,10 +4,10 @@
 //
 
 #include <ctype.h>
+#include <hedley.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <hedley.h>
 
 void reverse(char *str) {
 	size_t n = strlen(str);

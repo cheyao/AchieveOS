@@ -3,15 +3,15 @@ HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.h)
 OBJ = ${C_SOURCES:.c=.o} lib/idtr.o asmlib/memset.o asmlib/instrset.o asmlib/cachesize.o asmlib/cputype.o \
 	asmlib/unalignedisfaster.o asmlib/memcpy.o
 
-CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase -DDEBUG \
-		 -nostdlib -ffreestanding -O2 -std=gnu11 -g -static -Wall -Wextra -Wwrite-strings \
-		 -Wno-unused-function -Wno-unused-parameter -Wstrict-prototypes -pedantic -Iinclude
+CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase -DDEBUG -Iinclude -O2 \
+		 -nostdlib -ffreestanding -std=gnu11 -g -static -Wno-unused-parameter \
+		 -Wno-unused-function -pedantic -Wall -Wextra -Wwrite-strings -Wstrict-prototypes
 
 LDFLAGS = -T link.ld -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only \
           -nostdlib
 
-CC = x86_64-elf-gcc
-HOST_CC = gcc-12
+x86_CC ?= x86_64-elf-gcc
+i686_CC ?= i686-elf-gcc
 AS = nasm
 UTILS = util/portions
 
@@ -29,12 +29,12 @@ cdrom.iso: cdrom/bootsect.bin cdrom/kernel.bin cdcontents/bootsect.bin cdcontent
 	qemu-img create disk.img 128M
 
 cdcontents/kernel.bin: lib/kernel_start.o ${OBJ}
-	${CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000 -Wl,--oformat=binary
+	${x86_CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000 -Wl,--oformat=binary
 
 cdrom/kernel.bin: cdrom/main.c cdrom/start.asm
 	${AS} cdrom/start.asm -o cdrom/start.o -f elf32
-	i686-elf-gcc ${CFLAGS} -m32 -c cdrom/main.c -o cdrom/main.o
-	i686-elf-gcc -o $@ cdrom/start.o cdrom/main.o -T boot/link.ld -z max-page-size=0x1000 -Wl,--oformat=binary -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only -nostdlib
+	${i686_CC} ${CFLAGS} -m32 -c cdrom/main.c -o cdrom/main.o
+	${i686_CC} -o $@ cdrom/start.o cdrom/main.o -T boot/link.ld -z max-page-size=0x1000 -Wl,--oformat=binary -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only -nostdlib
 
 cdrom/bootsect.bin: cdrom/bootsect.asm
 	${AS} $< -f bin -o $@
@@ -44,7 +44,7 @@ cdcontents/bootsect.bin: boot/bootsect.asm
 	${AS} $< -f bin -o $@
 
 %.o: %.c ${HEADERS}
-	${CC} ${CFLAGS} -m64 -c $< -o $@
+	${x86_CC} ${CFLAGS} -m64 -c $< -o $@
 
 %.o: %.asm
 	${AS} -DUNIX -Worphan-labels $< -f elf64 -o $@
@@ -54,3 +54,4 @@ clean:
 
 format:
 	clang-format -Werror --style=file -i --verbose ${C_SOURCES} ${HEADERS} cdrom/main.c
+	include-what-you-use cdrom/main.c ${C_SOURCES} ${HEADERS}

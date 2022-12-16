@@ -1,5 +1,5 @@
 org 0x7C00
-KERNEL_OFFSET equ 0x8000
+KERNEL_OFFSET equ 0x10000
 
 GDT32_DATA equ GDT32.Data - GDT32
 GDT32_CODE equ GDT32.Code - GDT32
@@ -22,23 +22,18 @@ bits 16
     jmp 0:_start
 
 _start:
-    mov ax, 0 ; Init segments
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-
     mov bp, 0x7BFF
     mov sp, bp ; Stack
 
+    mov ax, 0x1000
+    mov ES, ax
+
     ; Read disk
-    mov bx, KERNEL_OFFSET
-    mov ah, 0x02
-    mov al, 0x3f ; Sectors (max, don't increase!)
-    mov ch, 0x00
+    xor bx, bx
+    mov ax, 0x023f ; Sectors (max, don't increase!)
+    xor ch, ch
+    xor dh, dh
     mov cl, 0x02
-    mov dh, 0x00
     int 0x13
 
     mov ax, 0x4F02
@@ -50,9 +45,22 @@ _start:
     mov di, 0x7E00
     int 0x10
 
+    jmp $
+
     in al, 0x92 ; enable a20
     or al, 2
     out 0x92, al
+
+    mov     ax,2402h
+    int     15h
+
+    cmp     al,1
+    jz      .a20_activated
+
+    mov     ax,2401h
+    int     15h
+
+.a20_activated:
 
     cli ; 32 bit!
     lgdt [GDT32.Pointer]
@@ -115,13 +123,11 @@ Realm64:
     mov gs, ax
     mov ss, ax
 
-    mov rbp, 0xC000000
+    mov rbp, 0x7C00
     mov rsp, rbp
 
-    ; mov QWORD [0x600000+8*3], 0x403003
-
     ; TBL[3]
-    mov QWORD [0x600000+0x1000+8*3], 0x404003
+    mov DWORD [0x600000+0x1000+8*3], 0x404003
 
     ; TBL[3][0]
     ; Kernel memory - 0x1000000 to 0x8000000 (16 Mib to 128 Mib) map to 0xC0000000 - 0xC8000000
@@ -130,13 +136,9 @@ Realm64:
     mov rbx, 0x1000083
 .kernel:
     mov [rdi], rbx
-
     add rdi, 8
     add rbx, 0x200000
-
     loop .kernel
-
-    xchg bx,bx
 
     jmp KERNEL_OFFSET
 
@@ -165,7 +167,6 @@ GDT32:
 GDT64:
     .Null:
         dq 0
-        dq 0
     .Code:
         dd 0xFFFF
         db 0
@@ -181,6 +182,11 @@ GDT64:
     .Pointer:
         dw GDT64.Pointer - GDT64 - 1
         dq GDT64
+
+times 446 - ($-$$) db 0
+
+dq 0xFFFFFEEEFFFFFE00 ; MBR
+dq 0x0002FB1800000001
 
 times 510 - ($-$$) db 0
 dw 0xaa55

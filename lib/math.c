@@ -3,9 +3,9 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <math.h>
-#include <hedley.h>
-#include <stdint.h>
+#include <hedley.h>  // for HEDLEY_DIAGNOSTIC_POP, HEDLEY_DIAGNOSTIC_PUSH
+#include <math.h>    // for abs, double_t, fabs, pow, sqrt
+#include <stdint.h>  // for uint64_t, uint32_t, int32_t
 
 HEDLEY_DIAGNOSTIC_PUSH
 #pragma GCC diagnostic ignored "-Wsign-compare"

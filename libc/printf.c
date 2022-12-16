@@ -1,10 +1,10 @@
-#include <stdio.h>
+#include <ctype.h>
+#include <hedley.h>
 #include <stdarg.h>
 #include <stdbool.h>
-#include <ctype.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <hedley.h>
 
 int intlen(int i, uint8_t base) {
 	int l = 1;
@@ -260,7 +260,8 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
 	return j;
 }
 
-HEDLEY_PRINTF_FORMAT(1, 2) int printf(const char *restrict format, ...) {
+HEDLEY_PRINTF_FORMAT(1, 2)
+int printf(const char *restrict format, ...) {
 	va_list list;
 	va_start(list, format);
 	int i = vprintf(format, list);

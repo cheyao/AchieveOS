@@ -3,10 +3,12 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
+#include <hedley.h>
 #include <kernel/ata.h>
 #include <kernel/ports.h>
 #include <stdint.h>
-#include <hedley.h>
+#include <stdbool.h>       // for bool, false, true
+
 
 #define BUFFER 0xB8000
 
@@ -69,9 +71,6 @@ void main(void) {
 			goto end;
 	}
 	end:
-	read_cdrom(0x10, 1, (uint16_t *) 0x100000);
-	read_cdrom(*((uint32_t *) 0x10009E), 1, (uint16_t *) 0x100000);
-
 	// Detecting hard disk
 	{
 		drive_port = BUS_PRIMARY;
@@ -88,8 +87,32 @@ void main(void) {
 		if (!ata_identify())
 			goto eend;
 	}
-	eend:
+	eend :
 	{
+		// First initialize disk GPT portions
+		// MBR included in bootsect.bin
+		*((uint64_t *) (0x100000 + 0x00)) = 0x5452415020494645ULL;  // 0x00 "EFI PART"
+		*((uint32_t *) (0x100000 + 0x08)) = 0x00010000;             // Revision 1.0
+		*((uint32_t *) (0x100000 + 0x0C)) = 0x0000005C;             // Header size
+		*((uint32_t *) (0x100000 + 0x10)) = 0x00000000;             // CRC - calculate last, put 0
+		*((uint32_t *) (0x100000 + 0x14)) = 0x00000000;             // Reserved
+		*((uint64_t *) (0x100000 + 0x18)) = 0x0000000000000000001;  // Current LBA
+		*((uint64_t *) (0x100000 + 0x20)) = 0x0000000000000000001;  // Backup  LBA :P no backup atm
+		*((uint64_t *) (0x100000 + 0x28)) = 0x0000000000000000022;  // First usable LBA for partitions
+		*((uint64_t *) (0x100000 + 0x30)) = *((uint64_t *) ((uint16_t *) 0x100000 + 100)) -
+		                                    34;  // Last usable LBA, using value returned from identify
+		uint32_t r;
+		__asm__ __volatile__("rdrand %0": "=a" (r));
+
+
+		// GPT LBA 2
+		write_disk(2, 1, (uint16_t *) 0x100000);
+
+		// Move files
+		// Dir table is in 0x100000
+		read_cdrom(0x10, 1, (uint16_t *) 0x100000);
+		read_cdrom(*((uint32_t *) 0x10009E), 1, (uint16_t *) 0x100000);
+
 		uintptr_t addr = 0x100000;
 		addr += *((uint8_t *) addr);
 		addr += *((uint8_t *) addr);
@@ -105,7 +128,7 @@ void main(void) {
 			if (HEDLEY_UNLIKELY(strcmp("kernel.bin", (const char *) (addr + 33)) != 0)) {
 				read_cdrom(*((uint32_t *) (addr + 2)), *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 
-				write_disk(2, *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
+				write_disk(3, *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 			}
 
 			addr += *((uint8_t *) addr);
@@ -119,7 +142,7 @@ void main(void) {
 		good = inb(0x64);
 	outb(0x64, 0xFE);
 
-	__asm__ __volatile__ ("int $0");
+	__asm__ __volatile__("int $0");
 }
 
 bool identify(void) {
@@ -223,8 +246,7 @@ int read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 				break;
 		}
 
-		int size = inb(port + LBA_HIGH) << 8
-		           | inb(port + LBA_MID);
+		int size = inb(port + LBA_HIGH) << 8 | inb(port + LBA_MID);
 
 		insw(port + DATA, (uint16_t *) ((uint8_t *) buffer + i * 0x800), size / 2);
 	}
@@ -260,7 +282,7 @@ void write_disk(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 	outb(drive_port + LBA_LOW, (uint8_t) lba);
 	outb(drive_port + LBA_MID, (uint8_t) (lba >> 8));
 	outb(drive_port + LBA_HIGH, (uint8_t) (lba >> 16));
-	outb(drive_port + COMMAND_REGISTER, 0x30); // Write disk command
+	outb(drive_port + COMMAND_REGISTER, 0x30);  // Write disk command
 
 	ata_io_wait(drive_port);
 
@@ -285,7 +307,7 @@ void write_disk(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 
 	ata_io_wait(drive_port);
 
-	outb(drive_port + COMMAND_REGISTER, 0xE7); // Flush cache
+	outb(drive_port + COMMAND_REGISTER, 0xE7);  // Flush cache
 
 	ata_io_wait(drive_port);
 }

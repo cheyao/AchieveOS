@@ -23,7 +23,7 @@ Still got a lot to do!
 - [ ] ATA PIO Write
 - [ ] ATAPI Read
 - [x] ATAPI Write
-- [ ] Change to grub
+- [ ] 3 stage bootloader
 - [x] Install from cdrom
 - [ ] GPT
 - [ ] TrueType

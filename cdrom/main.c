@@ -105,25 +105,53 @@ void main(void) {
 	}
 	eend :
 	{
+		volatile uint32_t r;
+
 		// First initialize disk GPT portions
-		// Partition 1 - Boot sector
+		// Partition 1 - Second stage boot sector
+		*((uint64_t *) (0x100000 + 0x00)) = 0x7553734949464555ULL; // Type GUID
+		*((uint64_t *) (0x100000 + 0x08)) = 0x2164726148726570ULL;
+		__asm__ __volatile__("rdrand %0": "=a" (r)); // Partition GUID
+		*((uint32_t *) (0x100000 + 0x10)) = r;
+		__asm__ __volatile__("rdrand %0": "=a" (r));
+		*((uint32_t *) (0x100000 + 0x14)) = r;
+		__asm__ __volatile__("rdrand %0": "=a" (r));
+		*((uint32_t *) (0x100000 + 0x18)) = r;
+		__asm__ __volatile__("rdrand %0": "=a" (r));
+		*((uint32_t *) (0x100000 + 0x1C)) = r;
+		*((uint64_t *) (0x100000 + 0x20)) = 0x20;
+		*((uint64_t *) (0x100000 + 0x28)) = 0x7FF;
 
 		// Partition 2 - APFS
-		*((uint64_t *) (0x100000 + 0x80 + 0x00)) = 0xACEC4365300011AAULL; // Type GUID
-		*((uint64_t *) (0x100000 + 0x80 + 0x08)) = 0x11AA00007C3457EFULL;
-		// Partition GUID
-		volatile uint32_t r;
+		*((uint64_t *) (0x100000 + 0x80 + 0x00)) = 0x11AA00007C3457EFULL; // Type GUID
+		*((uint64_t *) (0x100000 + 0x80 + 0x08)) = 0xACEC4365300011AAULL;
+		__asm__ __volatile__("rdrand %0": "=a" (r)); // Partition GUID
+		*((uint32_t *) (0x100000 + 0x80 + 0x10)) = r;
 		__asm__ __volatile__("rdrand %0": "=a" (r));
-		*((uint32_t *) (0x100000 + 0x10)) = r;  // GUID upper half
+		*((uint32_t *) (0x100000 + 0x80 + 0x14)) = r;
 		__asm__ __volatile__("rdrand %0": "=a" (r));
-		*((uint32_t *) (0x100000 + 0x80 + 0x18)) = r;  // GUID lower half
+		*((uint32_t *) (0x100000 + 0x80 + 0x18)) = r;
+		__asm__ __volatile__("rdrand %0": "=a" (r));
+		*((uint32_t *) (0x100000 + 0x80 + 0x1C)) = r;
 		*((uint64_t *) (0x100000 + 0x80 + 0x20)) = 0x800;
-		*((uint64_t *) (0x100000 + 0x80 + 0x28)) = 0x800;
+		*((uint64_t *) (0x100000 + 0x80 + 0x28)) = *((uint64_t *) 0x70C8) - 0x800;
 
 		// Partition 3 - SWAP
+		*((uint64_t *) (0x100000 + 0x100 + 0x00)) = 0x4157536F54776F48ULL; // Type GUID
+		*((uint64_t *) (0x100000 + 0x100 + 0x08)) = 0x3F79726F6D654D50ULL;
+		__asm__ __volatile__("rdrand %0": "=a" (r)); // Partition GUID
+		*((uint32_t *) (0x100000 + 0x100 + 0x10)) = r;
+		__asm__ __volatile__("rdrand %0": "=a" (r));
+		*((uint32_t *) (0x100000 + 0x100 + 0x14)) = r;
+		__asm__ __volatile__("rdrand %0": "=a" (r));
+		*((uint32_t *) (0x100000 + 0x100 + 0x18)) = r;
+		__asm__ __volatile__("rdrand %0": "=a" (r));
+		*((uint32_t *) (0x100000 + 0x100 + 0x1C)) = r;
+		*((uint64_t *) (0x100000 + 0x100 + 0x20)) = *((uint64_t *) 0x70C8) - 0x800;
+		*((uint64_t *) (0x100000 + 0x100 + 0x28)) = *((uint64_t *) 0x70C8) - 34;
 
-		// write_disk(3, 1, (uint16_t *) 0x100000);
-		// write_disk(*((uint64_t *) ((uint16_t *) 0x7000 + 100)) - 33, 1, (uint16_t *) 0x100000);
+		write_disk(2, 1, (uint16_t *) 0x100000);
+		write_disk(*((uint64_t *) 0x70C8) - 34, 1, (uint16_t *) 0x100000);
 
 		// Partition Table Header
 		// MBR included in bootsect.bin
@@ -154,13 +182,7 @@ void main(void) {
 		for (uint_fast16_t i = 0; i < 420; i++)
 			*((uint8_t *) (0x100000 + 0x5C + i)) = 0x0;
 
-
-		// GPT LBA 2
-		write_disk(2, 1, (uint16_t *) 0x100000);
-		asm volatile ("xchg %bx, %bx");
-		// passed: 0x3ffff binary: 0b00000011 0b11111111 0b11111111
-		// got:    0xfbd0e binary: 0b00001111 0b10111101 0b00001110
-		// 00039372670e[HD    ] logical address out of bounds (1031438/262144) - aborting command
+		write_disk(1, 1, (uint16_t *) 0x100000);
 		write_disk(*((uint64_t *) 0x70C8) - 1, 1, (uint16_t *) 0x100000);
 
 		// Move files
@@ -176,14 +198,14 @@ void main(void) {
 			if (HEDLEY_UNLIKELY(strcmp("bootsect.bin", (const char *) (addr + 33)) != 0)) {
 				read_cdrom(*((uint32_t *) (addr + 2)), 1, (uint16_t *) 0x100800);
 
-				write_disk(1, 1, (uint16_t *) 0x100800);
+				write_disk(0, 1, (uint16_t *) 0x100800);
 			}
 
-			// If the file is kernel.bin
-			if (HEDLEY_UNLIKELY(strcmp("kernel.bin", (const char *) (addr + 33)) != 0)) {
+			// If the file is second.bin
+			if (HEDLEY_UNLIKELY(strcmp("second.bin", (const char *) (addr + 33)) != 0)) {
 				read_cdrom(*((uint32_t *) (addr + 2)), *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 
-				write_disk(4, *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
+				write_disk(0x1F, *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 			}
 
 			addr += *((uint8_t *) addr);
@@ -237,7 +259,7 @@ bool identify_disk(void) {
 }
 
 void write_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
-	outb(drive_port + DRIVE_SELECT, drive_drive_select);
+	outb(drive_port + DRIVE_SELECT, drive_drive_select | (1 << 6)); // drive select with lba bit set
 	ata_io_wait(drive_port);
 	outb(drive_port + SECTOR_COUNT, sectors);
 	outb(drive_port + LBA_LOW, (lba & 0x000000ff) >> 0);

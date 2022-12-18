@@ -10,7 +10,7 @@ I've defined some custom uuids, here is the list of UUIDs that I used:
 |---------------------|--------------------------------------|
 | BIOS boot partition | 49464555-7349-7553-7065-724861726421 |
 | APFS partition      | 7C3457EF-0000-11AA-AA11-00306543ECAC |
-| SWAP partition      | 7265764F-6874-6F72-7757-696E646F7773 |
+| SWAP partition      | 54776F48-536F-4157-504D-656D6F72793F |
 
 ### TODO list
 
@@ -19,10 +19,10 @@ Still got a lot to do!
 - [x] VESA video mode
 - [x] Paging
 - [x] Switch to 64 bit mode
-- [x] ATA PIO Read
-- [ ] ATA PIO Write
-- [ ] ATAPI Read
-- [x] ATAPI Write
+- [ ] ATA PIO Read
+- [x] ATA PIO Write
+- [x] ATAPI Read
+- [ ] ATAPI Write
 - [ ] 3 stage bootloader
 - [x] Install from cdrom
 - [ ] GPT
@@ -32,7 +32,7 @@ Still got a lot to do!
 - [ ] APFS
 - [ ] Streams
 - [ ] Ncurses
-- [ ] Port Nethack <-- Version 1 OS Complete
+- [ ] Port Nethack <-- Version 0.0.1 OS Complete
 
 ##### Misc
 

@@ -26,13 +26,15 @@ Still got a lot to do!
 - [ ] 3 stage bootloader
 - [x] Install from cdrom
 - [ ] GPT
-- [ ] TrueType
+- [ ] Gylphs
 - [ ] Elf loader
 - [ ] Dynamic library
 - [ ] APFS
 - [ ] Streams
 - [ ] Ncurses
 - [ ] Port Nethack <-- Version 0.0.1 OS Complete
+- [ ] Truetype
+- [ ] USB keyboard
 
 ##### Misc
 

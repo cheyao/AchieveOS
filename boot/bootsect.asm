@@ -22,45 +22,35 @@ bits 16
     jmp 0:_start
 
 _start:
-    mov bp, 0x7BFF
+
+    xchg bx,bx
+    mov [BOOT_DRIVE], dl
+
+    xor ax, ax
+    mov es, ax
+    mov ss, ax
+    mov ds, ax
+
+    mov bp, 0x7C00
     mov sp, bp ; Stack
 
-    mov ax, 0x1000
-    mov ES, ax
-
-    ; Read disk
-    xor bx, bx
-    mov ax, 0x023f ; Sectors (max, don't increase!)
-    xor ch, ch
-    xor dh, dh
-    mov cl, 0x02
+    mov dl, [BOOT_DRIVE]
+    mov ah, 0x42
+    mov si, PACKET
     int 0x13
 
     mov ax, 0x4F02
     mov bx, 0x4117
     int 0x10
 
-    mov ax, 0x4F01
+    inc ax
     mov cx, 0x0117
-    mov di, 0x7E00
+    mov di, 0x1000
     int 0x10
-
-    jmp $
 
     in al, 0x92 ; enable a20
     or al, 2
     out 0x92, al
-
-    mov     ax,2402h
-    int     15h
-
-    cmp     al,1
-    jz      .a20_activated
-
-    mov     ax,2401h
-    int     15h
-
-.a20_activated:
 
     cli ; 32 bit!
     lgdt [GDT32.Pointer]
@@ -87,9 +77,12 @@ init_pm:
     ; TBL[0]
     mov DWORD [edi+0x1000], 0x402003
 
+    ; TBL[3]
+    mov DWORD [edi+0x1000+8*3], 0x404003
+
     ; TBL[0][0] ; Random - 0x0000000 to 0x1000000 (0 to 16 Mib) map to itself
     mov DWORD [edi+0x2000], 0x000083 ; Point to bootsect
-    mov ebx, [0x7E28]
+    mov ebx, [0x1028]
     add ebx, 0x83
     mov DWORD [edi+0x2000+8*1], ebx ; Framebuffer
     mov DWORD [edi+0x2000+8*2], 0x200083 ; Second Framebuffer
@@ -126,9 +119,6 @@ Realm64:
     mov rbp, 0x7C00
     mov rsp, rbp
 
-    ; TBL[3]
-    mov DWORD [0x600000+0x1000+8*3], 0x404003
-
     ; TBL[3][0]
     ; Kernel memory - 0x1000000 to 0x8000000 (16 Mib to 128 Mib) map to 0xC0000000 - 0xC8000000
     mov rcx, 56
@@ -140,12 +130,20 @@ Realm64:
     add rbx, 0x200000
     loop .kernel
 
-    jmp KERNEL_OFFSET
+    jmp 0x8000
+
+BOOT_DRIVE: db 0
+
+PACKET: db 0x10
+        db 0x00 ; Reserved
+        dw 0x40 ; Sectors to read
+        dw 0x0800 ; Segment
+        dw 0x0000 ; Address
+        dq 0x20 ; Starting LBA
 
 GDT32:
     .Null:
-        dd 0x0
-        dd 0x0
+        dq 0
     .Code:
         dw 0xffff    ; segment limit, bits 0-15
         dw 0x0000    ; segment base, bits 0-15

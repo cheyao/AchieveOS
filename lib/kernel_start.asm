@@ -1,4 +1,4 @@
-section .start
+section .text
 bits 64
 extern main
 global _start

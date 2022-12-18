@@ -4,12 +4,12 @@ SECTIONS {
 	. = 0x8000;
 	phys = .;
 
-	.start ALIGN(0x1000): {
+	/* .start ALIGN(0x1000): {
+	} */
+
+	.text ALIGN(0x1000) : {
 		code = .;
 		*(.start)
-	}
-
-	.text : {
 		*(.text)
 		. = ALIGN(0x1000);
 	}

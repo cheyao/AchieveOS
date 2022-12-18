@@ -1,15 +1,11 @@
 ENTRY(_start)
 
-SECTIONS {
-	. = 0x8000;
+SECTIONS { /* 0xC0000000 */
+	. = 0xC0000000;
 	phys = .;
 
-	.start ALIGN(0x1000): {
+	.text ALIGN(0x1000) : {
 		code = .;
-		*(.start)
-	}
-
-	.text : {
 		*(.text)
 		. = ALIGN(0x1000);
 	}

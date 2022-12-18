@@ -22,7 +22,6 @@ bits 16
     jmp 0:_start
 
 _start:
-
     xchg bx,bx
     mov [BOOT_DRIVE], dl
 
@@ -134,13 +133,6 @@ Realm64:
 
 BOOT_DRIVE: db 0
 
-PACKET: db 0x10
-        db 0x00 ; Reserved
-        dw 0x40 ; Sectors to read
-        dw 0x0800 ; Segment
-        dw 0x0000 ; Address
-        dq 0x20 ; Starting LBA
-
 GDT32:
     .Null:
         dq 0
@@ -185,6 +177,17 @@ times 446 - ($-$$) db 0
 
 dq 0xFFFFFEEEFFFFFE00 ; MBR
 dq 0x0002FB1800000001
+
+times 476-($-$$) db 0
+
+align 4
+PACKET: db 0x10
+        db 0x00 ; Reserved
+        dw 64 ; Sectors to read
+        dw 0x8000 ; Address
+        dw 0x0000 ; Segment
+        dq 0x20 ; Starting LBA
+
 
 times 510 - ($-$$) db 0
 dw 0xaa55

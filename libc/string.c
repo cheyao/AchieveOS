@@ -3,11 +3,10 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <stdint.h>
 #include <string.h>
 
 size_t strlen(const char *str) {
-	uint64_t len = 0;
+	size_t len = 0;
 
 	while (str[len] != 0) len++;
 

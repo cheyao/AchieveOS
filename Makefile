@@ -24,16 +24,23 @@ gdb: cdrom.iso
 	qemu-system-x86_64 -drive file=disk.img,media=disk,format=raw -cdrom cdrom.iso -m 512 -cpu host -accel hvf -debugcon stdio -boot order=cd -s -S &
 	x86_64-elf-gdb cdcontents/kernel.bin -ex "target remote localhost:1234"
 
-cdrom.iso: cdrom/bootsect.bin cdrom/kernel.bin cdcontents/bootsect.bin cdcontents/kernel.bin cdcontents/second.bin
+cdrom.iso: cdrom/bootsect.bin cdrom/kernel.bin cdcontents/bootsect.bin cdcontents/second.bin cdcontents/kernel.bin
 	dd if=/dev/zero of=cdcontents/kernel.flp bs=512 count=2880
 	dd if=cdrom/bootsect.bin of=cdcontents/kernel.flp conv=notrunc bs=512 seek=0 count=1
 	dd if=cdrom/kernel.bin of=cdcontents/kernel.flp conv=notrunc bs=512 seek=1 count=2879
 	rm cdcontents/.DS_Store; \
-	mkisofs -U -o cdrom.iso -V AchiveOS -b kernel.flp cdcontents # Finally a cdrom
+	mkisofs -U -o cdrom.iso -V AchiveOS -b kernel.flp cdcontents
 	-rm -rf disk.img cdromC.bin cdrombootsect.bin
 	qemu-img create disk.img 128M
 
-cdcontents/kernel.bin: lib/kernel_start.o ${OBJ}
+disk.img: cdcontents/bootsect.bin cdcontents/second.bin cdcontents/kernel.bin
+	qemu-img create disk.img 128M
+	dd if=cdcontents/bootsect.bin of=disk.img conv=notrunc bs=512 seek=0 count=1
+	dd if=cdcontents/second.bin of=disk.img conv=notrunc bs=512 seek=0x20 count=$$((`gstat -L -c %s cdcontents/second.bin` / 512 + 1))
+	dd if=cdcontents/kernel.bin of=disk.img conv=notrunc bs=512 seek=0x400 count=$$((`gstat -L -c %s cdcontents/kernel.bin` / 512 + 1))
+	-rm -rf cdromC.bin cdrombootsect.bin
+
+cdcontents/kernel.bin: lib/kernel_start.o $(OBJ)
 	${x86_CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000
 
 cdcontents/second.bin: boot/start.asm boot/main.c
@@ -54,7 +61,7 @@ cdcontents/bootsect.bin: boot/bootsect.asm
 	-mkdir cdcontents
 	${AS} $< -f bin -o $@
 
-%.o: %.c ${HEADERS}
+%.o: %.c $(HEADERS)
 	${x86_CC} ${CFLAGS} -mcmodel=large -m64 -c $< -o $@
 
 %.o: %.asm

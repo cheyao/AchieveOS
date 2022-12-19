@@ -22,7 +22,6 @@ bits 16
     jmp 0:_start
 
 _start:
-    xchg bx,bx
     mov [BOOT_DRIVE], dl
 
     xor ax, ax
@@ -38,11 +37,11 @@ _start:
     mov si, PACKET
     int 0x13
 
-    mov ax, 0x4F02
+    mov ax, 0x4F02 ; Set video mode
     mov bx, 0x4117
     int 0x10
 
-    inc ax
+    mov ax, 0x4F01 ; Get video info
     mov cx, 0x0117
     mov di, 0x1000
     int 0x10

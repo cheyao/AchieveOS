@@ -18,8 +18,8 @@ jobs:
       - name: Install dependencies
         run: brew install nasm x86_64-elf-gcc x86_64-elf-binutils coreutils cdrtools i686-elf-gcc i686-elf-binutils
 
-      - name: make OS.iso
-        run: make
+      - name: make cdrom.iso
+        run: make cdrom.iso
 
       - name: Store iso
         uses: actions/upload-artifact@v3

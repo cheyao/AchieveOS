@@ -1,5 +1,6 @@
 #include <kernel/ata.h>     // for OTHER, UNKNOWN, BUS_PRIMARY, BUS_SECONDARY
 #include <kernel/screen.h>  // for Vector2, rgb, circle, line, quadratic_bez...
+#include <kernel/idt.h>     // for init_idt
 #include <stdbool.h>        // for false
 #include <stdint.h>         // for uint16_t, uint8_t
 #include <string.h>         // for memset
@@ -32,7 +33,7 @@ uint8_t cdrom_port = 5;
 // }
 
 void main(void) {
-	// init_idt();
+	init_idt();
 
 	circle((Vector2) {WIDTH / 2, HEIGHT / 2}, 300, rgb(0xFF, 0xFF, 0xFF));
 
@@ -41,7 +42,7 @@ void main(void) {
 	                                     {.x = 100, .y = 50}},
 	                       rgb(0xFF, 0xFF, 0xFF));
 
-	memset((uint16_t *) BUFFER, rgb(0xFF, 0, 0xFF), WIDTH * HEIGHT / 2);
+	memset((uint16_t *) (BUFFER + WIDTH * HEIGHT / 2), rgb(0xFF, 0, 0xFF), WIDTH * HEIGHT / 2);
 
 	line((Vector2) {567, 333}, (Vector2) {630, 604}, rgb(0x4d, 0x25, 0x8e));
 

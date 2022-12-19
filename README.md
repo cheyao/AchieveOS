@@ -19,11 +19,10 @@ Still got a lot to do!
 - [x] VESA video mode
 - [x] Paging
 - [x] Switch to 64 bit mode
-- [ ] ATA PIO Read
-- [x] ATA PIO Write
+- [x] ATA PIO Read
 - [x] ATAPI Read
-- [ ] ATAPI Write
-- [ ] 3 stage bootloader
+- [x] ATAPI Write
+- [x] 3 stage bootloader
 - [x] Install from cdrom
 - [ ] GPT
 - [ ] Gylphs

@@ -12,10 +12,10 @@
 
 #define BUFFER 0xB8000
 
-int port = 0x00;
-int drive_select = 0x00;
-int drive_port = 0x00;
-int drive_drive_select = 0x00;
+static uint16_t port = 0x00;
+static uint16_t drive_select = 0x00;
+static uint16_t drive_port = 0x00;
+static uint16_t drive_drive_select = 0x00;
 
 int read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer);
 

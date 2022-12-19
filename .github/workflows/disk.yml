@@ -1,0 +1,28 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: brew install nasm x86_64-elf-gcc x86_64-elf-binutils coreutils cdrtools i686-elf-gcc i686-elf-binutils
+
+      - name: make disk.img
+        run: make disk.img
+
+      - name: Store disk.img
+        uses: actions/upload-artifact@v3
+        with:
+          name: disk.iso
+          path: disk.iso

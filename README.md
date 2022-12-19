@@ -24,11 +24,12 @@ Still got a lot to do!
 - [x] ATAPI Write
 - [x] 3 stage bootloader
 - [x] Install from cdrom
-- [ ] GPT
+- [x] Curves & lines
+- [x] GPT
 - [ ] Gylphs
-- [ ] Elf loader
-- [ ] Dynamic library
 - [ ] APFS
+- [x] Elf loader
+- [ ] Dynamic library
 - [ ] Streams
 - [ ] Ncurses
 - [ ] Port Nethack <-- Version 0.0.1 OS Complete

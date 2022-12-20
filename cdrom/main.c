@@ -31,6 +31,27 @@ void eject_cdrom(void);
 
 uint32_t CRC32(const uint8_t data[], size_t data_length);
 
+void putchar(const char c) {
+	while (!(inb(0x378 + 1) & 0x80))
+		ata_io_wait(drive_port);
+
+	outb(0x378, c);
+
+	unsigned char control = inb(0x37A);
+	outb(0x378 + 2, control | 1);
+	ata_io_wait(drive_port);
+	outb(0x378 + 2, control);
+	outb(0xe9, c);
+
+	while (!(inb(0x378 + 1) & 0x80))
+		ata_io_wait(drive_port);
+}
+
+void puts(const char *restrict str) {
+	for (size_t i = 0; str[i] != 0; i++)
+		putchar(str[i]);
+}
+
 /**
  * It returns true if the two strings are equal, and false otherwise
  *
@@ -49,6 +70,7 @@ bool strcmp(const char a[], const char b[]) {
 
 void main(void) {
 	// Detecting CD-ROM
+	puts("Entered CDROM burner\n");
 	{
 		port = BUS_PRIMARY;
 		drive_select = 0xA0;
@@ -65,6 +87,7 @@ void main(void) {
 			goto end;
 	}
 	end:
+	puts("CDROM finished detecting\n");
 	// Detecting hard disk
 	{
 		drive_port = BUS_PRIMARY;
@@ -81,7 +104,8 @@ void main(void) {
 		if (!identify_disk())
 			goto eend;
 	}
-	eend :
+	eend:
+	puts("Hard disk finished detecting\n");
 	{
 		volatile uint32_t r;
 
@@ -163,6 +187,8 @@ void main(void) {
 		write_disk(2, 1, (uint16_t *) 0x100000);
 		write_disk(*((uint64_t *) 0x70C8) - 34, 1, (uint16_t *) 0x100000);
 
+		puts("Partitions burned\n");
+
 		// Partition Table Header
 		// MBR included in bootsect.bin
 		*((uint32_t *) (0x100000 + 0x58)) = CRC32((const uint8_t *) 0x100000, 0x200); // CRC checksum
@@ -198,6 +224,8 @@ void main(void) {
 		write_disk(1, 1, (uint16_t *) 0x100000);
 		write_disk(*((uint64_t *) 0x70C8) - 1, 1, (uint16_t *) 0x100000);
 
+		puts("Partition table header burned");
+
 		// Move files
 		// Dir table is in 0x100000
 		read_cdrom(0x10, 1, (uint16_t *) 0x100000);
@@ -218,14 +246,22 @@ void main(void) {
 			if (HEDLEY_UNLIKELY(strcmp("second.bin", (const char *) (addr + 33)) != 0)) {
 				read_cdrom(*((uint32_t *) (addr + 2)), *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 
+				puts("second.bin read\n");
+
 				write_disk(0x20, *((uint32_t *) (addr + 10)) / 512 + 1, (uint16_t *) 0x100800);
+
+				puts("second.bin burned\n");
 			}
 
 			// If the file is kernel.bin
 			if (HEDLEY_UNLIKELY(strcmp("kernel.bin", (const char *) (addr + 33)) != 0)) {
 				read_cdrom(*((uint32_t *) (addr + 2)), *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 
+				puts("kernel.bin read\n");
+
 				write_disk(0x400, *((uint32_t *) (addr + 10)) / 512 + 1, (uint16_t *) 0x100800);
+
+				puts("kernel.bin burned\n");
 			}
 
 			addr += *((uint8_t *) addr);
@@ -371,18 +407,15 @@ void write_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
 	for (uint32_t i = 0; i < sectors; i++) {
 		ata_io_wait(drive_port);
 
-		int timeout = 1000;
 		while (1) {
 			uint8_t status = inb(drive_port + COMMAND_REGISTER);
 
-			if (timeout == 0)
-				break;
 			if (!(status & 0x80) && (status & 0x08))
 				break;
 			else if (status & 0x01)
 				return;
 
-			timeout--;
+			ata_io_wait(drive_port);
 		}
 
 		for (int j = 0; j < 256; j++, buffer++)
@@ -390,13 +423,9 @@ void write_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
 	}
 
 	ata_io_wait(drive_port);
-
 	outb(drive_port + DRIVE_SELECT, 0xA0);
-
 	ata_io_wait(drive_port);
-
 	outb(drive_port + COMMAND_REGISTER, 0xE7);  // Flush cache
-
 	ata_io_wait(drive_port);
 }
 

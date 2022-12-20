@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
-static uint16_t drive_port;
-static uint16_t drive_select;
+uint16_t drive_port;
+uint16_t drive_select;
 
 static void ata_io_wait(uint8_t p);
 
@@ -20,6 +20,47 @@ bool identify_disk(void);
 void putchar(char c);
 
 void puts(const char *restrict str);
+
+size_t strlen(const char *str) {
+	size_t len = 0;
+
+	while (str[len] != 0) len++;
+
+	return len;
+}
+
+void reverse(char *str) {
+	size_t n = strlen(str);
+
+	for (size_t i = 0; i < n / 2; i++) {
+		char temp = str[i];
+		str[i] = str[n - i - 1];
+		str[n - i - 1] = temp;
+	}
+}
+
+char *ltoa(unsigned long num, char *str, int base) {
+	int i = 0;
+
+	if (num == 0) {
+		str[i++] = '0';
+		str[i] = '\0';
+		return str;
+	}
+
+	while (num != 0) {
+		int rem = num % base;
+
+		str[i++] = rem > 9 ? rem - 10 + 'a' : rem + '0';
+		num = num / base;
+	}
+
+	str[i] = '\0';
+
+	reverse(str);
+
+	return str;
+}
 
 size_t main(void) {
 	drive_port = BUS_PRIMARY;
@@ -37,8 +78,6 @@ size_t main(void) {
 		goto end;
 
 	end:
-	puts("Hello world from the drive!\n");
-
 	read_disk(0x400, 1, (uint16_t *) 0x1000);
 
 	ELF_header *header = (ELF_header *) 0x1000;
@@ -48,6 +87,7 @@ size_t main(void) {
 	    header->e_ident[2] == 'L' &&
 	    header->e_ident[3] == 'F') {
 		puts("ELF file recognised\n");
+
 		if (header->e_ident[4] != 2)
 			puts("Error! Not 64 bit!\n");
 
@@ -59,12 +99,26 @@ size_t main(void) {
 		Program_header *pheader = (Program_header *) (0x1200 + header->e_phoff % 512);
 
 		for (size_t i = 0; i < header->e_phnum; i++) {
-			if (pheader->p_type == 1)
+			if (pheader->p_type == 1) {
+				char buff[20] = {0};
+				ltoa(0x400 + pheader->p_offset / 512, buff, 16);
+				puts(buff);
+				putchar('\n');
+				char p[20] = {0};
+				ltoa(pheader->p_filesz / 512 + 1, p, 16);
+				puts(p);
+				putchar('\n');
+				char j[20] = {0};
+				ltoa(pheader->p_vaddr, j, 16);
+				puts(j);
+				putchar('\n');
 				read_disk(0x400 + pheader->p_offset / 512, pheader->p_filesz / 512 + 1, (uint16_t *) pheader->p_vaddr);
-
-			if (pheader->p_filesz < pheader->p_memsz)
-				for (size_t j = 0; i < pheader->p_memsz - pheader->p_filesz; i++)
-					((char *) pheader->p_vaddr + pheader->p_filesz)[j] = 0;
+			}
+			if (pheader->p_filesz < pheader->p_memsz) {
+				puts("Yes");
+				for (size_t j = pheader->p_vaddr + pheader->p_filesz; j < pheader->p_vaddr + pheader->p_memsz; j++)
+					*((char *) j) = 0;
+			}
 
 			pheader++;
 		}
@@ -142,35 +196,35 @@ void read_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
 	outb(drive_port + LBA_HIGH, (lba & 0x00ff0000) >> 16);
 	outb(drive_port + COMMAND_REGISTER, 0x20);  // Read disk command
 
-	ata_io_wait(drive_port);
-
 	for (uint32_t i = 0; i < sectors; i++) {
 		ata_io_wait(drive_port);
 
-		int timeout = 1000;
 		while (1) {
 			uint8_t status = inb(drive_port + COMMAND_REGISTER);
 
-			if (timeout == 0)
-				break;
 			if (!(status & 0x80) && (status & 0x08))
 				break;
 			else if (status & 0x01)
 				return;
 
-			timeout--;
+			ata_io_wait(drive_port);
 		}
 
-		insw(drive_port + DATA, buffer + i * 256, 256);
+		for (int j = 0; j < 256; j++, buffer++)
+			*buffer = inw(drive_port + DATA);
 	}
 
-	ata_io_wait(drive_port);
+	uint_fast16_t timeout = 100;
+	while (1) {
+		uint8_t status = inb(drive_port + COMMAND_REGISTER);
 
-	outb(drive_port + DRIVE_SELECT, 0xA0);
+		if (timeout == 0)
+			break;
+		if (!(status & 0x80) && (status & 0x08))
+			break;
+		else if (status & 0x01)
+			return;
 
-	ata_io_wait(drive_port);
-
-	outb(drive_port + COMMAND_REGISTER, 0xE7);  // Flush cache
-
-	ata_io_wait(drive_port);
+		timeout--;
+	}
 }

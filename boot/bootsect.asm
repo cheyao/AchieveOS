@@ -182,7 +182,7 @@ times 476-($-$$) db 0
 align 4
 PACKET: db 0x10
         db 0x00 ; Reserved
-        dw 64 ; Sectors to read
+        dw 0x80 ; Sectors to read
         dw 0x8000 ; Address
         dw 0x0000 ; Segment
         dq 0x20 ; Starting LBA

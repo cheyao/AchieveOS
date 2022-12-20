@@ -1,6 +1,8 @@
 # AchieveOS
 
-Must install onto the disk
+This is NOT a linux distro, the contents are all made from zero (except for the asmlib)
+
+Must install onto hard disk
 
 ### GPT partition UUIDs
 

@@ -15,11 +15,11 @@
 static uint16_t port = 0x00;
 static uint16_t drive_select = 0x00;
 static uint16_t drive_port = 0x00;
-static uint16_t drive_drive_select = 0x00;
+static uint16_t drive_slave = 0x00;
 
 int read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer);
 
-void write_disk(uint32_t lba, uint32_t sectors, uint16_t *buffer);
+void write_disk(uint64_t lba, uint16_t sectors, uint16_t *buffer);
 
 static void ata_io_wait(uint8_t p);
 
@@ -91,16 +91,16 @@ void main(void) {
 	// Detecting hard disk
 	{
 		drive_port = BUS_PRIMARY;
-		drive_drive_select = 0xA0;
+		drive_slave = 0;
 		if (!identify_disk())
 			goto eend;
-		drive_drive_select = 0xB0;
+		drive_slave = 1;
 		if (!identify_disk())
 			goto eend;
 		drive_port = BUS_SECONDARY;
 		if (!identify_disk())
 			goto eend;
-		drive_drive_select = 0xA0;
+		drive_slave = 0;
 		if (!identify_disk())
 			goto eend;
 	}
@@ -366,7 +366,7 @@ static void ata_io_wait(const uint8_t p) {
 bool identify_disk(void) {
 	reset_ata(drive_port);
 
-	outb(drive_port + DRIVE_SELECT, drive_select); /* Drive select */
+	outb(drive_port + DRIVE_SELECT, 0xA0 | (drive_slave << 4)); /* Drive select */
 
 	ata_io_wait(drive_port);
 
@@ -392,17 +392,19 @@ bool identify_disk(void) {
 	return 0;
 }
 
-void write_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
-	reset_ata(drive_port);
-	outb(drive_port + DRIVE_SELECT, drive_drive_select | (1 << 6)); // drive select with lba bit set
+void write_disk(const uint64_t lba, const uint16_t sectors, uint16_t *buffer) {
+	outb(drive_port + DRIVE_SELECT, 0x40 | (drive_slave << 4)); // drive select with lba bit set
 	ata_io_wait(drive_port);
+	outb(drive_port + SECTOR_COUNT, sectors >> 8);
+	outb(drive_port + LBA_LOW, (lba & 0x0000ff000000) >> 24);
+	outb(drive_port + LBA_MID, (lba & 0x00ff00000000) >> 32);
+	outb(drive_port + LBA_HIGH, (lba & 0xff0000000000) >> 40);
+
 	outb(drive_port + SECTOR_COUNT, sectors);
 	outb(drive_port + LBA_LOW, (lba & 0x000000ff) >> 0);
 	outb(drive_port + LBA_MID, (lba & 0x0000ff00) >> 8);
 	outb(drive_port + LBA_HIGH, (lba & 0x00ff0000) >> 16);
-	outb(drive_port + COMMAND_REGISTER, 0x30);  // Write disk command
-
-	ata_io_wait(drive_port);
+	outb(drive_port + COMMAND_REGISTER, 0x34);  // Write disk command
 
 	for (uint32_t i = 0; i < sectors; i++) {
 		ata_io_wait(drive_port);
@@ -422,10 +424,11 @@ void write_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
 			outw(drive_port + DATA, *buffer);
 	}
 
+	// Flush cache
 	ata_io_wait(drive_port);
 	outb(drive_port + DRIVE_SELECT, 0xA0);
 	ata_io_wait(drive_port);
-	outb(drive_port + COMMAND_REGISTER, 0xE7);  // Flush cache
+	outb(drive_port + COMMAND_REGISTER, 0xE7);
 	ata_io_wait(drive_port);
 }
 

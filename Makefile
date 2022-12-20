@@ -1,7 +1,7 @@
-C_SOURCES = $(wildcard lib/*.c) $(wildcard libc/*.c)
-HEADERS = $(wildcard include/*.h) $(wildcard include/kernel/*.h)
-OBJ = ${C_SOURCES:.c=.o} lib/idtr.o asmlib/memset.o asmlib/instrset.o asmlib/cachesize.o asmlib/cputype.o \
-	asmlib/unalignedisfaster.o asmlib/memcpy.o
+C_SOURCES = $(wildcard kernel/**/*.c) $(wildcard kernel/*.c)
+HEADERS = $(wildcard include/**/*.h) $(wildcard include/*.h)
+OBJ = ${C_SOURCES:.c=.o} kernel/lib/idtr.o kernel/asm/memset.o kernel/asm/instrset.o kernel/asm/cachesize.o kernel/asm/cputype.o \
+	kernel/asm/unalignedisfaster.o kernel/asm/memcpy.o
 
 CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase -DDEBUG -Iinclude -O2 \
 		 -nostdlib -ffreestanding -std=gnu11 -g -static -Wno-unused-parameter -g \
@@ -40,7 +40,7 @@ disk.img: cdcontents/bootsect.bin cdcontents/second.bin cdcontents/kernel.bin
 	dd if=cdcontents/kernel.bin of=disk.img conv=notrunc bs=512 seek=0x400 count=$$((`gstat -L -c %s cdcontents/kernel.bin` / 512 + 1))
 	-rm -rf cdromC.bin cdrombootsect.bin
 
-cdcontents/kernel.bin: lib/kernel_start.o $(OBJ)
+cdcontents/kernel.bin: kernel/kernel_start.o $(OBJ)
 	${x86_CC} -o $@ $^ ${LDFLAGS} -z max-page-size=0x1000
 
 cdcontents/second.bin: boot/start.asm boot/main.c

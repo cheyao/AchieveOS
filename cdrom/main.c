@@ -12,8 +12,8 @@
 
 #define BUFFER 0xB8000
 
-static uint16_t port = 0x00;
-static uint16_t drive_select = 0x00;
+static uint16_t cdrom_port = 0x00;
+static uint16_t cdrom_slave = 0x00;
 static uint16_t drive_port = 0x00;
 static uint16_t drive_slave = 0x00;
 
@@ -32,19 +32,17 @@ void eject_cdrom(void);
 uint32_t CRC32(const uint8_t data[], size_t data_length);
 
 void putchar(const char c) {
-	while (!(inb(0x378 + 1) & 0x80))
-		ata_io_wait(drive_port);
+	while (!(inb(0x378 + 1) & 0x80));
 
 	outb(0x378, c);
 
 	unsigned char control = inb(0x37A);
 	outb(0x378 + 2, control | 1);
-	ata_io_wait(drive_port);
+	for (volatile int i = 1000; i > 0; i--);
 	outb(0x378 + 2, control);
 	outb(0xe9, c);
 
-	while (!(inb(0x378 + 1) & 0x80))
-		ata_io_wait(drive_port);
+	while (!(inb(0x378 + 1) & 0x80));
 }
 
 void puts(const char *restrict str) {
@@ -52,14 +50,6 @@ void puts(const char *restrict str) {
 		putchar(str[i]);
 }
 
-/**
- * It returns true if the two strings are equal, and false otherwise
- *
- * @param a The first string to compare.
- * @param b The base address of the string.
- *
- * @return a boolean value.
- */
 bool strcmp(const char a[], const char b[]) {
 	for (int i = 0; a[i] != 0; i++)
 		if (a[i] != b[i])
@@ -67,7 +57,6 @@ bool strcmp(const char a[], const char b[]) {
 
 	return true;
 }
-
 char *ltoa(unsigned long num, char *str, int base) {
 	int i = 0;
 
@@ -103,17 +92,17 @@ void main(void) {
 	// Detecting CD-ROM
 	puts("Entered CDROM burner\n");
 	{
-		port = BUS_PRIMARY;
-		drive_select = 0xA0;
+		cdrom_port = BUS_PRIMARY;
+		cdrom_slave = true;
 		if (!identify_cdrom())
 			goto end;
-		drive_select = 0xB0;
+		cdrom_slave = false;
 		if (!identify_cdrom())
 			goto end;
-		port = BUS_SECONDARY;
+		cdrom_port = BUS_SECONDARY;
 		if (!identify_cdrom())
 			goto end;
-		drive_select = 0xA0;
+		cdrom_slave = true;
 		if (!identify_cdrom())
 			goto end;
 	}
@@ -401,11 +390,17 @@ uint32_t CRC32(const uint8_t data[], size_t data_length) {
 	return crc32 ^ 0xFFFFFFFF;
 }
 
+static void atapi_wait(const uint16_t port) {
+	inb(port + CONTROL + ALTERNATE_STATUS);
+	inb(port + CONTROL + ALTERNATE_STATUS);
+	inb(port + CONTROL + ALTERNATE_STATUS);
+	inb(port + CONTROL + ALTERNATE_STATUS);
+}
+
 static void ata_io_wait(const uint8_t p) {
-	inb(p + ALTERNATE_STATUS + CONTROL);
-	inb(p + ALTERNATE_STATUS + CONTROL);
-	inb(p + ALTERNATE_STATUS + CONTROL);
-	inb(p + ALTERNATE_STATUS + CONTROL);
+	atapi_wait(p);
+
+	while (inb(p + ALTERNATE_STATUS + CONTROL) & 0x80);
 }
 
 bool identify_disk(void) {
@@ -413,7 +408,7 @@ bool identify_disk(void) {
 
 	outb(drive_port + DRIVE_SELECT, 0xA0 | (drive_slave << 4)); /* Drive select */
 
-	ata_io_wait(drive_port);
+	atapi_wait(drive_port);
 
 	outb(drive_port + SECTOR_COUNT, 0x00); /* Sector count */
 	outb(drive_port + LBA_LOW, 0x00);
@@ -422,7 +417,7 @@ bool identify_disk(void) {
 
 	outb(drive_port + COMMAND_REGISTER, 0xEC); /* Identify command */
 
-	ata_io_wait(drive_port);
+	atapi_wait(drive_port);
 
 	int timeout = 100;
 	while (1) {
@@ -439,7 +434,7 @@ bool identify_disk(void) {
 
 void write_disk(const uint32_t lba, const uint16_t sectors, const uint16_t *buffer) {
 	outb(drive_port + DRIVE_SELECT, 0xE0 | (drive_slave << 4)); // drive select with lba bit set
-	ata_io_wait(drive_port);
+	atapi_wait(drive_port);
 	outb(drive_port + SECTOR_COUNT, sectors >> 8);
 	outb(drive_port + LBA_LOW, (lba & 0x0000ff000000) >> 24);
 	outb(drive_port + LBA_MID, (lba & 0x00ff00000000) >> 32);
@@ -451,65 +446,48 @@ void write_disk(const uint32_t lba, const uint16_t sectors, const uint16_t *buff
 	outb(drive_port + LBA_HIGH, (lba & 0x00ff0000) >> 16);
 	outb(drive_port + COMMAND_REGISTER, 0x34);  // Write disk command
 
-	for (uint32_t i = 0; i < sectors; i++) {
-		ata_io_wait(drive_port);
+	atapi_wait(drive_port);
 
-		int ignore = 4;
+	for (uint32_t i = 0; i < sectors; i++) {
 		while (1) {
 			uint8_t status = inb(drive_port + COMMAND_REGISTER);
-
-			char c[10] = {0};
-			ltoa(status, c, 16);
-			puts(c);
-			putchar('\n');
-
-			if (ignore != 0) {
-				ignore--;
-				ata_io_wait(drive_port);
-				continue;
-			}
 
 			if (!(status & 0x80) && (status & 0x08))
 				break;
 			else if (status & 0x01)
 				return;
-
-			ata_io_wait(drive_port);
 		}
 
 		for (int j = 0; j < 256; j++)
 			outw(drive_port + DATA, buffer[j + i * 256]);
 	}
-
-	ata_io_wait(drive_port);
-	ata_io_wait(drive_port);
 }
 
 bool identify_cdrom(void) {
-	reset_ata(port);
+	reset_ata(cdrom_port);
 
-	outb(port + DRIVE_SELECT, drive_select); /* Drive select */
+	outb(cdrom_port + DRIVE_SELECT, 0xA0 | (cdrom_slave << 4)); /* Drive select */
 
-	ata_io_wait(port);
+	atapi_wait(cdrom_port);
 
-	outb(port + SECTOR_COUNT, 0x00); /* Sector count */
-	outb(port + LBA_LOW, 0x00);
-	outb(port + LBA_MID, 0x00);
-	outb(port + LBA_HIGH, 0x00);
+	outb(cdrom_port + SECTOR_COUNT, 0x00); /* Sector count */
+	outb(cdrom_port + LBA_LOW, 0x00);
+	outb(cdrom_port + LBA_MID, 0x00);
+	outb(cdrom_port + LBA_HIGH, 0x00);
 
-	outb(port + COMMAND_REGISTER, 0xA1); /* Identify command */
+	outb(cdrom_port + COMMAND_REGISTER, 0xA1); /* Identify command */
 
-	ata_io_wait(port);
+	atapi_wait(cdrom_port);
 
 	int timeout = 100;
 	while (1) {
-		uint8_t status = inb(port + COMMAND_REGISTER);
+		uint8_t status = inb(cdrom_port + COMMAND_REGISTER);
 		if ((status & 0x01)) return 1;
 		if (timeout-- < 0) return 1;
 		if (!(status & 0x80) && (status & 0x08)) break;
 	}
 
-	insw(port + DATA, ((unsigned short *) 0x7000), 256); /* Receive identify */
+	insw(cdrom_port + DATA, ((unsigned short *) 0x7000), 256); /* Receive identify */
 
 	return 0;
 }
@@ -522,37 +500,30 @@ int read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 	                                 (sectors >> 0x00) & 0xFF,
 	                                 0, 0};
 
-	outb(port + DRIVE_SELECT, drive_select);
-	ata_io_wait(port);
-	outb(port + ERROR_R, 0x00);
-	outb(port + LBA_MID, 2048 & 0xFF);
-	outb(port + LBA_HIGH, 2048 >> 8);
-	outb(port + COMMAND_REGISTER, 0xA0); /* Packet command */
-	ata_io_wait(port);
+	outb(cdrom_port + DRIVE_SELECT, 0xA0 | (cdrom_slave << 4));
+	atapi_wait(cdrom_port);
+	outb(cdrom_port + ERROR_R, 0x00);
+	outb(cdrom_port + LBA_MID, 2048 & 0xFF);
+	outb(cdrom_port + LBA_HIGH, 2048 >> 8);
+	outb(cdrom_port + COMMAND_REGISTER, 0xA0); /* Packet command */
+	atapi_wait(cdrom_port);
 
-	while (1) {
-		uint8_t status = inb(port + COMMAND_REGISTER);
-		if ((status & 0x01) == 1)
-			return 1;
-		if (!(status & 0x80) && (status & 0x08))
-			break;
-		ata_io_wait(port);
-	}
+	atapi_wait(cdrom_port);
 
-	outsw(port + DATA, (uint16_t *) read_cmd, 6);
+	outsw(cdrom_port + DATA, (uint16_t *) read_cmd, 6);
 
 	for (uint32_t i = 0; i < sectors; i++) {
 		while (1) {
-			uint8_t status = inb(port + COMMAND_REGISTER);
+			uint8_t status = inb(cdrom_port + COMMAND_REGISTER);
 			if (status & 0x01)
 				return 1;
 			if (!(status & 0x80) && (status & 0x08))
 				break;
 		}
 
-		int size = inb(port + LBA_HIGH) << 8 | inb(port + LBA_MID);
+		int size = inb(cdrom_port + LBA_HIGH) << 8 | inb(cdrom_port + LBA_MID);
 
-		insw(port + DATA, (uint16_t *) ((uint8_t *) buffer + i * 0x800), size / 2);
+		insw(cdrom_port + DATA, (uint16_t *) ((uint8_t *) buffer + i * 0x800), size / 2);
 	}
 
 	return 0;
@@ -561,20 +532,20 @@ int read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer) {
 void eject_cdrom(void) {
 	volatile uint8_t read_cmd[12] = {0x1B, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0};
 
-	outb(port + DRIVE_SELECT, drive_select);
-	ata_io_wait(port);
-	outb(port + ERROR_R, 0x00);
-	outb(port + LBA_MID, 2048 & 0xFF);
-	outb(port + LBA_HIGH, 2048 >> 8);
-	outb(port + COMMAND_REGISTER, 0xA0); /* Packet command */
+	outb(cdrom_port + DRIVE_SELECT, 0xA0 | (cdrom_slave << 4));
+	atapi_wait(cdrom_port);
+	outb(cdrom_port + ERROR_R, 0x00);
+	outb(cdrom_port + LBA_MID, 2048 & 0xFF);
+	outb(cdrom_port + LBA_HIGH, 2048 >> 8);
+	outb(cdrom_port + COMMAND_REGISTER, 0xA0); /* Packet command */
 
 	while (1) {
-		uint8_t status = inb(port + COMMAND_REGISTER);
+		uint8_t status = inb(cdrom_port + COMMAND_REGISTER);
 		if (HEDLEY_UNLIKELY(status & 0x01))
 			return;
 		if (!(status & 0x80) && (status & 0x08))
 			break;
 	}
 
-	outsw(port + DATA, (uint16_t *) read_cmd, 6);
+	outsw(cdrom_port + DATA, (uint16_t *) read_cmd, 6);
 }

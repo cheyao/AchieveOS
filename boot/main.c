@@ -21,24 +21,6 @@ void putchar(char c);
 
 void puts(const char *restrict str);
 
-size_t strlen(const char *str) {
-	size_t len = 0;
-
-	while (str[len] != 0) len++;
-
-	return len;
-}
-
-void reverse(char *str) {
-	size_t n = strlen(str);
-
-	for (size_t i = 0; i < n / 2; i++) {
-		char temp = str[i];
-		str[i] = str[n - i - 1];
-		str[n - i - 1] = temp;
-	}
-}
-
 char *ltoa(unsigned long num, char *str, int base) {
 	int i = 0;
 
@@ -57,7 +39,15 @@ char *ltoa(unsigned long num, char *str, int base) {
 
 	str[i] = '\0';
 
-	reverse(str);
+	size_t n = 0;
+
+	while (str[n] != 0) n++;
+
+	for (size_t j = 0; j < n / 2; j++) {
+		char temp = str[j];
+		str[j] = str[n - j - 1];
+		str[n - j - 1] = temp;
+	}
 
 	return str;
 }

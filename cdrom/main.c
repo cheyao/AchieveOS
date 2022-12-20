@@ -19,7 +19,7 @@ static uint16_t drive_slave = 0x00;
 
 int read_cdrom(uint32_t lba, uint32_t sectors, uint16_t *buffer);
 
-void write_disk(uint64_t lba, uint16_t sectors, uint16_t *buffer);
+void write_disk(uint32_t lba, uint16_t sectors, const uint16_t *buffer);
 
 static void ata_io_wait(uint8_t p);
 
@@ -66,6 +66,37 @@ bool strcmp(const char a[], const char b[]) {
 			return false;
 
 	return true;
+}
+
+char *ltoa(unsigned long num, char *str, int base) {
+	int i = 0;
+
+	if (num == 0) {
+		str[i++] = '0';
+		str[i] = '\0';
+		return str;
+	}
+
+	while (num != 0) {
+		int rem = num % base;
+
+		str[i++] = rem > 9 ? rem - 10 + 'a' : rem + '0';
+		num = num / base;
+	}
+
+	str[i] = '\0';
+
+	size_t n = 0;
+
+	while (str[n] != 0) n++;
+
+	for (size_t j = 0; j < n / 2; j++) {
+		char temp = str[j];
+		str[j] = str[n - j - 1];
+		str[n - j - 1] = temp;
+	}
+
+	return str;
 }
 
 void main(void) {
@@ -184,6 +215,8 @@ void main(void) {
 		*((uint8_t *) (0x100000 + 0x180 + 0x3C)) = 'A';
 		*((uint8_t *) (0x100000 + 0x180 + 0x3E)) = 'P';
 
+		puts("Burning partitions\n");
+
 		write_disk(2, 1, (uint16_t *) 0x100000);
 		write_disk(*((uint64_t *) 0x70C8) - 34, 1, (uint16_t *) 0x100000);
 
@@ -221,6 +254,8 @@ void main(void) {
 		for (uint_fast16_t i = 0; i < 420; i++)
 			*((uint8_t *) (0x100000 + 0x5C + i)) = 0x0;
 
+		puts("Burning Partition table header\n");
+
 		write_disk(1, 1, (uint16_t *) 0x100000);
 		write_disk(*((uint64_t *) 0x70C8) - 1, 1, (uint16_t *) 0x100000);
 
@@ -239,7 +274,11 @@ void main(void) {
 			if (HEDLEY_UNLIKELY(strcmp("bootsect.bin", (const char *) (addr + 33)) != 0)) {
 				read_cdrom(*((uint32_t *) (addr + 2)), 1, (uint16_t *) 0x100800);
 
+				puts("bootsect.bin read\n");
+
 				write_disk(0, 1, (uint16_t *) 0x100800);
+
+				puts("bootsect.bin burned\n");
 			}
 
 			// If the file is second.bin
@@ -247,6 +286,12 @@ void main(void) {
 				read_cdrom(*((uint32_t *) (addr + 2)), *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 
 				puts("second.bin read\n");
+
+				puts("Reading ");
+				char c[10] = {0};
+				ltoa(*((uint32_t *) (addr + 10)) / 512 + 1, c, 16);
+				puts(c);
+				putchar('\n');
 
 				write_disk(0x20, *((uint32_t *) (addr + 10)) / 512 + 1, (uint16_t *) 0x100800);
 
@@ -392,8 +437,8 @@ bool identify_disk(void) {
 	return 0;
 }
 
-void write_disk(const uint64_t lba, const uint16_t sectors, uint16_t *buffer) {
-	outb(drive_port + DRIVE_SELECT, 0x40 | (drive_slave << 4)); // drive select with lba bit set
+void write_disk(const uint32_t lba, const uint16_t sectors, const uint16_t *buffer) {
+	outb(drive_port + DRIVE_SELECT, 0xE0 | (drive_slave << 4)); // drive select with lba bit set
 	ata_io_wait(drive_port);
 	outb(drive_port + SECTOR_COUNT, sectors >> 8);
 	outb(drive_port + LBA_LOW, (lba & 0x0000ff000000) >> 24);
@@ -409,8 +454,20 @@ void write_disk(const uint64_t lba, const uint16_t sectors, uint16_t *buffer) {
 	for (uint32_t i = 0; i < sectors; i++) {
 		ata_io_wait(drive_port);
 
+		int ignore = 4;
 		while (1) {
 			uint8_t status = inb(drive_port + COMMAND_REGISTER);
+
+			char c[10] = {0};
+			ltoa(status, c, 16);
+			puts(c);
+			putchar('\n');
+
+			if (ignore != 0) {
+				ignore--;
+				ata_io_wait(drive_port);
+				continue;
+			}
 
 			if (!(status & 0x80) && (status & 0x08))
 				break;
@@ -420,15 +477,11 @@ void write_disk(const uint64_t lba, const uint16_t sectors, uint16_t *buffer) {
 			ata_io_wait(drive_port);
 		}
 
-		for (int j = 0; j < 256; j++, buffer++)
-			outw(drive_port + DATA, *buffer);
+		for (int j = 0; j < 256; j++)
+			outw(drive_port + DATA, buffer[j + i * 256]);
 	}
 
-	// Flush cache
 	ata_io_wait(drive_port);
-	outb(drive_port + DRIVE_SELECT, 0xA0);
-	ata_io_wait(drive_port);
-	outb(drive_port + COMMAND_REGISTER, 0xE7);
 	ata_io_wait(drive_port);
 }
 

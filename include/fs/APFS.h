@@ -10,9 +10,19 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
+#include <stdint-gcc.h>
 
 typedef int64_t paddr_t; // A physical address of an on-disk block.
+
+// A range of physical addresses.
+struct prange {
+	paddr_t pr_start_paddr;
+	uint64_t pr_block_count;
+};
+typedef struct prange prange_t;
+typedef paddr_t pr_start_paddr;
+typedef uint64_t pr_block_count;
+typedef unsigned char uuid_t[16];
 
 #if defined(__cplusplus)
 } /* extern "C" */

@@ -4,7 +4,7 @@ OBJ = ${C_SOURCES:.c=.o} kernel/lib/idtr.o kernel/asm/memset.o kernel/asm/instrs
 	kernel/asm/unalignedisfaster.o kernel/asm/memcpy.o
 
 CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase -DDEBUG -Iinclude -O2 \
-		 -nostdlib -ffreestanding -std=gnu11 -g -static -Wno-unused-parameter -g \
+		 -nostdlib -ffreestanding -std=gnu11 -g -static -Wno-unused-parameter \
 		 -Wno-unused-function -pedantic -Wall -Wextra -Wwrite-strings -Wstrict-prototypes
 
 LDFLAGS = -T link.ld -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only \
@@ -31,10 +31,10 @@ cdrom.iso: cdrom/bootsect.bin cdrom/kernel.bin cdcontents/bootsect.bin cdcontent
 	rm cdcontents/.DS_Store; \
 	mkisofs -U -o cdrom.iso -V AchiveOS -b kernel.flp cdcontents
 	-rm -rf disk.img cdromC.bin cdrombootsect.bin
-	qemu-img create disk.img 128M
+	qemu-img create disk.img 64M
 
 disk.img: cdcontents/bootsect.bin cdcontents/second.bin cdcontents/kernel.bin
-	qemu-img create disk.img 128M
+	qemu-img create disk.img 64M
 	dd if=cdcontents/bootsect.bin of=disk.img conv=notrunc bs=512 seek=0 count=1
 	dd if=cdcontents/second.bin of=disk.img conv=notrunc bs=512 seek=0x20 count=$$((`gstat -L -c %s cdcontents/second.bin` / 512 + 1))
 	dd if=cdcontents/kernel.bin of=disk.img conv=notrunc bs=512 seek=0x400 count=$$((`gstat -L -c %s cdcontents/kernel.bin` / 512 + 1))

@@ -30,7 +30,7 @@
 
 default rel
 
-global __memcpy                        ; Function A_memcpy
+global memcpy                        ; Function A_memcpy
 global memcpySSE2                      ; Version for processors with only SSE2
 global memcpySSSE3                     ; Version for processors with SSSE3
 global memcpyU                         ; Version for processors with fast unaligned read
@@ -77,7 +77,7 @@ SECTION .text  align=16
 
 ; extern "C" void * A_memcpy(void * dest, const void * src, size_t count);
 ; Function entry:
-__memcpy:
+memcpy:
         jmp     qword [memcpyDispatch] ; Go to appropriate version, depending on instruction set
 
 
@@ -118,11 +118,7 @@ L010:   ; make two partially overlapping blocks
 
 align 16
 
-%IFDEF  WINDOWS
-times 5 nop                            ; align L200
-%ELSE   ; Unix
 times 13 nop                           ; align L200
-%ENDIF
 
 memcpyAVX512BW:                        ; global label
 memcpyAVX512BW@:                       ; local label
@@ -1355,25 +1351,17 @@ GetMemcpyCacheLimit@:  ; local limit
         test    rax, rax
         jnz     U200
         ; Get half the size of the largest level cache
-%ifdef  WINDOWS
-        xor     ecx, ecx               ; 0 means largest level cache
-%else
         xor     edi, edi               ; 0 means largest level cache
-%endif
         call    DataCacheSize          ; get cache size
         shr     rax, 1                 ; half the size
         jnz     U100
         mov     eax, 400000H           ; cannot determine cache size. use 4 Mbytes
 U100:   mov     [CacheBypassLimit], rax
 U200:   ret
-        
+
 ; Note: SetMemcpyCacheLimit is defined in memmove64.asm, calling SetMemcpyCacheLimit1
 SetMemcpyCacheLimit1:
-%ifdef  WINDOWS
-        mov     rax, rcx
-%else
         mov     rax, rdi
-%endif
         test    rax, rax
         jnz     U400
         ; zero, means default

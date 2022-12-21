@@ -60,8 +60,8 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
 			le:
 
 			// Width
-			if (isDigit(format[i])) {
-				while (isDigit(format[i])) {
+			if (isdigit(format[i])) {
+				while (isdigit(format[i])) {
 					width *= 10;
 					width += format[i++] - '0';
 				}
@@ -73,8 +73,8 @@ int vprintf(const char *restrict format, va_list args) { /* Ahh never knew print
 			// Precision
 			if (format[i] == '.') {
 				i++;
-				if (isDigit(format[i])) {
-					while (isDigit(format[i])) {
+				if (isdigit(format[i])) {
+					while (isdigit(format[i])) {
 						precision *= 10;
 						precision += format[i] - '0';
 						i++;

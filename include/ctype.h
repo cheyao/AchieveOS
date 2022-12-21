@@ -12,9 +12,11 @@ extern "C" {
 
 #include <stdbool.h>
 
-bool isDigit(char i);
+bool isdigit(char i);
 
-int tolower(int ch);
+extern void tolower(char *string);
+
+extern void toupper(char *string);
 
 int isspace(int c);
 

@@ -1,7 +1,7 @@
 C_SOURCES = $(wildcard kernel/**/*.c) $(wildcard kernel/*.c)
 HEADERS = $(wildcard include/**/*.h) $(wildcard include/*.h)
-OBJ = ${C_SOURCES:.c=.o} kernel/lib/idtr.o kernel/asm/memset.o kernel/asm/instrset.o kernel/asm/cachesize.o kernel/asm/cputype.o \
-	kernel/asm/unalignedisfaster.o kernel/asm/memcpy.o
+ASMLIB =  $(wildcard kernel/asm/*.asm)
+OBJ = ${C_SOURCES:.c=.o} kernel/lib/idtr.o ${ASMLIB:.asm=.o}
 
 CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase -DDEBUG -Iinclude -O2 \
 		 -nostdlib -ffreestanding -std=gnu11 -g -static -Wno-unused-parameter \

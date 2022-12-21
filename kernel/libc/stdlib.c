@@ -4,7 +4,6 @@
 //
 
 #include <ctype.h>
-#include <hedley.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,7 +63,7 @@ int atoi(const char *str) {
 		case '+':
 			str++;
 	}
-	while (isDigit(*str)) {
+	while (isdigit(*str)) {
 		n = 10 * n - (*str++ - '0');
 	}
 

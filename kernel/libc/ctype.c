@@ -6,15 +6,8 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-bool isDigit(char i) {
+bool isdigit(char i) {
 	return (i >= '0') & (i <= '9');
-}
-
-int tolower(int ch) {
-	if (ch >= 'A' && ch <= 'Z') {
-		return ch - 'A' + 'a';
-	}
-	return ch;
 }
 
 int isspace(int c) {

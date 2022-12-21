@@ -12,6 +12,12 @@ extern "C" {
 
 double pow(double base, double exponent);
 
+double round(double x);
+
+float roundf(float x);
+
+long double roundl(long double x);
+
 double sqrt(double x);
 
 double fabs(double x);

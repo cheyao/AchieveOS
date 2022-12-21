@@ -24,7 +24,7 @@
 
 default rel
 
-global __memset              ; Function memset
+global memset              ; Function memset
 global memsetSSE2            ; SSE2 version
 global memsetAVX             ; version for CPUs with fast 256-bit store
 global memsetAVX512BW        ; version for CPUs with fast 512-bit store
@@ -66,7 +66,7 @@ SECTION .text  align=16
 
 ; extern "C" void * memset(void * dest, int c, size_t count);
 ; Function entry:
-__memset:
+memset:
         jmp     [memsetDispatch]       ; CPU dispatch table
 
 

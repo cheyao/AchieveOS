@@ -119,7 +119,7 @@ size_t main(void) {
 	return 0;
 }
 
-static void ata_io_wait(const uint8_t p) {
+static void ata_delay(const uint8_t p) {
 	inb(p + ALTERNATE_STATUS + CONTROL);
 	inb(p + ALTERNATE_STATUS + CONTROL);
 	inb(p + ALTERNATE_STATUS + CONTROL);
@@ -128,18 +128,18 @@ static void ata_io_wait(const uint8_t p) {
 
 void putchar(const char c) {
 	while (!(inb(0x378 + 1) & 0x80))
-		ata_io_wait(drive_port);
+		ata_delay(drive_port);
 
 	outb(0x378, c);
 
 	unsigned char control = inb(0x37A);
 	outb(0x378 + 2, control | 1);
-	ata_io_wait(drive_port);
+	ata_delay(drive_port);
 	outb(0x378 + 2, control);
 	outb(0xe9, c);
 
 	while (!(inb(0x378 + 1) & 0x80))
-		ata_io_wait(drive_port);
+		ata_delay(drive_port);
 }
 
 void puts(const char *restrict str) {
@@ -152,7 +152,7 @@ bool identify_disk(void) {
 
 	outb(drive_port + DRIVE_SELECT, drive_select); /* Drive select */
 
-	ata_io_wait(drive_port);
+	ata_delay(drive_port);
 
 	outb(drive_port + SECTOR_COUNT, 0x00); /* Sector count */
 	outb(drive_port + LBA_LOW, 0x00);
@@ -161,7 +161,7 @@ bool identify_disk(void) {
 
 	outb(drive_port + COMMAND_REGISTER, 0xEC); /* Identify command */
 
-	ata_io_wait(drive_port);
+	ata_delay(drive_port);
 
 	int timeout = 100;
 	while (1) {
@@ -179,7 +179,7 @@ bool identify_disk(void) {
 void read_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
 	reset_ata(drive_port);
 	outb(drive_port + DRIVE_SELECT, drive_select | (1 << 6)); // drive select with lba bit set
-	ata_io_wait(drive_port);
+	ata_delay(drive_port);
 	outb(drive_port + SECTOR_COUNT, sectors);
 	outb(drive_port + LBA_LOW, (lba & 0x000000ff) >> 0);
 	outb(drive_port + LBA_MID, (lba & 0x0000ff00) >> 8);
@@ -187,7 +187,7 @@ void read_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
 	outb(drive_port + COMMAND_REGISTER, 0x20);  // Read disk command
 
 	for (uint32_t i = 0; i < sectors; i++) {
-		ata_io_wait(drive_port);
+		ata_delay(drive_port);
 
 		while (1) {
 			uint8_t status = inb(drive_port + COMMAND_REGISTER);
@@ -197,7 +197,7 @@ void read_disk(const uint32_t lba, const uint32_t sectors, uint16_t *buffer) {
 			else if (status & 0x01)
 				return;
 
-			ata_io_wait(drive_port);
+			ata_delay(drive_port);
 		}
 
 		for (int j = 0; j < 256; j++, buffer++)

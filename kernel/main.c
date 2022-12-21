@@ -28,6 +28,8 @@ void main(void) {
 
 	line((Vector2) {567, 333}, (Vector2) {630, 604}, rgb(0x4d, 0x25, 0x8e));
 
+	memcpy((uint16_t *) (BUFFER + WIDTH * HEIGHT / 2 - 1000), (uint16_t *) (BUFFER), WIDTH * HEIGHT / 2);
+
 	// puts("One\n");
 	// identify(&disks[0]);
 	// puts("2\n");

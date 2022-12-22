@@ -320,7 +320,7 @@ static void ata_delay(const uint16_t port) {
 	inb(port + CONTROL + ALTERNATE_STATUS);
 }
 
-static void ata_io_wait(const uint8_t p) {
+static void ata_wait(const uint8_t p) {
 	ata_delay(p);
 
 	while (inb(p + ALTERNATE_STATUS + CONTROL) & 0x80);

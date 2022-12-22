@@ -4,6 +4,7 @@
 #include <stdbool.h>        // for false
 #include <stdint.h>         // for uint16_t, uint8_t
 #include <string.h>         // for memset
+#include <stdio.h>         // for memset
 
 Disk disks[4] = {
 		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
@@ -14,27 +15,18 @@ Disk disks[4] = {
 
 uint8_t cdrom_port = 5;
 
+int snake(void);
+
 void main(void) {
 	init_idt();
 
-	circle((Vector2) {WIDTH / 2, HEIGHT / 2}, 300, rgb(0xFF, 0xFF, 0xFF));
+	printf("Hello %s%c", "world", '!');
 
-	quadratic_bezier_curve((Vector2[4]) {{.x = 50, .y = 50},
-	                                     {.x = 75, .y = 100},
-	                                     {.x = 100, .y = 50}},
-	                       rgb(0xFF, 0xFF, 0xFF));
-
-	memset((uint16_t *) (BUFFER + WIDTH * HEIGHT / 2), rgb(0xFF, 0, 0xFF), WIDTH * HEIGHT / 2);
-
-	line((Vector2) {567, 333}, (Vector2) {630, 604}, rgb(0x4d, 0x25, 0x8e));
-
-	memcpy((uint16_t *) (BUFFER + WIDTH * HEIGHT / 2 - 1000), (uint16_t *) (BUFFER), WIDTH * HEIGHT / 2);
-
-	// puts("One\n");
+	// printf("One %d\n", 1);
 	// identify(&disks[0]);
-	// puts("2\n");
+	// printf("2\n");
 	// identify(&disks[1]);
-	// puts("3\n");
+	// printf("3\bh\n");
 	// identify(&disks[2]);
 	// printf("Type: %d\n", disks[0].type);
 	// puts("Type: 4\n");

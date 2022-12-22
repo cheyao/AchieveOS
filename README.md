@@ -28,11 +28,12 @@ Still got a lot to do!
 - [x] Install from cdrom
 - [x] Curves & lines
 - [x] GPT
-- [ ] Glyphs
+- [x] Glyphs
+- [ ] Memloc
+- [ ] Streams
 - [ ] HFS+
 - [x] Elf loader
 - [ ] Dynamic library
-- [ ] Streams
 - [ ] Ncurses
 - [ ] Port Nethack <-- Version 0.0.1 OS Complete
 - [ ] Truetype

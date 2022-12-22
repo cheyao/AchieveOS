@@ -10,9 +10,17 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+
 char *itoa(int num, char *buff, int base);
 
 int atoi(const char *str);
+
+static inline uint32_t rand(void) {
+	uint32_t r;
+	__asm__ __volatile__("rdrand %0": "=a" (r));
+	return r;
+}
 
 #if defined(__cplusplus)
 } /* extern "C" */

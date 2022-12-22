@@ -1,10 +1,10 @@
-C_SOURCES = $(wildcard kernel/**/*.c) $(wildcard kernel/*.c)
+C_SOURCES = $(wildcard kernel/**/**/*.c) $(wildcard kernel/**/*.c) $(wildcard kernel/*.c)
 HEADERS = $(wildcard include/**/*.h) $(wildcard include/*.h)
 ASMLIB =  $(wildcard kernel/asm/*.asm)
 OBJ = ${C_SOURCES:.c=.o} kernel/lib/idtr.o ${ASMLIB:.asm=.o}
 
 CFLAGS = -mno-red-zone -fno-omit-frame-pointer -mfsgsbase -DDEBUG -Iinclude -O2 \
-		 -nostdlib -ffreestanding -std=gnu11 -g -static -Wno-unused-parameter \
+		 -nostdlib -ffreestanding -std=gnu17 -g -static -Wno-unused-parameter \
 		 -Wno-unused-function -pedantic -Wall -Wextra -Wwrite-strings -Wstrict-prototypes
 
 LDFLAGS = -T link.ld -ffreestanding -O2 -nostdlib -lgcc -mfsgsbase -mgeneral-regs-only \

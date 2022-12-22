@@ -53,7 +53,7 @@ char *itoa(int num, char *str, int base) {
 int atoi(const char *str) {
 	int n = 0;
 	int neg = 0;
-	while (isspace(*str)) {
+	while (isspace((int) *str)) {
 		str++;
 	}
 	switch (*str) {
@@ -63,7 +63,7 @@ int atoi(const char *str) {
 		case '+':
 			str++;
 	}
-	while (isdigit(*str)) {
+	while (isdigit((int) *str)) {
 		n = 10 * n - (*str++ - '0');
 	}
 

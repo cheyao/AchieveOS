@@ -15,28 +15,32 @@ extern "C" {
 typedef __SIZE_TYPE__ size_t;
 #define NULL ((void *)0)
 
-// From asmlib:
-extern void *memset(void *dest, int c, size_t count);
+size_t strnlen(const char *s, size_t maxlen);
 
+// From asmlib:
 extern void *memcpy(void *dest, const void *src, size_t count);
+
+extern void *memmove(void *dest, const void *src, size_t count);
+
+extern void *memset(void *dest, int c, size_t count);
 
 extern int *memcmp(const void *ptr1, const void *ptr2, size_t count);
 
-extern void *memmove(void *dest, const void *src, size_t count);
+extern char *strcat(char *dest, const char *src);
 
 extern char *strcpy(char *dest, const char *src);
 
 extern size_t strlen(const char *str);
 
-extern char *strcat(char *dest, const char *src);
+extern char *strstr(char *haystack, const char *needle);
 
 extern int strcmp(const char *s1, const char *s2);
+
+extern int stricmp(const char *string1, const char *string2);
 
 extern size_t strspn(const char *str, const char *set);
 
 extern size_t strcspn(const char *str, const char *set);
-
-extern char *strstr(char *haystack, const char *needle);
 
 // Some non-standard functions
 extern int strcasecmp(const char *string1, const char *string2);

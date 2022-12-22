@@ -70,5 +70,6 @@ L2:     ; Zero-byte found. Compute string length
         sub      rax,  Rscopy          ; subtract start address
         add      rax,  rdx             ; add byte index
         ret
+
         
 ;A_strlen ENDP

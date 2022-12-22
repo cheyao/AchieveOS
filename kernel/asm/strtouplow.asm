@@ -36,8 +36,8 @@ casebit: times 16 db 20h               ; bit to change when changing case
 
 section .text
 
-global tolower
-global toupper
+global strtolower
+global strtoupper
 global strtolowerGeneric
 global strtoupperGeneric
 global strtolowerSSE42
@@ -48,10 +48,10 @@ extern InstructionSet                 ; Instruction set for CPU dispatcher
 
 ; function dispatching
 
-tolower:
+strtolower:
         jmp     near [strtolowerDispatch] ; Go to appropriate version, depending on instruction set
 
-toupper:
+strtoupper:
         jmp     near [strtoupperDispatch] ; Go to appropriate version, depending on instruction set
 
 

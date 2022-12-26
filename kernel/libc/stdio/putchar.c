@@ -3,16 +3,24 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <stdio.h>
 #include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
-#include <kernel/terminal-font.h>
 #include <kernel/screen.h>
+#include <kernel/terminal-font.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 static uint32_t __cursor_x = 0;
 static uint32_t __cursor_y = 0;
-static uint32_t __attr = 0x0F;
+static uint8_t __attr = 0x0F;
+
+void _set_attr(uint8_t attr) {
+	__attr = attr;
+}
+
+uint8_t _get_attr(void) {
+	return __attr;
+}
 
 #define CHARACTER_PER_LINE 128
 #define LINE_PER_PAGE 45
@@ -24,14 +32,14 @@ int puts(const char *str) {
 		if (str[i] == 0x1B && str[++i] == '[') {
 			unsigned int j = 0, k = 0;
 			i++;
-			if (isdigit((int) str[i])) { // First digit
+			if (isdigit((int) str[i])) {  // First digit
 				j = atoi(str);
 
 				while (isdigit((int) str[i]))
 					i++;
 
 				if (str[i] == ';') {
-					i++; // Second digit
+					i++;  // Second digit
 					if (isdigit((int) str[i])) {
 						k = atoi(str);
 
@@ -52,28 +60,28 @@ int puts(const char *str) {
 		}
 	}
 
+	putchar('\n');
+
 	return i;
 }
 
 static uint32_t term_colors[] = {
 		rgb(000, 000, 000),
-		rgb(205, 000, 000),
-		rgb(000, 205, 000),
-		rgb(205, 205, 000),
 		rgb(000, 000, 238),
-		rgb(205, 000, 205),
+		rgb(000, 205, 000),
 		rgb(000, 205, 205),
+		rgb(205, 000, 000),
+		rgb(205, 000, 205),
+		rgb(205, 205, 000),
 		rgb(229, 229, 229),
 		rgb(127, 127, 127),
-		rgb(255, 000, 000),
-		rgb(000, 255, 000),
-		rgb(255, 255, 000),
 		rgb(92, 92, 255),
-		rgb(255, 000, 255),
+		rgb(000, 255, 000),
 		rgb(000, 255, 255),
-		rgb(255, 255, 255)
-};
-
+		rgb(255, 000, 000),
+		rgb(255, 000, 255),
+		rgb(255, 255, 000),
+		rgb(255, 255, 255)};
 
 int putchar(const int c) {
 	uint32_t colors[] = {term_colors[(__attr >> 4) & 0xF], term_colors[__attr & 0xF]};

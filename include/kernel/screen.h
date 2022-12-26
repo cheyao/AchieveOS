@@ -13,12 +13,13 @@ extern "C" {
 #include <stdint.h>
 
 #define BUFFER 0x200000
+#define DOUBLE_BUFFER 0x380000
 #define WIDTH 1024
 #define HEIGHT 768
 #define rgb(r, g, b) (((uint16_t)(((r)&0x1F) << 11) + (((g)&0x3F) << 5) + ((b)&0x1F)))
 
-static __inline void putPixel(uint32_t __x, uint32_t __y, uint16_t __color) {
-	*((uint16_t *) BUFFER + __x + __y * WIDTH) = __color;
+static __inline void putPixel(uint32_t _x, uint32_t _y, uint16_t __color) {
+	*((uint16_t *) BUFFER + _x + _y * WIDTH) = __color;
 }
 
 typedef struct {

@@ -6,9 +6,9 @@
 #include <hedley.h>
 #include <kernel/ata.h>
 #include <kernel/ports.h>
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #define BUFFER 0xB8000
 
@@ -131,15 +131,19 @@ void main(void) {
 
 		// First initialize disk GPT portions
 		// Partition 1 - Second stage boot sector
-		*((uint64_t *) (0x100000 + 0x00)) = 0x7553734949464555ULL; // Type GUID
+		*((uint64_t *) (0x100000 + 0x00)) = 0x7553734949464555ULL;  // Type GUID
 		*((uint64_t *) (0x100000 + 0x08)) = 0x2164726148726570ULL;
-		__asm__ __volatile__("rdrand %0": "=a" (r)); // Partition GUID
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));  // Partition GUID
 		*((uint32_t *) (0x100000 + 0x10)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x14)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x18)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x1C)) = r;
 		*((uint64_t *) (0x100000 + 0x21)) = 0x20;
 		*((uint64_t *) (0x100000 + 0x28)) = 0x7FF;
@@ -149,15 +153,19 @@ void main(void) {
 		*((uint8_t *) (0x100000 + 0x3E)) = 'T';
 
 		// Partition 2 - Kernel
-		*((uint64_t *) (0x100000 + 0x80 + 0x00)) = 0x7553734949464555ULL; // Type GUID
+		*((uint64_t *) (0x100000 + 0x80 + 0x00)) = 0x7553734949464555ULL;  // Type GUID
 		*((uint64_t *) (0x100000 + 0x80 + 0x08)) = 0x2164726148726570ULL;
-		__asm__ __volatile__("rdrand %0": "=a" (r)); // Partition GUID
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));  // Partition GUID
 		*((uint32_t *) (0x100000 + 0x80 + 0x10)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x80 + 0x14)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x80 + 0x18)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x80 + 0x1C)) = r;
 		*((uint64_t *) (0x100000 + 0x80 + 0x20)) = 0x400;
 		*((uint64_t *) (0x100000 + 0x80 + 0x28)) = 0x3FFF;
@@ -169,15 +177,19 @@ void main(void) {
 		*((uint8_t *) (0x100000 + 0x80 + 0x42)) = 'l';
 
 		// Partition 3 - APFS
-		*((uint64_t *) (0x100000 + 0x100 + 0x00)) = 0x11AA00007C3457EFULL; // Type GUID
+		*((uint64_t *) (0x100000 + 0x100 + 0x00)) = 0x11AA00007C3457EFULL;  // Type GUID
 		*((uint64_t *) (0x100000 + 0x100 + 0x08)) = 0xACEC4365300011AAULL;
-		__asm__ __volatile__("rdrand %0": "=a" (r)); // Partition GUID
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));  // Partition GUID
 		*((uint32_t *) (0x100000 + 0x100 + 0x10)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x100 + 0x14)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x100 + 0x18)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x100 + 0x1C)) = r;
 		*((uint64_t *) (0x100000 + 0x100 + 0x20)) = 0x4000;
 		*((uint64_t *) (0x100000 + 0x100 + 0x28)) = *((uint64_t *) 0x70C8) - 0x800;
@@ -187,15 +199,19 @@ void main(void) {
 		*((uint8_t *) (0x100000 + 0x100 + 0x3E)) = 'S';
 
 		// Partition 3 - SWAP
-		*((uint64_t *) (0x100000 + 0x180 + 0x00)) = 0x4157536F54776F48ULL; // Type GUID
+		*((uint64_t *) (0x100000 + 0x180 + 0x00)) = 0x4157536F54776F48ULL;  // Type GUID
 		*((uint64_t *) (0x100000 + 0x180 + 0x08)) = 0x3F79726F6D654D50ULL;
-		__asm__ __volatile__("rdrand %0": "=a" (r)); // Partition GUID
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));  // Partition GUID
 		*((uint32_t *) (0x100000 + 0x180 + 0x10)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x180 + 0x14)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x180 + 0x18)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x180 + 0x1C)) = r;
 		*((uint64_t *) (0x100000 + 0x180 + 0x20)) = *((uint64_t *) 0x70C8) - 0x800;
 		*((uint64_t *) (0x100000 + 0x180 + 0x28)) = *((uint64_t *) 0x70C8) - 34;
@@ -213,31 +229,35 @@ void main(void) {
 
 		// Partition Table Header
 		// MBR included in bootsect.bin
-		*((uint32_t *) (0x100000 + 0x58)) = CRC32((const uint8_t *) 0x100000, 0x200); // CRC checksum
+		*((uint32_t *) (0x100000 + 0x58)) = CRC32((const uint8_t *) 0x100000, 0x200);  // CRC checksum
 
-		*((uint64_t *) (0x100000 + 0x00)) = 0x5452415020494645ULL;  // 0x00 "EFI PART"
-		*((uint32_t *) (0x100000 + 0x08)) = 0x00010000U; // Revision 1.0
-		*((uint32_t *) (0x100000 + 0x0C)) = 0x0000005CU; // Header size
-		*((uint32_t *) (0x100000 + 0x10)) = 0x00000000U; // CRC - calculate last, put 0
-		*((uint32_t *) (0x100000 + 0x14)) = 0x00000000U; // Reserved
+		*((uint64_t *) (0x100000 + 0x00)) = 0x5452415020494645ULL;     // 0x00 "EFI PART"
+		*((uint32_t *) (0x100000 + 0x08)) = 0x00010000U;               // Revision 1.0
+		*((uint32_t *) (0x100000 + 0x0C)) = 0x0000005CU;               // Header size
+		*((uint32_t *) (0x100000 + 0x10)) = 0x00000000U;               // CRC - calculate last, put 0
+		*((uint32_t *) (0x100000 + 0x14)) = 0x00000000U;               // Reserved
 		*((uint64_t *) (0x100000 + 0x18)) = 0x0000000000000000001ULL;  // Current LBA
 		*((uint64_t *) (0x100000 + 0x20)) = 0x0000000000000000020ULL;  // Backup  LBA :P no backup atm
 		*((uint64_t *) (0x100000 + 0x28)) = 0x0000000000000000022ULL;  // First usable LBA for partitions
 		*((uint64_t *) (0x100000 + 0x30)) = *((uint64_t *) ((uint16_t *) 0x7000 + 100)) -
 		                                    34;  // Last usable LBA, using value returned from identify
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x38)) = r;  // GUID
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x3C)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x40)) = r;
-		__asm__ __volatile__("rdrand %0": "=a" (r));
+		__asm__ __volatile__("rdrand %0"
+				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x44)) = r;
 		*((uint32_t *) (0x100000 + 0x48)) = 0x00000002U;  // Starting LBA of array of partition entries
 		*((uint32_t *) (0x100000 + 0x50)) = 0x00000180U;  // Number of partition entries in array
 		*((uint32_t *) (0x100000 + 0x54)) = 0x00000080U;  // Size of a single partition entry
 
-		*((uint32_t *) (0x100000 + 0x10)) = CRC32((const uint8_t *) 0x100000, 0x5b); // CRC - calculate last, put 0
+		*((uint32_t *) (0x100000 + 0x10)) = CRC32((const uint8_t *) 0x100000, 0x5b);  // CRC - calculate last, put 0
 
 		/* Filling the rest of the partition with zeros. */
 		for (uint_fast16_t i = 0; i < 420; i++)
@@ -356,7 +376,7 @@ bool identify_disk(void) {
 }
 
 void write_disk(const uint32_t lba, const uint16_t sectors, const uint16_t *buffer) {
-	outb(drive_port + DRIVE_SELECT, 0xE0 | (drive_slave << 4)); // drive select with lba bit set
+	outb(drive_port + DRIVE_SELECT, 0xE0 | (drive_slave << 4));  // drive select with lba bit set
 	ata_delay(drive_port);
 	outb(drive_port + SECTOR_COUNT, sectors >> 8);
 	outb(drive_port + LBA_LOW, (lba & 0x0000ff000000) >> 24);
@@ -537,8 +557,7 @@ const uint32_t CRCTable[256] = {
 		0xBDBDF21C, 0xCABAC28A, 0x53B39330, 0x24B4A3A6,
 		0xBAD03605, 0xCDD70693, 0x54DE5729, 0x23D967BF,
 		0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94,
-		0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
-};
+		0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D};
 
 uint32_t CRC32(const uint8_t data[], size_t data_length) {
 	uint32_t crc32 = 0xFFFFFFFF;

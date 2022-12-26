@@ -14,4 +14,4 @@ extern "C" {
 } /* extern "C" */
 #endif
 
-#endif //_HFSP_H
+#endif  //_HFSP_H

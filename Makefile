@@ -68,8 +68,9 @@ cdcontents/bootsect.bin: boot/bootsect.asm
 	${AS} -DUNIX -Worphan-labels $< -f elf64 -o $@
 
 clean:
-	-rm -rf lib/kernel_start.o ${OBJ} cdromC.bin cdrombootsect.bin cdrom/*.o cdrom/*.bin kernel.elf kernel.bin
+	-rm -rf lib/kernel_start.o ${OBJ} boot/main.o boot/start.o cdromC.bin cdrombootsect.bin \
+		cdrom/*.o cdrom/*.bin kernel.elf kernel.bin kernel/kernel_start.o cdcontents/second.bin cdcontents/kernel.bin \
+		cdcontents/bootsect.bin cdrom.iso disk.img
 
 format:
 	clang-format -Werror --style=file -i --verbose ${C_SOURCES} ${HEADERS} cdrom/main.c
-	include-what-you-use cdrom/main.c ${C_SOURCES} ${HEADERS}

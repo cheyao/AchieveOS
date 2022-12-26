@@ -29,9 +29,9 @@ Still got a lot to do!
 - [x] Curves & lines
 - [x] GPT
 - [x] Glyphs
-- [ ] Memloc
-- [ ] Streams
+- [ ] Malloc
 - [ ] HFS+
+- [ ] Streams
 - [x] Elf loader
 - [ ] Dynamic library
 - [ ] Ncurses

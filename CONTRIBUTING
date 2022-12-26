@@ -7,3 +7,5 @@ Feel free to correct me
 But please respect these rules :
 1. Keep in UTF - 8 encoding
 2. Run make format before committing
+3. Prefix local variables with 1 underscore ("_"), local functions with 2 underscores
+   and local macros with 4 underscores

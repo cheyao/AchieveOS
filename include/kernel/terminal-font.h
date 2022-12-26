@@ -9539,9 +9539,8 @@ uint8_t __terminal_font[][17] = {
 		},
 };
 
-
 #if defined(__cplusplus)
 } /* extern "C" */
 #endif
 
-#endif //_TERMINAL_FONT_H
+#endif  //_TERMINAL_FONT_H

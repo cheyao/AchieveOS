@@ -1,8 +1,8 @@
 bits 64
 
 %macro ISR_NO_ERR 1
-global isr_%1
-isr_%1:
+global __isr_%1
+__isr_%1:
     push QWORD 0
     push QWORD %1
 
@@ -10,17 +10,16 @@ isr_%1:
 %endmacro
 
 %macro ISR_ERR 1
-global isr_%1
-isr_%1:
-    push QWORD 0
+global __isr_%1
+__isr_%1:
     push QWORD %1
 
     jmp isr_common
 %endmacro
 
 %macro IRQ 2
-global irq_%1
-irq_%1:
+global __irq_%1
+__irq_%1:
     push QWORD 0
     push QWORD %1
 
@@ -76,9 +75,14 @@ IRQ 13, 45
 IRQ 14, 46
 IRQ 15, 47
 
-extern interrupt_handler
+extern __interrupt_handler
 
 isr_common:
+    cmp QWORD [rsp + 24], 8
+    je .L100
+    swapgs
+.L100:
+
     push rax
     push rbx
     push rcx
@@ -97,7 +101,8 @@ isr_common:
 
     cld
 
-    call interrupt_handler
+    mov rdi, rsp
+    call __interrupt_handler
 
     pop r15
     pop r14
@@ -114,6 +119,11 @@ isr_common:
     pop rcx
     pop rbx
     pop rax
+
+    cmp QWORD [rsp + 24], 8
+    je .L200
+    swapgs
+.L200:
 
     add rsp, 16
 

@@ -14,4 +14,4 @@ extern "C" {
 } /* extern "C" */
 #endif
 
-#endif //_ATAPI_H
+#endif  //_ATAPI_H

@@ -207,7 +207,7 @@ str_finished20: ; end of str, all match
 ; ********************************************************************************
 ; CPU dispatching for strspn. This is executed only once
 ; ********************************************************************************
-
+; 82fb
 %ifdef  WINDOWS
 %define par1    rcx
 %define par2    rdx

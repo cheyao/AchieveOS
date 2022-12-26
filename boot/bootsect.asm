@@ -37,6 +37,46 @@ _start:
     mov si, PACKET
     int 0x13
 
+    mov di, 0x2004          ; Set di to 0x8004. Otherwise this code will get stuck in `int 0x15` after some entries are fetched
+	xor ebx, ebx		    ; ebx must be 0 to start
+	xor si, si		        ; keep an entry count in si
+	mov edx, 0x0534D4150	; Place "SMAP" into edx
+	mov eax, 0xe820
+	mov [di + 20], dword 1	; force a valid ACPI 3.X entry
+	mov ecx, 24		        ; ask for 24 bytes
+	int 0x15
+	jc .failed	            ; carry set on first call means "unsupported function"
+	mov edx, 0x0534D4150	; Some BIOSes apparently trash this register?
+	cmp eax, edx		    ; on success, eax must have been reset to "SMAP"
+	jne short .failed
+	test ebx, ebx		    ; ebx = 0 implies list is only 1 entry long (worthless)
+	je short .failed
+	jmp short .jmpin
+.e820lp:
+	mov eax, 0xe820		    ; eax, ecx get trashed on every int 0x15 call
+	mov [di + 20], dword 1	; force a valid ACPI 3.X entry
+	mov ecx, 24		        ; ask for 24 bytes again
+	int 0x15
+	jc short .e820f		    ; carry set means "end of list already reached"
+	mov edx, 0x0534D4150	; repair potentially trashed register
+.jmpin:
+	jcxz .skipent		    ; skip any 0 length entries
+	cmp cl, 20		        ; got a 24 byte ACPI 3.X response?
+	jbe short .notext
+	test byte [di + 20], 1	; if so: is the "ignore this data" bit clear?
+	je short .skipent
+.notext:
+	mov ecx, [di + 8]	    ; get lower uint32_t of memory region length
+	or ecx, [di + 12]	    ; "or" it with upper uint32_t to test for zero
+	jz .skipent		        ; if length uint64_t is 0, skip entry
+	inc si			        ; got a good entry: ++count, move to next storage spot
+	add di, 24
+.skipent:
+	test ebx, ebx		    ; if ebx resets to 0, list is complete
+	jne short .e820lp
+.e820f:
+	mov [0x2000], si	    ; store the entry count
+
     mov ax, 0x4F02 ; Set video mode
     mov bx, 0x4117
     int 0x10
@@ -56,6 +96,13 @@ _start:
     or eax, 1
     mov cr0, eax
     jmp GDT32_CODE:init_pm
+
+.failed:
+    mov ah, 0x0e
+    mov al, 'E'
+    int 0x10
+
+	jmp $
 
 bits 32
 init_pm:
@@ -80,12 +127,8 @@ init_pm:
 
     ; TBL[0][0] ; Random - 0x0000000 to 0x1000000 (0 to 16 Mib) map to itself
     mov DWORD [edi+0x2000], 0x000083 ; Point to bootsect
-    mov ebx, [0x1028]
-    add ebx, 0x83
-    mov DWORD [edi+0x2000+8*1], ebx ; Framebuffer
-    mov DWORD [edi+0x2000+8*2], 0x200083 ; Second Framebuffer
+
     mov DWORD [edi+0x2000+8*3], 0x400083 ; Page table
-    mov DWORD [edi+0x2000+8*4], 0x600083 ; Page table
 
     ; Enable paging
     mov ecx, 0xC0000080
@@ -116,17 +159,6 @@ Realm64:
 
     mov rbp, 0x7C00
     mov rsp, rbp
-
-    ; TBL[3][0]
-    ; Kernel memory - 0x1000000 to 0x8000000 (16 Mib to 128 Mib) map to 0xC0000000 - 0xC8000000
-    mov rcx, 56
-    mov rdi, 0x604000
-    mov rbx, 0x1000083
-.kernel:
-    mov [rdi], rbx
-    add rdi, 8
-    add rbx, 0x200000
-    loop .kernel
 
     jmp 0x8000
 
@@ -172,7 +204,7 @@ GDT64:
         dw GDT64.Pointer - GDT64 - 1
         dq GDT64
 
-times 446 - ($-$$) db 0
+times 446-($-$$) db 0
 
 dq 0xFFFFFEEEFFFFFE00 ; MBR
 dq 0x0002FB1800000001

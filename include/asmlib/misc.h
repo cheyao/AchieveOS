@@ -22,4 +22,4 @@ size_t DataCacheSize(int level);
 } /* extern "C" */
 #endif
 
-#endif // _MISC_H
+#endif  // _MISC_H

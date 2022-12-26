@@ -2,8 +2,8 @@
 // Created by cheyao on 20.12.2022.
 // Copyright (c) 2022 cheyao All rights reserved.
 //
-#include <kernel/ata.h>
 #include <drivers/ata_pio.h>
+#include <kernel/ata.h>
 
 static void ata_io_wait(const uint8_t p) {
 	inb(p + ALTERNATE_STATUS + CONTROL);
@@ -44,7 +44,7 @@ bool identify_disk(uint16_t port) {
 void write_disk(const uint16_t port, const uint8_t drive_select, const uint32_t lba, const uint32_t sectors,
                 uint16_t *buffer) {
 	reset_ata(port);
-	outb(port + DRIVE_SELECT, drive_select | (1 << 6)); // drive select with lba bit set
+	outb(port + DRIVE_SELECT, drive_select | (1 << 6));  // drive select with lba bit set
 	ata_io_wait(port);
 	outb(port + SECTOR_COUNT, sectors);
 	outb(port + LBA_LOW, (lba & 0x000000ff) >> 0);

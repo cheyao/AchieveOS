@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//
+// TODO: Make all these allocs
 
 void *calloc(size_t num, size_t size) {
 	void *ptr = malloc(num * size);
@@ -18,20 +18,6 @@ void *calloc(size_t num, size_t size) {
 void free(void *ptr) {
 
 }
-
-typedef struct {
-	uint32_t present: 1,
-			rw: 1,
-			us: 1,
-			pwt: 1,
-			pcd: 1,
-			a: 1,
-			d: 1,
-			pat: 1,
-			g: 1,
-			avl: 3,
-			frame_addr: 20;
-} ____page_entry;
 
 void *realloc(void *ptr, size_t size) {
 	void *new_ptr = malloc(size);

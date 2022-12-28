@@ -7,6 +7,7 @@
 #include <stdbool.h>          // for bool, false, true
 #include <stdint.h>           // for uint16_t, uint8_t
 #include <stdio.h>           // for uint16_t, uint8_t
+#include <kernel/idt.h>
 
 // char volatile buff[30];
 // int volatile index = 0;
@@ -32,10 +33,11 @@ typedef struct {
 			esc: 1;
 } _keys;
 
-void keyboard_call(void) {
+void keyboard_call(struct regs *r) {
 	uint8_t scancode = inb(0x60); /* Da scancode */
 
 	if (scancode >= 0x80)
 		return;
 
+	putchar(scancode);
 }

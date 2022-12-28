@@ -1,5 +1,5 @@
 //
-// Created by cheyao on 09.12.2022.
+// Created by cheyao on 27.12.2022.
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
@@ -10,12 +10,22 @@
 extern "C" {
 #endif
 
-extern void __assert_func(const char *file, int line, const char *func, const char *failedexpr);
+#include <stdio.h>
 
-#define assert(statement) ((statement) ? (void)0 : __assert_func(__FILE__, __LINE__, __func__, #statement))
+#undef assert
+#undef __assert
+
+#ifdef NDEBUG
+#define assert(ignore) ((void)0)
+#else
+#define assert(exp) \
+    (__builtin_expect(!(exp), 0) ? error("Assertion failed: %s, function %s, file %s, line %d.", #exp, __func__, __FILE_NAME__, __LINE__) : (void)0)
+#endif
+
+#define static_assert _Static_assert
 
 #if defined(__cplusplus)
 } /* extern "C" */
 #endif
 
-#endif  //_ASSERT_H
+#endif //_ASSERT_H

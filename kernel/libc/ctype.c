@@ -4,11 +4,8 @@
 //
 
 #include <ctype.h>
-#include <stdbool.h>
 
 // Agner said that lookup tables are faster ¯\_(ツ)_/¯
-
-int _ctmp;
 int _ctype[] = {
 		_C, _C, _C, _C, _C, _C, _C, _C,                               /* 0-7 */
 		_C, _C | _S, _C | _S, _C | _S, _C | _S, _C | _S, _C, _C,      /* 8-15 */

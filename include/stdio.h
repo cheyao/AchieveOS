@@ -10,7 +10,6 @@
 extern "C" {
 #endif
 
-#include <hedley.h>
 #include <stdarg.h>
 #include <stddef.h>
 
@@ -26,12 +25,14 @@ extern const FILE *stderr;
 
 #define EOF (-1)
 
-HEDLEY_PRINTF_FORMAT(1, 2)
-int printf(const char *format, ...);           // Implemented
-int vprintf(const char *format, va_list arg);  // Implemented
-// HEDLEY_PRINTF_FORMAT(2, 3) int fprintf(FILE *stream, const char *format, ...);
+__attribute__((__format__(__printf__, 1, 2)))
+int printf(const char *format, ...);
+
+int vprintf(const char *format, va_list arg);
+
+// __attribute__((__format__(__printf__, 2, 3))) int fprintf(FILE *stream, const char *format, ...);
 // int vfprintf(FILE *stream, const char *format, va_list arg);
-HEDLEY_PRINTF_FORMAT(2, 3)
+__attribute__((__format__(__printf__, 2, 3)))
 int sprintf(char *str, const char *format, ...);
 
 int vsprintf(char *s, const char *format, va_list arg);
@@ -45,7 +46,7 @@ int puts(const char *restrict str);
 
 extern void clear_screen(void);
 
-void _error(const char *format, ...);
+void error(const char *format, ...);
 
 #if defined(__cplusplus)
 } /* extern "C" */

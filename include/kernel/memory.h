@@ -12,6 +12,22 @@ extern "C" {
 
 #include <stddef.h>
 
+// TODO: finish the structs
+
+typedef struct {
+	uint32_t present: 1,
+			rw: 1,
+			us: 1,
+			pwt: 1,
+			pcd: 1,
+			a: 1,
+			d: 1,
+			pat: 1,
+			g: 1,
+			avl: 3,
+			frame_addr: 20;
+} ____page_entry;
+
 void __init_memory(void);
 
 void *__alloc_page(size_t pages);

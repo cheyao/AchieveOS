@@ -4,5 +4,7 @@ extern main
 global _start
 _start:
     call main
-
-    jmp $
+.hlt:
+    hlt
+    jmp .hlt ; Prevents ints from skipping the hlt
+align 16

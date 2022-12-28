@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <kernel/idt.h>
 
 extern uint64_t ticks;
 
@@ -18,7 +19,7 @@ uint64_t sleep(uint64_t seconds);
 
 uint64_t sleepms(uint64_t milliseconds);
 
-void tick(void);
+void tick(struct regs *r);
 
 typedef uint64_t time_t;
 

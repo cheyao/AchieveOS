@@ -68,7 +68,7 @@ size_t main(void) {
 		goto end;
 
 	end:
-	read_disk(0x400, 1, (uint16_t *) 0x1000);
+	read_disk(0x70, 1, (uint16_t *) 0x1000);
 
 	ELF_header *header = (ELF_header *) 0x1000;
 
@@ -84,28 +84,15 @@ size_t main(void) {
 		if (header->e_type != 2)
 			puts("Error! Not executable!\n");
 
-		read_disk(0x400 + header->e_phoff / 512, 2, (uint16_t *) 0x1200);
+		read_disk(0x70 + header->e_phoff / 512, 2, (uint16_t *) 0x1200);
 
 		Program_header *pheader = (Program_header *) (0x1200 + header->e_phoff % 512);
 
 		for (size_t i = 0; i < header->e_phnum; i++) {
 			if (pheader->p_type == 1) {
-				char buff[20] = {0};
-				ltoa(0x400 + pheader->p_offset / 512, buff, 16);
-				puts(buff);
-				putchar('\n');
-				char p[20] = {0};
-				ltoa(pheader->p_filesz / 512 + 1, p, 16);
-				puts(p);
-				putchar('\n');
-				char j[20] = {0};
-				ltoa(pheader->p_vaddr, j, 16);
-				puts(j);
-				putchar('\n');
-				read_disk(0x400 + pheader->p_offset / 512, pheader->p_filesz / 512 + 1, (uint16_t *) pheader->p_vaddr);
+				read_disk(0x70 + pheader->p_offset / 512, pheader->p_filesz / 512 + 1, (uint16_t *) pheader->p_vaddr);
 			}
 			if (pheader->p_filesz < pheader->p_memsz) {
-				puts("Yes");
 				for (size_t j = pheader->p_vaddr + pheader->p_filesz; j < pheader->p_vaddr + pheader->p_memsz; j++)
 					*((char *) j) = 0;
 			}

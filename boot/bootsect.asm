@@ -1,10 +1,9 @@
 org 0x7C00
 KERNEL_OFFSET equ 0x10000
 
-GDT32_DATA equ GDT32.Data - GDT32
-GDT32_CODE equ GDT32.Code - GDT32
-GDT64_DATA equ GDT64.Data - GDT64
-GDT64_CODE equ GDT64.Code - GDT64
+GDT_DATA   equ GDT.Data   - GDT
+GDT_CODE32 equ GDT.Code32 - GDT
+GDT_CODE64 equ GDT.Code64 - GDT
 
 PRESENT        equ 1 << 7
 NOT_SYS        equ 1 << 4
@@ -91,11 +90,11 @@ _start:
     out 0x92, al
 
     cli ; 32 bit!
-    lgdt [GDT32.Pointer]
+    lgdt [GDT.Pointer]
     mov eax, cr0
     or eax, 1
     mov cr0, eax
-    jmp GDT32_CODE:init_pm
+    jmp GDT_CODE32:init_pm
 
 .failed:
     mov ah, 0x0e
@@ -106,7 +105,7 @@ _start:
 
 bits 32
 init_pm:
-    mov ax, GDT32_DATA
+    mov ax, GDT_DATA
     mov ds, ax
     mov ss, ax
     mov es, ax
@@ -145,18 +144,11 @@ init_pm:
     and eax, ~(1 << 2)
     mov cr0, eax
 
-    lgdt [GDT64.Pointer]
-    jmp GDT64_CODE:Realm64
+    ; lgdt [GDT64.Pointer]
+    jmp GDT_CODE64:Realm64
 
 bits 64
 Realm64:
-    mov ax, GDT64_DATA
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-
     mov rbp, 0x7C00
     mov rsp, rbp
 
@@ -164,45 +156,32 @@ Realm64:
 
 BOOT_DRIVE: db 0
 
-GDT32:
+GDT:
     .Null:
         dq 0
-    .Code:
+    .Code32:
         dw 0xffff    ; segment limit, bits 0-15
         dw 0x0000    ; segment base, bits 0-15
         db 0x00      ; segment base, bits 16-23
-        db 10011010b ; flags (8 bits)
-        db 11001111b ; flags (4 bits) + limit, bits 16-19
+        db PRESENT | NOT_SYS | EXEC | RW ; flags (8 bits)
+        db GRAN_4K | SZ_32 | 0xF ; flags (4 bits) + limit, bits 16-19
         db 0x00      ; segment base, bits 24-31
-    .Data:
-        dw 0xffff
-        dw 0x0000
-        db 0x00
-        db 10010010b
-        db 11001111b
-        db 0x00
-    .Pointer:
-        dw GDT32.Pointer - GDT32 - 1
-        dd GDT32
-
-GDT64:
-    .Null:
-        dq 0
-    .Code:
+    .Code64:
         dd 0xFFFF
         db 0
         db PRESENT | NOT_SYS | EXEC | RW
         db GRAN_4K | LONG_MODE | 0xF
         db 0
     .Data:
-        dd 0xFFFF
-        db 0
+        dw 0xffff
+        dw 0x0000
+        db 0x00
         db PRESENT | NOT_SYS | RW
         db GRAN_4K | SZ_32 | 0xF
-        db 0
+        db 0x00
     .Pointer:
-        dw GDT64.Pointer - GDT64 - 1
-        dq GDT64
+        dw GDT.Pointer - GDT - 1
+        dd GDT
 
 times 446-($-$$) db 0
 

@@ -4,8 +4,10 @@
 #include <stdint.h>      // for uint16_t, uint8_t
 #include <stdio.h>       // for memset
 #include <kernel/memory.h>
+#include <assert.h>
+#include <complex.h>
 
-Disk disks[4] = {
+Disk _disks[4] = {
 		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
 		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x3f6},
 		{.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x370},
@@ -17,11 +19,11 @@ typedef struct SMAP_entry {
 	uint64_t Length;
 	uint32_t Type;  // entry Type
 	uint32_t ACPI;  // extended
-} __attribute__((packed)) SMAP_entry_t;
+} __attribute__((packed)) ____SMAP_entry_t;
 
-uint8_t cdrom_port = 5;
+uint8_t _cdrom_port = 5;
 
-static const char *restrict types[] = {
+static const char *restrict _types[] = {
 		"Error! (0)",
 		"Available memory (1)",
 		"Reserved memory (2)",
@@ -30,17 +32,18 @@ static const char *restrict types[] = {
 };
 
 void main(void) {
-	__init_idt();
-	__init_memory();
+	assert(0);
+	init_idt();
+	// __init_memory();
 
-	SMAP_entry_t *entry = (SMAP_entry_t *) 0x2004;
-
-	puts("| Base             |Length            |Type                   |");
-	puts("|------------------|------------------|-----------------------|");
-	for (int i = 0; i < *((uint16_t *) 0x2000) - 1; i++) {
-		printf("|%#018lx|%#018lx|%-23s|\n", entry->Base, entry->Length, types[entry->Type > 4 ? 2 : entry->Type]);
-		entry++;
-	}
+	// ____SMAP_entry_t *entry = (____SMAP_entry_t *) 0x2004;
+//
+	// puts("| Base             |Length            |Type                   |");
+	// puts("|------------------|------------------|-----------------------|");
+	// for (int i = 0; i < *((uint16_t *) 0x2000) - 1; i++) {
+	// 	printf("|%#018lx|%#018lx|%-23s|\n", entry->Base, entry->Length, _types[entry->Type > 4 ? 2 : entry->Type]);
+	// 	entry++;
+	// }
 
 	// printf("One %d\n", 1);
 	// identify(&disks[0]);

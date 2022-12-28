@@ -46,7 +46,8 @@ void line(Vector2 p0, Vector2 p1, const uint16_t color) {
 	bool yLonger = false;
 	int32_t shortLen = (int32_t) (p1.y - p0.y);
 	int32_t longLen = (int32_t) (p1.x - p0.x);
-	if (abs(shortLen) > abs(longLen)) {
+	// if (abs(shortLen) > abs(longLen))
+	if (shortLen > longLen) {
 		int swap = shortLen;
 		shortLen = longLen;
 		longLen = swap;

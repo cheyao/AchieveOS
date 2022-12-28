@@ -1609,8 +1609,6 @@ HEDLEY_DIAGNOSTIC_POP
      ((HEDLEY_TI_CL6X_VERSION_CHECK(7, 2, 0) && defined(__TI_GNU_ATTRIBUTE_SUPPORT__)) || \
       HEDLEY_TI_CL6X_VERSION_CHECK(7, 5, 0))) || \
     HEDLEY_MCST_LCC_VERSION_CHECK(1, 25, 10)
-#define HEDLEY_PRIVATE __attribute__((__visibility__("hidden")))
-#define HEDLEY_PUBLIC __attribute__((__visibility__("default")))
 #else
 #define HEDLEY_PRIVATE
 #define HEDLEY_PUBLIC
@@ -1640,16 +1638,6 @@ HEDLEY_DIAGNOSTIC_POP
 #if HEDLEY_HAS_ATTRIBUTE(fallthrough) || \
     HEDLEY_GCC_VERSION_CHECK(7, 0, 0) || \
     HEDLEY_MCST_LCC_VERSION_CHECK(1, 25, 10)
-#define HEDLEY_FALL_THROUGH __attribute__((__fallthrough__))
-#elif HEDLEY_HAS_CPP_ATTRIBUTE_NS(clang, fallthrough)
-#define HEDLEY_FALL_THROUGH HEDLEY_DIAGNOSTIC_DISABLE_CPP98_COMPAT_WRAP_([[clang::fallthrough]])
-#elif HEDLEY_HAS_CPP_ATTRIBUTE(fallthrough)
-#define HEDLEY_FALL_THROUGH HEDLEY_DIAGNOSTIC_DISABLE_CPP98_COMPAT_WRAP_([[fallthrough]])
-#elif defined(__fallthrough) /* SAL */
-#define HEDLEY_FALL_THROUGH __fallthrough
-#else
-#define HEDLEY_FALL_THROUGH
-#endif
 
 #if defined(HEDLEY_RETURNS_NON_NULL)
 #undef HEDLEY_RETURNS_NON_NULL

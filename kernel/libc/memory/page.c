@@ -58,8 +58,8 @@ void __init_memory(void) {
 	}
 
 	if (max_addr < 512 * 1024 * 1024)
-		_error("Error! Not enough memory!\nYou have %dMib of memory, but the kernel needs at least 256Mib!",
-		       max_addr / 1024 / 1024);
+		error("Error! Not enough memory!\nYou have %dMib of memory, but the kernel needs at least 256Mib!",
+		      max_addr / 1024 / 1024);
 
 	*((size_t *) (0x602000 + 8 * 5)) = (size_t) _memory_start + 0x83;
 	*((size_t *) (0x602000 + 8 * 6)) = (size_t) _memory_start + 0x200000 + 0x83;
@@ -94,7 +94,7 @@ void *__alloc_page(size_t pages) {
 		if (i <= _last_search)
 			goto _else;
 
-		_error("Out of memory! ");
+		error("Out of memory!");
 		return NULL;
 	} else {
 		_else:

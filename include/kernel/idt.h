@@ -12,108 +12,6 @@ extern "C" {
 
 #include <stdint.h>
 
-void __init_idt(void);
-
-extern void __isr_0(void);
-
-extern void __isr_1(void);
-
-extern void __isr_2(void);
-
-extern void __isr_3(void);
-
-extern void __isr_4(void);
-
-extern void __isr_5(void);
-
-extern void __isr_6(void);
-
-extern void __isr_7(void);
-
-extern void __isr_8(void);
-
-extern void __isr_9(void);
-
-extern void __isr_10(void);
-
-extern void __isr_11(void);
-
-extern void __isr_12(void);
-
-extern void __isr_13(void);
-
-extern void __isr_14(void);
-
-extern void __isr_15(void);
-
-extern void __isr_16(void);
-
-extern void __isr_17(void);
-
-extern void __isr_18(void);
-
-extern void __isr_19(void);
-
-extern void __isr_20(void);
-
-extern void __isr_21(void);
-
-extern void __isr_22(void);
-
-extern void __isr_23(void);
-
-extern void __isr_24(void);
-
-extern void __isr_25(void);
-
-extern void __isr_26(void);
-
-extern void __isr_27(void);
-
-extern void __isr_28(void);
-
-extern void __isr_29(void);
-
-extern void __isr_30(void);
-
-extern void __isr_31(void);
-
-extern void __irq_0(void);
-
-extern void __irq_1(void);
-
-extern void __irq_2(void);
-
-extern void __irq_3(void);
-
-extern void __irq_4(void);
-
-extern void __irq_5(void);
-
-extern void __irq_6(void);
-
-extern void __irq_7(void);
-
-extern void __irq_8(void);
-
-extern void __irq_9(void);
-
-extern void __irq_10(void);
-
-extern void __irq_11(void);
-
-extern void __irq_12(void);
-
-extern void __irq_13(void);
-
-extern void __irq_14(void);
-
-extern void __irq_15(void);
-
-typedef void (*irq_t)(void);
-
-void __register_handler(int num, irq_t fun);
-
 struct regs {
 	/* Registers :) */
 	uintptr_t r15, r14, r13, r12, r11, r10, r9, r8, rbp, rdi, rsi, rdx, rcx, rbx, rax;
@@ -139,6 +37,108 @@ typedef struct {
 	uint16_t limit;
 	uint64_t base;
 } __attribute__((packed)) idt_t;
+
+void init_idt(void);
+
+extern void isr_0(void);
+
+extern void isr_1(void);
+
+extern void isr_2(void);
+
+extern void isr_3(void);
+
+extern void isr_4(void);
+
+extern void isr_5(void);
+
+extern void isr_6(void);
+
+extern void isr_7(void);
+
+extern void isr_8(void);
+
+extern void isr_9(void);
+
+extern void isr_10(void);
+
+extern void isr_11(void);
+
+extern void isr_12(void);
+
+extern void isr_13(void);
+
+extern void isr_14(void);
+
+extern void isr_15(void);
+
+extern void isr_16(void);
+
+extern void isr_17(void);
+
+extern void isr_18(void);
+
+extern void isr_19(void);
+
+extern void isr_20(void);
+
+extern void isr_21(void);
+
+extern void isr_22(void);
+
+extern void isr_23(void);
+
+extern void isr_24(void);
+
+extern void isr_25(void);
+
+extern void isr_26(void);
+
+extern void isr_27(void);
+
+extern void isr_28(void);
+
+extern void isr_29(void);
+
+extern void isr_30(void);
+
+extern void isr_31(void);
+
+extern void irq_0(void);
+
+extern void irq_1(void);
+
+extern void irq_2(void);
+
+extern void irq_3(void);
+
+extern void irq_4(void);
+
+extern void irq_5(void);
+
+extern void irq_6(void);
+
+extern void irq_7(void);
+
+extern void irq_8(void);
+
+extern void irq_9(void);
+
+extern void irq_10(void);
+
+extern void irq_11(void);
+
+extern void irq_12(void);
+
+extern void irq_13(void);
+
+extern void irq_14(void);
+
+extern void irq_15(void);
+
+typedef void (*irq_t)(struct regs *r);
+
+void __register_handler(int num, irq_t fun);
 
 #if defined(__cplusplus)
 } /* extern "C" */

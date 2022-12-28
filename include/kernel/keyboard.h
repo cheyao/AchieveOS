@@ -10,12 +10,9 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <kernel/idt.h>
 
-void update_cursor(uint16_t pos);
-
-void keyboard_call(void);
-
-uint16_t get_cursor_position(void);
+void keyboard_call(struct regs *r);
 
 #if defined(__cplusplus)
 } /* extern "C" */

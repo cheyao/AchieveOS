@@ -146,7 +146,7 @@ void main(void) {
 				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x1C)) = r;
 		*((uint64_t *) (0x100000 + 0x21)) = 0x20;
-		*((uint64_t *) (0x100000 + 0x28)) = 0x7FF;
+		*((uint64_t *) (0x100000 + 0x28)) = 0x6F;
 		*((uint8_t *) (0x100000 + 0x38)) = 'B';
 		*((uint8_t *) (0x100000 + 0x3A)) = 'O';
 		*((uint8_t *) (0x100000 + 0x3C)) = 'O';
@@ -167,8 +167,8 @@ void main(void) {
 		__asm__ __volatile__("rdrand %0"
 				: "=a"(r));
 		*((uint32_t *) (0x100000 + 0x80 + 0x1C)) = r;
-		*((uint64_t *) (0x100000 + 0x80 + 0x20)) = 0x400;
-		*((uint64_t *) (0x100000 + 0x80 + 0x28)) = 0x3FFF;
+		*((uint64_t *) (0x100000 + 0x80 + 0x20)) = 0x70;
+		*((uint64_t *) (0x100000 + 0x80 + 0x28)) = 0x1FFF;
 		*((uint8_t *) (0x100000 + 0x80 + 0x38)) = 'K';
 		*((uint8_t *) (0x100000 + 0x80 + 0x3A)) = 'e';
 		*((uint8_t *) (0x100000 + 0x80 + 0x3C)) = 'r';
@@ -176,7 +176,7 @@ void main(void) {
 		*((uint8_t *) (0x100000 + 0x80 + 0x40)) = 'e';
 		*((uint8_t *) (0x100000 + 0x80 + 0x42)) = 'l';
 
-		// Partition 3 - APFS
+		// Partition 3 - HFS+
 		*((uint64_t *) (0x100000 + 0x100 + 0x00)) = 0x11AA00007C3457EFULL;  // Type GUID
 		*((uint64_t *) (0x100000 + 0x100 + 0x08)) = 0xACEC4365300011AAULL;
 		__asm__ __volatile__("rdrand %0"
@@ -294,28 +294,14 @@ void main(void) {
 			if (HEDLEY_UNLIKELY(strcmp("second.bin", (const char *) (addr + 33)) != 0)) {
 				read_cdrom(*((uint32_t *) (addr + 2)), *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 
-				puts("second.bin read\n");
-
-				puts("Reading ");
-				char c[10] = {0};
-				ltoa(*((uint32_t *) (addr + 10)) / 512 + 1, c, 16);
-				puts(c);
-				putchar('\n');
-
 				write_disk(0x20, *((uint32_t *) (addr + 10)) / 512 + 1, (uint16_t *) 0x100800);
-
-				puts("second.bin burned\n");
 			}
 
 			// If the file is kernel.bin
 			if (HEDLEY_UNLIKELY(strcmp("kernel.bin", (const char *) (addr + 33)) != 0)) {
 				read_cdrom(*((uint32_t *) (addr + 2)), *((uint32_t *) (addr + 10)) / 2048 + 1, (uint16_t *) 0x100800);
 
-				puts("kernel.bin read\n");
-
-				write_disk(0x400, *((uint32_t *) (addr + 10)) / 512 + 1, (uint16_t *) 0x100800);
-
-				puts("kernel.bin burned\n");
+				write_disk(0x70, *((uint32_t *) (addr + 10)) / 512 + 1, (uint16_t *) 0x100800);
 			}
 
 			addr += *((uint8_t *) addr);

@@ -3,22 +3,20 @@ bits 64
 extern main
 global _start
 _start:
-    mov ebx, [0x1028]
-    add ebx, 0x83
-    mov DWORD [0x602000+8*1], ebx ; Framebuffer
-    mov DWORD [0x602000+8*2], 0x200083 ; Second Framebuffer
-    mov DWORD [0x602000+8*4], 0x600083 ; Page table
+    mov     eax, DWORD [0x1028]
+    mov     edx, 0x1000083
+    mov     QWORD [0x602010], 0x200083
+    mov     QWORD [0x602020], 0x600083
+    add     eax, 0x83
+    mov     QWORD [0x602008], rax
 
-    ; TBL[3][0]
-    ; Kernel memory - 0x1000000 to 0x8000000 (16 Mib to 128 Mib) map to 0xC0000000 - 0xC8000000
-    mov rcx, 56
-    mov rdi, 0x604000
-    mov rbx, 0x1000083
-.kernel:
-    mov [rdi], rbx
-    add rdi, 8
-    add rbx, 0x200000
-    loop .kernel
+    mov     eax, 0x604000
+.L2:
+    mov     QWORD [rax], rdx ; 0x1000083
+    add     rax, 0x08
+    add     rdx, 0x200000
+    cmp     rax, 0x604000 + 56 * 8
+    jne     .L2
 
     call main
 

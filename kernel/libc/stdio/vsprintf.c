@@ -5,9 +5,9 @@
 //
 
 #include <ctype.h>
-#include <hedley.h>
 #include <stdarg.h>
 #include <string.h>
+#include <stdio.h>
 
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 
@@ -40,8 +40,10 @@ static char *number(char *str, int num, int base, int size, int precision, int t
 	if (type & SIGN && num < 0) {
 		sign = '-';
 		num = -num;
-	} else
+	} else {
 		sign = (type & PLUS) ? '+' : ((type & SPACE) ? ' ' : 0);
+	}
+
 	if (sign) size--;
 	if (type & SPECIAL) {
 		if (base == 16)
@@ -58,11 +60,17 @@ static char *number(char *str, int num, int base, int size, int precision, int t
 			num /= base;
 		}
 	}
-	if (i > precision) precision = i;
+	if (i > precision) {
+		precision = i;
+	}
+
 	size -= precision;
-	if (!(type & (ZEROPAD + LEFT)))
+
+	if (!(type & (ZEROPAD + LEFT))
+			)
 		while (size-- > 0)
 			*str++ = ' ';
+
 	if (sign)
 		*str++ = sign;
 	if (type & SPECIAL) {
@@ -201,7 +209,7 @@ int vsprintf(char *buf, const char *fmt, va_list args) {
 
 			case 'x':
 				flags |= SMALL;
-						HEDLEY_FALL_THROUGH;
+						__attribute__((__fallthrough__));
 			case 'X':
 				str = number(str, va_arg(args, unsigned long), 16,
 				             field_width, precision, flags);
@@ -210,7 +218,7 @@ int vsprintf(char *buf, const char *fmt, va_list args) {
 			case 'd':
 			case 'i':
 				flags |= SIGN;
-						HEDLEY_FALL_THROUGH;
+						__attribute__((__fallthrough__));
 			case 'u':
 				str = number(str, va_arg(args, unsigned long), 10,
 				             field_width, precision, flags);

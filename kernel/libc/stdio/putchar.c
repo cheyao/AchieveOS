@@ -116,6 +116,14 @@ int putchar(const int c) {
 			break;
 		}
 		case '\n': {
+			for (int i = 0; i < LARGE_FONT_CELL_HEIGHT; i++) {
+				for (int j = 0; j < LARGE_FONT_CELL_WIDTH; j++) {
+					putPixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
+					         colors[0]);
+				}
+			}
+
+			__cursor_x++;
 			for (; __cursor_x != 0;) {
 				for (int i = 0; i < LARGE_FONT_CELL_HEIGHT; i++) {
 					for (int j = 0; j < LARGE_FONT_CELL_WIDTH; j++) {

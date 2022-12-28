@@ -3,12 +3,9 @@
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#include <hedley.h>
 #include <stdarg.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <string.h>
 
 int intlen(int i, uint8_t base) {
 	int l = 1;
@@ -19,7 +16,7 @@ int intlen(int i, uint8_t base) {
 	return l;
 }
 
-HEDLEY_PRINTF_FORMAT(1, 2)
+__attribute__((__format__(__printf__, 1, 2)))
 int printf(const char *restrict format, ...) {
 	va_list list;
 	va_start(list, format);
@@ -28,13 +25,16 @@ int printf(const char *restrict format, ...) {
 	return i;
 }
 
-void _error(const char *restrict format, ...) {
-	va_list list;
-	va_start(list, format);
-	char *str = (char *) 0x8000;
-	vsprintf(str, format, list);
+void error(const char *restrict format, ...) {
 	uint8_t _get_attr(void);
 	void _set_attr(uint8_t attr);
+
+	va_list list;
+	va_start(list, format);
+
+	char *str = (char *) 0x8000;
+	vsprintf(str, format, list);
+
 	uint8_t attr = _get_attr();
 	_set_attr(0xCF);
 	puts(str);

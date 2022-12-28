@@ -12,8 +12,8 @@ extern "C" {
 
 #include <stdbool.h>
 
+// From asmlib
 extern void strtolower(char *string);
-
 extern void strtoupper(char *string);
 
 #define _U 0x01  /* upper */
@@ -26,25 +26,34 @@ extern void strtoupper(char *string);
 #define _SP 0x80 /* hard space (0x20) */
 
 extern int _ctype[];
-extern int _ctmp;
 
-#define isalnum(c) (_ctype[c] & (_U | _L | _D))
-#define isalpha(c) (_ctype[c] & (_U | _L))
-#define iscntrl(c) (_ctype[c] & (_C))
-#define isdigit(c) (_ctype[c] & (_D))
-#define isgraph(c) (_ctype[c] & (_P | _U | _L | _D))
-#define islower(c) (_ctype[c] & (_L))
-#define isprint(c) (_ctype[c] & (_P | _U | _L | _D | _SP))
-#define ispunct(c) (_ctype[c] & (_P))
-#define isspace(c) (_ctype[c] & (_S))
-#define isupper(c) (_ctype[c] & (_U))
-#define isxdigit(c) (_ctype[c] & (_D | _X))
+// TODO: implement locale
+int static inline isalnum(int c) { return (_ctype[c] & (_U | _L | _D)); }
 
-#define isascii(c) (((unsigned)(c)) <= 0x7f)
-#define toascii(c) (((unsigned)(c)) & 0x7f)
+int static inline isalpha(int c) { return (_ctype[c] & (_U | _L)); }
 
-#define tolower(c) (_ctmp = (c), isupper(_ctmp) ? _ctmp - ('A' - 'a') : _ctmp)
-#define toupper(c) (_ctmp = (c), islower(_ctmp) ? _ctmp - ('a' - 'A') : _ctmp)
+int static inline iscntrl(int c) { return (_ctype[c] & (_C)); }
+
+int static inline isdigit(int c) { return (_ctype[c] & (_D)); }
+
+int static inline isgraph(int c) { return (_ctype[c] & (_P | _U | _L | _D)); }
+
+int static inline islower(int c) { return (_ctype[c] & (_L)); }
+
+int static inline isprint(int c) { return (_ctype[c] & (_P | _U | _L | _D | _SP)); }
+
+int static inline ispunct(int c) { return (_ctype[c] & (_P)); }
+
+int static inline isspace(int c) { return (_ctype[c] & (_S)); }
+
+int static inline isupper(int c) { return (_ctype[c] & (_U)); }
+
+int static inline isxdigit(int c) { return (_ctype[c] & (_D | _X)); }
+
+int static inline tolower(int c) { return isupper(c) ? c - ('A' - 'a') : c; }
+
+int static inline toupper(int c) { return islower(c) ? c - ('a' - 'A') : c; }
+
 
 #if defined(__cplusplus)
 } /* extern "C" */

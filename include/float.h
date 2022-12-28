@@ -1,10 +1,10 @@
 //
-// Created by cheyao on 07.12.2022.
+// Created by cheyao on 27.12.2022.
 // Copyright (c) 2022 cheyao All rights reserved.
 //
 
-#ifndef _MATH_H
-#define _MATH_H
+#ifndef _FLOAT_H
+#define _FLOAT_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -14,4 +14,4 @@ extern "C" {
 } /* extern "C" */
 #endif
 
-#endif  // _MATH_H
+#endif //_FLOAT_H

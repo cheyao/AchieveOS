@@ -4,11 +4,12 @@
 //
 
 #include <stdint.h>
+#include <kernel/idt.h>
 #include <time.h>
 
 uint64_t ticks;
 
-void tick(void) {
+void tick(struct regs *r) {
 	ticks++;
 }
 

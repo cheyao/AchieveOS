@@ -1,0 +1,38 @@
+More complete TODO list
+Mark with ✓ if done
+
+- C standard library
+  - Header files: (Yes, don't use gcc's headers)
+    - <assert.h> ✓
+    - <complex.h>
+    - <ctype.h> ✓
+    - <errno.h> ✓
+    - <fenv.h>
+    - <float.h>
+    - <inttypes.h>
+    - <iso646.h> ✓
+    - <limits.h>
+    - <locale.h>
+    - <math.h>
+    - <setjmp.h>
+    - <signal.h>
+    - <stdalign.h> ✓
+    - <stdarg.h> ✓
+    - <stdatomic.h>
+    - <stdbool.h> ✓
+    - <stddef.h> half ✓
+    - <stdint.h> ✓
+    - <stdio.h>
+    - <stdlib.h>
+    - <stdnoreturn.h> ✓
+    - <string.h>
+    - <tgmath.h>
+    - <threads.h>
+    - <time.h>
+    - <uchar.h>
+    - <wchar.h>
+    - <wctype.h>
+  - Use private
+    - #define PRIVATE __attribute__((__visibility__("hidden")))
+    - #define PUBLIC __attribute__((__visibility__("default")))
+  - Somehow separate the lib and the kernel???????

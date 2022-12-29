@@ -10,7 +10,6 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
-#if !defined(HEDLEY_VERSION) || (HEDLEY_VERSION < 15)
 #if defined(HEDLEY_VERSION)
 #undef HEDLEY_VERSION
 #endif

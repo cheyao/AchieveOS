@@ -4,7 +4,6 @@
 //
 
 #include <kernel/screen.h>
-#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -12,14 +11,14 @@ void circle(Vector2 Pc, int32_t r, const uint16_t color) {
 	int32_t x = 0, y = r;
 	int32_t d = 3 - 2 * r;
 
-	putPixel(Pc.x + x, Pc.y + y, color);
-	putPixel(Pc.x + x, Pc.y - y, color);
-	putPixel(Pc.x - x, Pc.y + y, color);
-	putPixel(Pc.x - x, Pc.y - y, color);
-	putPixel(Pc.x + y, Pc.y + x, color);
-	putPixel(Pc.x + y, Pc.y - x, color);
-	putPixel(Pc.x - y, Pc.y + x, color);
-	putPixel(Pc.x - y, Pc.y - x, color);
+	put_pixel(Pc.x + x, Pc.y + y, color);
+	put_pixel(Pc.x + x, Pc.y - y, color);
+	put_pixel(Pc.x - x, Pc.y + y, color);
+	put_pixel(Pc.x - x, Pc.y - y, color);
+	put_pixel(Pc.x + y, Pc.y + x, color);
+	put_pixel(Pc.x + y, Pc.y - x, color);
+	put_pixel(Pc.x - y, Pc.y + x, color);
+	put_pixel(Pc.x - y, Pc.y - x, color);
 
 	while (y >= x) {
 		x++;
@@ -31,18 +30,20 @@ void circle(Vector2 Pc, int32_t r, const uint16_t color) {
 			d = d + 4 * x + 6;
 		}
 
-		putPixel(Pc.x + x, Pc.y + y, color);
-		putPixel(Pc.x + x, Pc.y - y, color);
-		putPixel(Pc.x - x, Pc.y + y, color);
-		putPixel(Pc.x - x, Pc.y - y, color);
-		putPixel(Pc.x + y, Pc.y + x, color);
-		putPixel(Pc.x + y, Pc.y - x, color);
-		putPixel(Pc.x - y, Pc.y + x, color);
-		putPixel(Pc.x - y, Pc.y - x, color);
+		put_pixel(Pc.x + x, Pc.y + y, color);
+		put_pixel(Pc.x + x, Pc.y - y, color);
+		put_pixel(Pc.x - x, Pc.y + y, color);
+		put_pixel(Pc.x - x, Pc.y - y, color);
+		put_pixel(Pc.x + y, Pc.y + x, color);
+		put_pixel(Pc.x + y, Pc.y - x, color);
+		put_pixel(Pc.x - y, Pc.y + x, color);
+		put_pixel(Pc.x - y, Pc.y - x, color);
 	}
+
+	swap_buffers();
 }
 
-void line(Vector2 p0, Vector2 p1, const uint16_t color) {
+void _line(Vector2 p0, Vector2 p1, const uint16_t color) {
 	bool yLonger = false;
 	int32_t shortLen = (int32_t) (p1.y - p0.y);
 	int32_t longLen = (int32_t) (p1.x - p0.x);
@@ -63,14 +64,14 @@ void line(Vector2 p0, Vector2 p1, const uint16_t color) {
 		if (longLen > 0) {
 			longLen += (int32_t) p0.y;
 			for (int j = (int32_t) (0x8000 + (p0.x << 16)); (int32_t) p0.y <= longLen; ++p0.y) {
-				putPixel(j >> 16, p0.y, color);
+				put_pixel(j >> 16, p0.y, color);
 				j += decInc;
 			}
 			return;
 		}
 		longLen += (int32_t) p0.y;
 		for (int j = (int32_t) (0x8000 + (p0.x << 16)); (int32_t) p0.y >= longLen; --p0.y) {
-			putPixel(j >> 16, p0.y, color);
+			put_pixel(j >> 16, p0.y, color);
 			j -= decInc;
 		}
 		return;
@@ -79,16 +80,22 @@ void line(Vector2 p0, Vector2 p1, const uint16_t color) {
 	if (longLen > 0) {
 		longLen += (int32_t) p0.x;
 		for (int j = (int32_t) (0x8000 + (p0.y << 16)); (int32_t) p0.x <= longLen; ++p0.x) {
-			putPixel(p0.x, j >> 16, color);
+			put_pixel(p0.x, j >> 16, color);
 			j += decInc;
 		}
 		return;
 	}
 	longLen += (int32_t) p0.x;
 	for (int j = (int32_t) (0x8000 + (p0.y << 16)); (int32_t) p0.x >= longLen; --p0.x) {
-		putPixel(p0.x, j >> 16, color);
+		put_pixel(p0.x, j >> 16, color);
 		j -= decInc;
 	}
+}
+
+void line(Vector2 p0, Vector2 p1, const uint16_t color) {
+	_line(p0, p1, color);
+
+	swap_buffers();
 }
 
 static Vector2 midpoint(Vector2 p1, Vector2 p2) {
@@ -131,18 +138,23 @@ static uint32_t flatness(const Vector2 p[4]) {
 	return ux + uy;
 }
 
-void cubic_bezier_curve(const Vector2 p[4], const color_t color) {
+void _cubic_bezier_curve(const Vector2 p[4], const color_t color) {
 #define THRESHOLD 10
 	if (flatness(p) < THRESHOLD) {
-		line(p[0], p[3], color);
+		_line(p[0], p[3], color);
 		return;
 	} else {
 		Vector2 split[2][4] = {{[3] = {0, 0}},
 		                       {[3] = {0, 0}}};
 		split_curve(p, split);
-		cubic_bezier_curve(split[0], color);
-		cubic_bezier_curve(split[1], color);
+		_cubic_bezier_curve(split[0], color);
+		_cubic_bezier_curve(split[1], color);
 	}
+}
+
+void cubic_bezier_curve(const Vector2 p[4], const color_t color) {
+	_cubic_bezier_curve(p, color);
+	swap_buffers();
 }
 
 static void quadratic_split_curve(const Vector2 p[3], Vector2 out[2][3]) {
@@ -162,15 +174,19 @@ static int32_t quadratic_flatness(const Vector2 p[3]) {
 	        (int32_t) p[1].y - (((int32_t) p[0].y + (int32_t) p[2].y) / 2));
 }
 
-void quadratic_bezier_curve(const Vector2 p[3], const color_t color) {
+void _quadratic_bezier_curve(const Vector2 p[3], const color_t color) {
 	if (quadratic_flatness(p) < 2) {
-		line(p[0], p[2], color);
+		_line(p[0], p[2], color);
 		return;
 	} else {
-		Vector2 split[2][3] = {{[2] = {0, 0}},
-		                       {[2] = {0, 0}}};
+		Vector2 split[2][3];
 		quadratic_split_curve(p, split);
-		quadratic_bezier_curve(split[0], color);
-		quadratic_bezier_curve(split[1], color);
+		_quadratic_bezier_curve(split[0], color);
+		_quadratic_bezier_curve(split[1], color);
 	}
+}
+
+void quadratic_bezier_curve(const Vector2 p[3], const color_t color) {
+	_quadratic_bezier_curve(p, color);
+	swap_buffers();
 }

@@ -5,25 +5,17 @@
 #include <stdio.h>       // for memset
 #include <kernel/memory.h>
 #include <assert.h>
-#include <complex.h>
-
-Disk _disks[4] = {
-		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x3f6},
-		{.port = BUS_PRIMARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x3f6},
-		{.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xA0, .removable = false, .protocol = OTHER, .control = 0x370},
-		{.port = BUS_SECONDARY, .type = UNKNOWN, .drive_select_command = 0xB0, .removable = false, .protocol = OTHER, .control = 0x370},
-};
+#include <stdlib.h>
+#include <kernel/screen.h>
 
 typedef struct SMAP_entry {
 	uint64_t Base;
 	uint64_t Length;
 	uint32_t Type;  // entry Type
 	uint32_t ACPI;  // extended
-} __attribute__((packed)) ____SMAP_entry_t;
+} __attribute__((packed)) SMAP_entry_t;
 
-uint8_t _cdrom_port = 5;
-
-static const char *restrict _types[] = {
+static const char *restrict types[] = {
 		"Error! (0)",
 		"Available memory (1)",
 		"Reserved memory (2)",
@@ -34,35 +26,16 @@ static const char *restrict _types[] = {
 void main(void) {
 	assert(0);
 	init_idt();
-	// __init_memory();
+	init_memory();
+
+	line((Vector2) {0, 0}, (Vector2) {WIDTH, HEIGHT}, 0xFFFF);
 
 	// ____SMAP_entry_t *entry = (____SMAP_entry_t *) 0x2004;
-//
+
 	// puts("| Base             |Length            |Type                   |");
 	// puts("|------------------|------------------|-----------------------|");
 	// for (int i = 0; i < *((uint16_t *) 0x2000) - 1; i++) {
 	// 	printf("|%#018lx|%#018lx|%-23s|\n", entry->Base, entry->Length, _types[entry->Type > 4 ? 2 : entry->Type]);
 	// 	entry++;
 	// }
-
-	// printf("One %d\n", 1);
-	// identify(&disks[0]);
-	// printf("2\n");
-	// identify(&disks[1]);
-	// printf("3\bh\n");
-	// identify(&disks[2]);
-	// printf("Type: %d\n", disks[0].type);
-	// puts("Type: 4\n");
-	// identify(&disks[3]);
-	//
-	// for (int i = 0; i < 4; i++) {
-	//	if (disks[i].type == CDROM) {
-	//		cdrom_port = i;
-	//	}
-	//}
-	//
-	// read_cdrom(&disks[cdrom_port], 0x10, 1, (uint16_t *)0x100000);
-	// read_cdrom(&disks[cdrom_port], *((int32_t *)0x10009e), 1, (uint16_t *)0x100000);
-
-	// puts("Welcome to Achieve OS\nUsage: Press [1] for ls, Press [2] for cd\n");
 }

@@ -57,6 +57,14 @@ void init_idt(void) {
 	outb(0xA1, 0x0);
 	io_wait();
 
+	int timer = 1000;
+	while (inb(0x64) & 1 && timer)
+		timer--;
+
+	outb(0x64, 0x60);
+	io_wait();
+	outb(0x60, 0x25 /* 0x00100101 */);
+
 	set_gate(0, isr_0);
 	set_gate(1, isr_1);
 	set_gate(2, isr_2);

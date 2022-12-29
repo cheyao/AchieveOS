@@ -3,12 +3,12 @@ bits 64
 extern main
 global _start
 _start:
-    mov     eax, DWORD [0x1028]
-    mov     edx, 0x1000083
-    mov     QWORD [0x602010], 0x200083
-    mov     QWORD [0x602020], 0x600083
-    add     eax, 0x83
-    mov     QWORD [0x602008], rax
+    mov eax, DWORD [0x1028]
+    mov edx, 0x1000083
+    mov QWORD [0x602010], 0x200083
+    mov QWORD [0x602020], 0x600083
+    add eax, 0x83
+    mov QWORD [0x602008], rax
 
     mov     eax, 0x604000
 .L2:

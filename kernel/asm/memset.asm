@@ -43,22 +43,12 @@ extern Store256BitIsFaster             ; Tells if a 256 bit store is faster than
 
 ; Define prolog for this function
 %MACRO  PROLOGM  0
-%IFDEF  WINDOWS
-%define Rdest   rcx                    ; dest
-        movzx   eax, dl                ; c
-        mov     rdx, r8                ; count
-%define Rcount  rdx                    ; count
-%define Rdest2  r9                     ; copy of dest
-%define Rcount2 r8                     ; copy of count
-
-%ELSE   ; Unix
 %define Rdest   rdi                    ; dest
         movzx   eax, sil               ; c
 %define Rcount  rdx                    ; count
 %define Rdest2  rcx                    ; copy of dest
 %define Rcount2 rsi                    ; copy of count
         mov     Rcount2, Rcount        ; copy count
-%ENDIF
 %ENDMACRO
 
 
@@ -77,13 +67,8 @@ memset:
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-%IFDEF  WINDOWS
-align 8
-times 2 nop                            ; align L100
-%ELSE   ; Unix
 align 8
 times 1 nop                            ; align L100
-%ENDIF
 
 memsetAVX512BW:                        ; AVX512BW version. Use zmm register
 memsetAVX512BW@:                       ; local label

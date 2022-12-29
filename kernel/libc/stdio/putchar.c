@@ -22,10 +22,12 @@ uint8_t _get_attr(void) {
 	return __attr;
 }
 
+int _putchar(const int c);
+
 #define CHARACTER_PER_LINE 128
 #define LINE_PER_PAGE 45
 
-int puts(const char *str) {
+int _puts(const char *str) {
 	int i = 0;
 
 	for (; str[i] != 0; i++) {
@@ -56,11 +58,18 @@ int puts(const char *str) {
 				}
 			}
 		} else {
-			putchar(str[i]);
+			_putchar(str[i]);
 		}
 	}
 
-	putchar('\n');
+	return i;
+}
+
+int puts(const char *str) {
+	int i = _puts(str);
+	_putchar('\n');
+
+	swap_buffers();
 
 	return i;
 }
@@ -84,6 +93,15 @@ static uint32_t term_colors[] = {
 		rgb(255, 255, 255)};
 
 int putchar(const int c) {
+	_putchar(c);
+
+	swap_buffers();
+
+	return c;
+}
+
+int _putchar(const int c) {
+
 	uint32_t colors[] = {term_colors[(__attr >> 4) & 0xF], term_colors[__attr & 0xF]};
 
 	uint8_t *font = __terminal_font[c];
@@ -95,8 +113,8 @@ int putchar(const int c) {
 
 			for (int i = 0; i < LARGE_FONT_CELL_HEIGHT; i++) {
 				for (int j = 0; j < LARGE_FONT_CELL_WIDTH; j++) {
-					putPixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
-					         colors[0]);
+					put_pixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
+					          colors[0]);
 				}
 			}
 
@@ -118,8 +136,8 @@ int putchar(const int c) {
 		case '\n': {
 			for (int i = 0; i < LARGE_FONT_CELL_HEIGHT; i++) {
 				for (int j = 0; j < LARGE_FONT_CELL_WIDTH; j++) {
-					putPixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
-					         colors[0]);
+					put_pixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
+					          colors[0]);
 				}
 			}
 
@@ -127,8 +145,8 @@ int putchar(const int c) {
 			for (; __cursor_x != 0;) {
 				for (int i = 0; i < LARGE_FONT_CELL_HEIGHT; i++) {
 					for (int j = 0; j < LARGE_FONT_CELL_WIDTH; j++) {
-						putPixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
-						         colors[0]);
+						put_pixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
+						          colors[0]);
 					}
 				}
 
@@ -143,8 +161,8 @@ int putchar(const int c) {
 		default: {
 			for (int i = 0; i < LARGE_FONT_CELL_HEIGHT; i++) {
 				for (int j = 0; j < LARGE_FONT_CELL_WIDTH; j++) {
-					putPixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
-					         colors[(font[i] & (1 << (LARGE_FONT_MASK - j))) != 0]);
+					put_pixel(__cursor_x * LARGE_FONT_CELL_WIDTH + j, __cursor_y * LARGE_FONT_CELL_HEIGHT + i,
+					          colors[(font[i] & (1 << (LARGE_FONT_MASK - j))) != 0]);
 				}
 			}
 

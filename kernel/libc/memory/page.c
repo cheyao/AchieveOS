@@ -36,20 +36,20 @@ typedef struct SMAP_entry {
 	uint32_t ACPI;  // extended
 } __attribute__((packed)) entry_t;
 
-uint64_t *_buddy = (uint64_t *) 0xA00000;
-size_t _memory_start = 0;
-uint64_t _entries = 0;
-uint64_t _last_search = 0;
+uint64_t *buddy = (uint64_t *) 0xA00000;
+size_t memory_start = 0;
+uint64_t entries = 0;
+uint64_t last_search = 0;
 
-void __init_memory(void) {
+void init_memory(void) {
 	uint16_t entry_num = *((uint16_t *) 0x2000) - 1;
 	entry_t *entry = (entry_t *) 0x2004;
 	size_t max_addr = 0;
 
 	for (int i = 0; i < entry_num; i++) {
 		// 128 Mib is allocated for the kernel
-		if (entry->Type == 1 && entry->Base + entry->Length >= 0x8000000 && (void *) _memory_start == NULL)
-			_memory_start = (entry->Base < 0x8000000 ? 0x8000000 : entry->Base);
+		if (entry->Type == 1 && entry->Base + entry->Length >= 0x8000000 && (void *) memory_start == NULL)
+			memory_start = (entry->Base < 0x8000000 ? 0x8000000 : entry->Base);
 
 		if (entry->Base + entry->Length > max_addr)
 			max_addr = entry->Base + entry->Length;
@@ -58,62 +58,54 @@ void __init_memory(void) {
 	}
 
 	if (max_addr < 512 * 1024 * 1024)
-		error("Error! Not enough memory!\nYou have %dMib of memory, but the kernel needs at least 256Mib!",
+		error("Error! Not enough memory!\nYou have %dMib of memory, but we need at least 256Mib! (Maybe less but I hardcoded this :D)",
 		      max_addr / 1024 / 1024);
 
-	*((size_t *) (0x602000 + 8 * 5)) = (size_t) _memory_start + 0x83;
-	*((size_t *) (0x602000 + 8 * 6)) = (size_t) _memory_start + 0x200000 + 0x83;
+	*((size_t *) (0x602000 + 8 * 5)) = (size_t) memory_start + 0x83;
+	*((size_t *) (0x602000 + 8 * 6)) = (size_t) memory_start + 0x200000 + 0x83;
 
-	_buddy = (uint64_t *) ((size_t) _buddy + sizeof(_buddy) * 8);
+	buddy = (uint64_t *) ((size_t) buddy + sizeof(buddy) * 8);
 
-	_entries = max_addr / 4096;
+	entries = max_addr / 2097152;
 
 	entry = (entry_t *) 0x2004;
 	for (int i = 0; i < entry_num; i++) {
-		if (entry->Type != 1 && entry->Base >= _memory_start) {
-			setBits(_buddy, (entry->Base - _memory_start) / 4096, entry->Length / 4096);
+		if (entry->Type != 1 && entry->Base >= memory_start) {
+			setBits(buddy, (entry->Base - memory_start) / 2097152, entry->Length / 2097152);
 		}
 
 		entry++;
 	}
 }
 
-void *__alloc_page(size_t pages) {
+void *alloc_page(size_t pages) {
 	if (pages == 0)
 		return NULL;
 
-	uint64_t i = _last_search;
-	while (i <= _entries - pages && testBits(_buddy, i, pages))
+	uint64_t i = last_search;
+	while (i <= entries - pages && testBits(buddy, i, pages))
 		i++;
 
-	if (i > _entries - pages) {
+	if (i > entries - pages) {
 		i = 0;
-		while (i <= _last_search && testBits(_buddy, i, pages))
+		while (i <= last_search && testBits(buddy, i, pages))
 			i++;
 
-		if (i <= _last_search)
+		if (i <= last_search)
 			goto _else;
 
 		error("Out of memory!");
 		return NULL;
 	} else {
 		_else:
-		printf("Allocated %luk page (%#lx - %#lx)", pages * 4, (_memory_start + i * PAGE_SIZE),
-		       (_memory_start + i * PAGE_SIZE + pages * PAGE_SIZE));
-		setBits(_buddy, i, pages);
-		return (void *) (_memory_start + i * PAGE_SIZE);
+		printf("Allocated %luk page (%#llx - %#llx)", pages * 4, (memory_start + i * PAGE_SIZE),
+		       (memory_start + i * PAGE_SIZE + pages * PAGE_SIZE));
+		setBits(buddy, i, pages);
+		return (void *) (memory_start + i * PAGE_SIZE);
 	}
 }
 
-void __free_page(void *start, size_t pages) {
+void free_page(void *start, size_t pages) {
 	printf("Freed %luk page at %#lx", pages * 4, (size_t) start);
-	clearBits(_buddy, ((size_t) start - _memory_start) / PAGE_SIZE / 64, pages);
-}
-
-void *__alloc_virt_page(size_t pages) {
-	return NULL;
-}
-
-void __free_virt_page(void *start, size_t pages) {
-
+	clearBits(buddy, ((size_t) start - memory_start) / PAGE_SIZE / 64, pages);
 }

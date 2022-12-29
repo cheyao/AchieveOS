@@ -119,15 +119,15 @@ init_pm:
     mov DWORD [edi], 0x401003
 
     ; TBL[0]
-    mov DWORD [edi+0x1000], 0x402003
+    mov DWORD [0x401000], 0x402003
 
     ; TBL[3]
-    mov DWORD [edi+0x1000+8*3], 0x404003
+    mov DWORD [0x401000+8*3], 0x404003
 
     ; TBL[0][0] ; Random - 0x0000000 to 0x1000000 (0 to 16 Mib) map to itself
-    mov DWORD [edi+0x2000], 0x000083 ; Point to bootsect
+    mov DWORD [0x402000], 0x000083 ; Point to bootsect
 
-    mov DWORD [edi+0x2000+8*3], 0x400083 ; Page table
+    mov DWORD [0x402000+8*3], 0x400083 ; Page table
 
     ; Enable paging
     mov ecx, 0xC0000080

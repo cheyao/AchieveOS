@@ -6,6 +6,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <kernel/screen.h>
 
 int intlen(int i, uint8_t base) {
 	int l = 1;
@@ -42,10 +43,13 @@ void error(const char *restrict format, ...) {
 	va_end(list);
 }
 
+int _puts(const char *str);
+
 int vprintf(const char *restrict format, va_list args) {
 	char *buffer = (char *) 0x8000;
 	int i = vsprintf(buffer, format, args);
-	puts(buffer);
+	_puts(buffer);
+	swap_buffers();
 	return i;
 }
 

@@ -26,17 +26,17 @@ typedef struct {
 			g: 1,
 			avl: 3,
 			frame_addr: 20;
-} ____page_entry;
+} page_entry;
 
-void __init_memory(void);
+void init_memory(void);
 
-void *__alloc_page(size_t pages);
+void *alloc_page(size_t pages);
 
-void __free_page(void *start, size_t pages);
+void free_page(void *start, size_t pages);
 
-void *__alloc_virt_page(size_t pages);
+void *alloc_virt_page(size_t pages);
 
-void __free_virt_page(void *start, size_t pages);
+void free_virt_page(void *start, size_t pages);
 
 #if defined(__cplusplus)
 } /* extern "C" */

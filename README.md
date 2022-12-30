@@ -46,3 +46,6 @@ Still got a lot to do!
 ##### Misc
 
 - [ ] Rust - Got half a std library implemented - very nice :)
+
+Vacation time!!
+Nope, this project is not abandoned, i'm just taking a few days of vacation :)

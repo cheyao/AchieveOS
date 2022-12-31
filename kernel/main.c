@@ -23,8 +23,10 @@ static const char *restrict types[] = {
 		"ACPI NVS memory (4)",
 };
 
+extern uintptr_t kernel_start;
+extern uintptr_t kernel_end;
+
 void main(void) {
-	assert(0);
 	init_idt();
 	init_memory();
 

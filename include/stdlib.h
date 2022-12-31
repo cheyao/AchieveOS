@@ -34,6 +34,9 @@ void *realloc(void *ptr, size_t size);
 
 void *malloc(size_t size);
 
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
+
 #if defined(__cplusplus)
 } /* extern "C" */
 #endif

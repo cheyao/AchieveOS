@@ -10,13 +10,13 @@ mode at boot even if no-one uses it, and it is 50 years old.
 
 ### GPT partition UUIDs
 
-I've defined some custom uuids, here is the list of UUIDs that I used:
+Here is the list of UUIDs that I used:
 
 | Name                | UUID                                 |
 |---------------------|--------------------------------------|
-| BIOS boot partition | 49464555-7349-7553-7065-724861726421 |
-| HFS+ partition      | 6A898CC3-1DD2-11B2-99A6-080020736631 |
-| SWAP partition      | 54776F48-536F-4157-504D-656D6F72793F |
+| BIOS boot partition | BC13C2FF-59E6-4262-A352-B275FD6F7172 |
+| EXT2 partition      | 0FC63DAF-8483-4772-8E79-3D69D8477DE4 |
+| SWAP partition      | 0657FD6D-A4AB-43C4-84E5-0933C84B4F4F |
 
 ### TODO list
 
@@ -33,13 +33,13 @@ Still got a lot to do!
 - [x] Curves & lines
 - [x] GPT
 - [x] Glyphs
-- [ ] Malloc
 - [ ] HFS+
 - [ ] Streams
+- [ ] Port Nethack <-- Version 0.0.1 OS Complete
+- [ ] Malloc
 - [x] Elf loader
 - [ ] Dynamic library
 - [ ] Ncurses
-- [ ] Port Nethack <-- Version 0.0.1 OS Complete
 - [ ] Truetype
 - [ ] USB keyboard
 

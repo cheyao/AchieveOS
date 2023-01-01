@@ -2,6 +2,10 @@
 
 This is NOT a linux distro, the contents are all made from zero (except for the asmlib)
 
+**Changing to RISC-V! Behold big changes!**
+
+See Achieve Core at https://github.com/cheyao/Achieve-Core
+
 ## Why AchieveOS?
 
 AchieveOS guarantees __no__ backward capabilities, it only implies with C17 and newer.
@@ -21,6 +25,11 @@ Here is the list of UUIDs that I used:
 ### TODO list
 
 Still got a lot to do!
+
+- [ ] RISC-V OS with Core
+- [ ] VGA lines and stuff <-- Version 0.0.1
+
+Old:
 
 - [x] VESA video mode
 - [x] Paging

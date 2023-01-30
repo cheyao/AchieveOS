@@ -1,4 +1,4 @@
-ENTRY(_start)
+ENTRY(main)
 
 SECTIONS {
 	. = 0; /* Achieve-BIOS is gonna load the OS into addr 0 */

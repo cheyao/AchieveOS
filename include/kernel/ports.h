@@ -46,6 +46,7 @@ static inline uint8_t inb(uint32_t port) {
 #define SD_DATA   0xC0000
 #define SD_SEEK   0xC1000
 #define UART      0xC1002
+#define MEM_SIZE  0xC1003
 #define DEBUG_INT 0xEFFFF
 
 #endif

@@ -22,7 +22,7 @@ jobs:
         sudo apt-get -y install llvm
         sudo apt-get -y install lld
     - name: make
-      run: CC=clang LD=lld make
+      run: CC=clang LD=ld.lld make
     - name: check syntax
       run: make clang-tidy >> $GITHUB_OUTPUT
     - name: check ct output

@@ -9,8 +9,9 @@ static inline void putchar(const char c) {
 }
 
 static inline void puts(const char *str) {
-    for (int i = 0; str[i] != 0; i++)
+    for (int i = 0; str[i] != 0; i++) {
         putchar(str[i]);
+    }
 }
 
 void main(void) {

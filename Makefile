@@ -29,7 +29,7 @@ build/%.o: src/%.S
 	$(AS) $(ASFLAGS) -c $< -o $@
 
 clang-tidy: $(C_SOURCES)
-	-@$(CT) $^ --system-headers -- $(CFLAGS) 
+	-@$(CT) $^ --system-headers --checks=* --warnings-as-errors=* -- $(CFLAGS) 
 
 clean:
 	-rm -rf kernel $(OBJ)

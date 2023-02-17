@@ -18,7 +18,7 @@ jobs:
     - name: Check out repo
       uses: actions/checkout@v3
     - name: Install tools
-      run: bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+      run: sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
     - name: make
       run: CC=clang LD=ld.lld make
     - name: check syntax

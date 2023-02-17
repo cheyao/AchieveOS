@@ -25,5 +25,5 @@ jobs:
       run: CC=clang LD=ld.lld make
     - name: check syntax
       run: |
-        echo "```\n" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`\n" >> $GITHUB_STEP_SUMMARY
         make clang-tidy >> $GITHUB_STEP_SUMMARY

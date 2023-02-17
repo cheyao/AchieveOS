@@ -21,13 +21,13 @@ jobs:
       run: |
         sudo apt-get -y install llvm
         sudo apt-get -y install lld
-        echo "Installed dependencies\n" >> $GITHUB_OUTPUT
+        echo "Installed dependencies\n\n" >> $GITHUB_STEP_SUMMARY
     - name: make
       run: CC=clang LD=ld.lld make
     - name: check syntax
-      run: make clang-tidy >> $GITHUB_OUTPUT
+      run: make clang-tidy >> $GITHUB_STEP_SUMMARY
     - name: check ct output
       run: |
-        if [ -s $GITHUB_OUTPUT ]; then
+        if [ -s $GITHUB_STEP_SUMMARY ]; then
           exit 1
         fi

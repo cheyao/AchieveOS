@@ -22,7 +22,7 @@ jobs:
         sudo apt-get -y install llvm
         sudo apt-get -y install lld
     - name: make
-      run: cd Achieve-BIOS && CC=clang LD=ld.lld make
+      run: CC=clang LD=ld.lld make
     - name: check syntax
       run: |
         echo "\`\`\`\n" >> $GITHUB_STEP_SUMMARY

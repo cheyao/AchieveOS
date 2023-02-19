@@ -5,7 +5,7 @@ CC ?= clang
 CFLAGS := -fno-omit-frame-pointer -O2 -nostdlib -ffreestanding -std=c2x -static -Wno-unused-parameter --target=riscv64 \
 		  -Wno-unused-function -pedantic -Wall -Wextra -Wwrite-strings -Wstrict-prototypes -march=rv64i -mabi=lp64 -flto \
 		  -I include -Wno-unused-function -fno-stack-protector -nodefaultlibs \
-		  -fms-extensions
+		  -fms-extensions -fno-PIC
 AS ?= riscv64-unknown-elf-as
 ASFLAGS := -march=rv64i -mabi=lp64
 LD ?= ld.lld
@@ -29,7 +29,7 @@ build/%.o: src/%.S
 	$(AS) $(ASFLAGS) -c $< -o $@
 
 clang-tidy: $(C_SOURCES)
-	-$(CT) $^ --system-headers --checks=*,-hicpp-no-assembler,-llvm-header-guard,-bugprone-easily-swappable-parameters,-modernize-macro-to-enum,-cert-dcl51-cpp,-cert-dcl37-c,-bugprone-reserved-identifier,-readability-identifier-length,-altera-unroll-loops --warnings-as-errors=* -header-filter='.*' -- $(CFLAGS) 
+	-@$(CT) $^ --system-headers --checks=*,-altera-struct-pack-align,-cppcoreguidelines-*,-altera-id-dependent-backward-branch,-readability-magic-numbers,-cppcoreguidelines-avoid-magic-numbers,-hicpp-no-assembler,-llvm-header-guard,-bugprone-easily-swappable-parameters,-modernize-macro-to-enum,-cert-dcl51-cpp,-cert-dcl37-c,-bugprone-reserved-identifier,-readability-identifier-length,-altera-unroll-loops --warnings-as-errors=* -header-filter='.*' -- $(CFLAGS) 
 
 clean:
 	-rm -rf kernel $(OBJ)

@@ -1,5 +1,7 @@
 See Achieve Core at https://github.com/cheyao/Achieve-Core
 
+I worked on this for 5 months 3 days (156 days) lol Not regeting it
+
 # Why AchieveOS
 AchieveOS is the future - ditch all of the bloatware. Starting at $99 per monthly license.
 

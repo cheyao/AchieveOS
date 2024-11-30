@@ -1,6 +1,6 @@
 //
 // Created by cheyao on 20.12.2022.
-// Copyright (c) 2022 cheyao All rights reserved.
+// Copyright (c) 2022 cheyao 
 //
 #include <drivers/ata_pio.h>
 #include <kernel/ata.h>
@@ -49,8 +49,7 @@ bool identify_disk(uint16_t drive_port, bool drive_slave) {
 	return 0;
 }
 
-void
-write_disk(uint16_t drive_port, bool drive_slave, const uint32_t lba, const uint16_t sectors, const uint16_t *buffer) {
+void write_disk(uint16_t drive_port, bool drive_slave, const uint32_t lba, const uint16_t sectors, const uint16_t *buffer) {
 	outb(drive_port + DRIVE_SELECT, 0xE0 | (drive_slave << 4));  // drive select with lba bit set
 	ata_delay(drive_port);
 	outb(drive_port + SECTOR_COUNT, sectors >> 8);

@@ -4,7 +4,7 @@
 //
 
 #ifndef _TERMINAL_FONT_H
-#define _TERMINAL_FONT_H 1
+#define _TERMINAL_FONT_H
 
 #if defined(__cplusplus)
 extern "C" {
@@ -13,6 +13,11 @@ extern "C" {
 #include <stdint.h>
 
 /**
+ * @file apps/terminal-font.h
+ * @brief Fallback font used to render text where the TrueType renderer would be inappropriate.
+ *
+ * Used variously by Terminal, splash-log, and the kernel.
+ *
  * This is baked bitmap version of Deja Vu Sans Mono.
  *
  * @copyright
@@ -59,7 +64,7 @@ extern "C" {
 #define LARGE_FONT_CELL_WIDTH 8
 #define LARGE_FONT_CELL_HEIGHT 17
 #define LARGE_FONT_MASK 7
-const static uint8_t __terminal_font[][17] = {
+uint8_t __terminal_font[][17] = {
 		/* 0 32 */
 		{
 				/*          */

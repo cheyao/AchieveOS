@@ -1,96 +1,54 @@
-//
-// Created by cheyao on 08.10.2022.
-// Huge thanks to SOSO for the code :)
-// https://github.com/ozkl/soso
-//
-
-#ifndef _PORTS_H
-#define _PORTS_H
-
-#if defined(__cplusplus)
-extern "C" {
-#endif
+#ifndef __PORTS_H
+#define __PORTS_H 1
 
 #include <stdint.h>
 
-static __inline__ void outb(uint16_t __port, uint8_t __val) {
-	__asm__ __volatile__("outb %0,%1"::"a"(__val), "dN"(__port));
+#define MMIO_ADDR 0xFFFFFFFF00000000
+
+static inline void outd(uint32_t port, uint64_t val) {
+    __asm__ __volatile__("sd %1, 0(%0)"::"r" (MMIO_ADDR + port), "r" (val));
 }
 
-static __inline__ void outw(uint16_t __port, uint16_t __val) {
-	__asm__ __volatile__("outw %0,%1"
-			:
-			: "a"(__val), "dN"(__port));
+static inline void outw(uint32_t port, uint32_t val) {
+    __asm__ __volatile__("sw %1, 0(%0)"::"r" (MMIO_ADDR + port), "r" (val));
 }
 
-static __inline__ void outl(uint16_t __port, uint32_t __val) {
-	__asm__ __volatile__("outl %0,%1"
-			:
-			: "a"(__val), "dN"(__port));
+static inline void outh(uint32_t port, uint16_t val) {
+    __asm__ __volatile__("sh %1, 0(%0)"::"r" (MMIO_ADDR + port), "r" (val));
 }
 
-static __inline__ uint8_t inb(uint16_t __port) {
-	uint8_t __val;
-	__asm__ __volatile__("inb %1,%0"
-			: "=a"(__val)
-			: "dN"(__port));
-	return __val;
+static inline void outb(uint32_t port, uint8_t val) {
+    __asm__ __volatile__("sb %1, 0(%0)"::"r" (MMIO_ADDR + port), "r" (val));
 }
 
-static __inline__ uint16_t inw(uint16_t __port) {
-	uint16_t __val;
-	__asm__ __volatile__("inw %1,%0"
-			: "=a"(__val)
-			: "dN"(__port));
-	return __val;
+static inline uint64_t ind(uint32_t port) {
+    uint64_t data = 0;
+    __asm__ __volatile__("ld %0, 0(%1)": "=r" (data):"r" (MMIO_ADDR + port));
+    return data;
 }
 
-static __inline__ uint32_t inl(uint16_t __port) {
-	uint32_t __val;
-	__asm__ __volatile__("inl %1,%0"
-			: "=a"(__val)
-			: "dN"(__port));
-	return __val;
+static inline uint32_t inw(uint32_t port) {
+    uint32_t data = 0;
+    __asm__ __volatile__("lw %0, 0(%1)": "=r" (data):"r" (MMIO_ADDR + port));
+    return data;
 }
 
-static __inline__ void outsb(uint16_t __port, const void *__buf, unsigned long __n) {
-	__asm__ __volatile__("cld; rep; outsb"
-			: "+S"(__buf), "+c"(__n)
-			: "d"(__port));
+static inline uint16_t inh(uint32_t port) {
+    uint16_t data = 0;
+    __asm__ __volatile__("lh %0, 0(%1)": "=r" (data):"r" (MMIO_ADDR + port));
+    return data;
 }
 
-static __inline__ void outsw(uint16_t __port, const void *__buf, unsigned long __n) {
-	__asm__ __volatile__("cld; rep; outsw"
-			: "+S"(__buf), "+c"(__n)
-			: "d"(__port));
+static inline uint8_t inb(uint32_t port) {
+    uint16_t data = 0;
+    __asm__ __volatile__("lb %0, 0(%1)": "=r" (data):"r" (MMIO_ADDR + port));
+    return data;
 }
 
-static __inline void outsl(uint16_t __port, const void *__buf, unsigned long __n) {
-	__asm__ __volatile__("cld; rep; outsl"
-			: "+S"(__buf), "+c"(__n)
-			: "d"(__port));
-}
+#define SD_DATA   0xC0000
+#define SD_SEEK   0xC1000
+#define UART      0xC1002
+#define MEM_SIZE  0xC1003
+#define DEBUG_INT 0xEFFFF
 
-static __inline__ void insb(uint16_t __port, void *__buf, unsigned long __n) {
-	__asm__ __volatile__("cld; rep; insb"
-			: "+D"(__buf), "+c"(__n)
-			: "d"(__port));
-}
-
-static __inline void insw(uint16_t __port, void *__buf, unsigned long __n) {
-	__asm__ __volatile__("cld; rep; insw"
-			: "+D"(__buf), "+c"(__n)
-			: "d"(__port));
-}
-
-static __inline void insl(uint16_t __port, void *__buf, unsigned long __n) {
-	__asm__ __volatile__("cld; rep; insl"
-			: "+D"(__buf), "+c"(__n)
-			: "d"(__port));
-}
-
-#if defined(__cplusplus)
-} /* extern "C" */
 #endif
-
-#endif  // _PORTS_H
